@@ -1,0 +1,225 @@
+/* Logs Page Specific Styles */
+
+.maps-section {
+    margin: 20px;
+    padding: 20px;
+}
+
+.map-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.map-container h3 {
+    color: white;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.map-placeholder {
+    position: relative;
+    height: 300px;
+    background: linear-gradient(135deg, #133E57, #bed9cc);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.map-marker {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.map-marker:hover {
+    transform: scale(1.2);
+}
+
+.alert-marker {
+    background: #ff4444;
+    box-shadow: 0 0 20px rgba(255, 68, 68, 0.6);
+    top: 30%;
+    left: 40%;
+}
+
+.warning-marker {
+    background: #ffaa00;
+    box-shadow: 0 0 20px rgba(255, 170, 0, 0.6);
+    top: 60%;
+    left: 60%;
+}
+
+.normal-marker {
+    background: #44ff44;
+    box-shadow: 0 0 20px rgba(68, 255, 68, 0.6);
+    top: 45%;
+    left: 25%;
+}
+
+.marker-label {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.map-marker:hover .marker-label {
+    opacity: 1;
+}
+
+.logs-container {
+    margin: 20px;
+    max-width: 900px;
+}
+
+.log-entry {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    margin-bottom: 15px;
+    padding: 15px;
+    border-left: 4px solid;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.log-entry:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.log-entry.alert {
+    border-left-color: #ff4444;
+    background: rgba(255, 68, 68, 0.1);
+}
+
+.log-entry.warning {
+    border-left-color: #ffaa00;
+    background: rgba(255, 170, 0, 0.1);
+}
+
+.log-entry.normal {
+    border-left-color: #44ff44;
+    background: rgba(68, 255, 68, 0.1);
+}
+
+.log-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.log-time {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.log-type {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: white;
+}
+
+.log-type.alert {
+    background: #ff4444;
+}
+
+.log-type.warning {
+    background: #ffaa00;
+}
+
+.log-type.normal {
+    background: #44ff44;
+}
+
+.log-location {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+}
+
+.log-details p {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.log-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-acknowledge, .btn-investigate {
+    padding: 6px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-acknowledge {
+    background: rgba(68, 255, 68, 0.2);
+    color: #44ff44;
+    border: 1px solid #44ff44;
+}
+
+.btn-acknowledge:hover {
+    background: rgba(68, 255, 68, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-investigate {
+    background: rgba(255, 170, 0, 0.2);
+    color: #ffaa00;
+    border: 1px solid #ffaa00;
+}
+
+.btn-investigate:hover {
+    background: rgba(255, 170, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .maps-section {
+        margin: 15px;
+        padding: 15px;
+    }
+    
+    .map-placeholder {
+        height: 200px;
+    }
+    
+    .logs-container {
+        margin: 15px;
+    }
+    
+    .log-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .log-actions {
+        justify-content: flex-start;
+    }
+}
