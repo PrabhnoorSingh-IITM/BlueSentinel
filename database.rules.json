@@ -1,0 +1,20 @@
+{
+  "rules": {
+    "sensors": {
+      ".read": true,
+      ".write": true,
+      "latest": {
+        ".indexOn": ["timestamp"]
+      },
+      "history": {
+        ".indexOn": ["timestamp"]
+      }
+    },
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    }
+  }
+}
