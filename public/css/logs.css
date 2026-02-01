@@ -6,15 +6,15 @@
 }
 
 .map-container {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(84, 101, 255, 0.1);
     backdrop-filter: blur(10px);
     border-radius: 16px;
     padding: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(0, 255, 212, 0.2);
 }
 
 .map-container h3 {
-    color: white;
+    color: #00FFD4;
     margin-bottom: 15px;
     font-size: 1.2rem;
 }
@@ -22,7 +22,7 @@
 .map-placeholder {
     position: relative;
     height: 300px;
-    background: linear-gradient(135deg, #133E57, #bed9cc);
+    background: linear-gradient(135deg, #050208 0%, #1a0f2e 50%, #0a1628 100%);
     border-radius: 12px;
     overflow: hidden;
 }
@@ -48,15 +48,15 @@
 }
 
 .warning-marker {
-    background: #ffaa00;
-    box-shadow: 0 0 20px rgba(255, 170, 0, 0.6);
+    background: #D2DDFF;
+    box-shadow: 0 0 20px rgba(210, 221, 255, 0.6);
     top: 60%;
     left: 60%;
 }
 
 .normal-marker {
-    background: #44ff44;
-    box-shadow: 0 0 20px rgba(68, 255, 68, 0.6);
+    background: #00FFD4;
+    box-shadow: 0 0 20px rgba(0, 255, 212, 0.6);
     top: 45%;
     left: 25%;
 }
@@ -106,13 +106,13 @@
 }
 
 .log-entry.warning {
-    border-left-color: #ffaa00;
-    background: rgba(255, 170, 0, 0.1);
+    border-left-color: #D2DDFF;
+    background: rgba(210, 221, 255, 0.1);
 }
 
 .log-entry.normal {
-    border-left-color: #44ff44;
-    background: rgba(68, 255, 68, 0.1);
+    border-left-color: #00FFD4;
+    background: rgba(0, 255, 212, 0.1);
 }
 
 .log-header {
@@ -143,11 +143,13 @@
 }
 
 .log-type.warning {
-    background: #ffaa00;
+    background: #D2DDFF;
+    color: #050208;
 }
 
 .log-type.normal {
-    background: #44ff44;
+    background: #00FFD4;
+    color: #050208;
 }
 
 .log-location {
@@ -178,24 +180,24 @@
 }
 
 .btn-acknowledge {
-    background: rgba(68, 255, 68, 0.2);
-    color: #44ff44;
-    border: 1px solid #44ff44;
+    background: rgba(0, 255, 212, 0.2);
+    color: #00FFD4;
+    border: 1px solid #00FFD4;
 }
 
 .btn-acknowledge:hover {
-    background: rgba(68, 255, 68, 0.3);
+    background: rgba(0, 255, 212, 0.3);
     transform: translateY(-2px);
 }
 
 .btn-investigate {
-    background: rgba(255, 170, 0, 0.2);
-    color: #ffaa00;
-    border: 1px solid #ffaa00;
+    background: rgba(84, 101, 255, 0.2);
+    color: #5465FF;
+    border: 1px solid #5465FF;
 }
 
 .btn-investigate:hover {
-    background: rgba(255, 170, 0, 0.3);
+    background: rgba(84, 101, 255, 0.3);
     transform: translateY(-2px);
 }
 
