@@ -1,0 +1,721 @@
+/* Contact & About Page Styles - BlueSentinel */
+/* Color Palette: #00FFD4 (cyan), #5465FF (blue), #D2DDFF (light blue), #050208 (dark) */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #050208 0%, #1a0f2e 50%, #0a1628 100%);
+  color: #D2DDFF;
+  overflow-x: hidden;
+}
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* ============ NAVBAR ============ */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(5, 2, 8, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 255, 212, 0.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+.logo-icon img {
+  height: 48px;
+  width: 48px;
+  object-fit: contain;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.logo-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #00FFD4;
+  letter-spacing: 0.5px;
+}
+
+.logo-subtitle {
+  font-size: 0.75rem;
+  color: #D2DDFF;
+  opacity: 0.8;
+  font-weight: 400;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-links a {
+  color: #D2DDFF;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #00FFD4;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.github-icon img {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(1);
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.github-icon:hover img {
+  opacity: 1;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #00FFD4, #5465FF);
+  color: #050208;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 255, 212, 0.3);
+}
+
+/* ============ HERO SECTION ============ */
+.hero-contact {
+  padding: 12rem 2rem 4rem;
+  text-align: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.hero-contact h1 {
+  font-size: 4rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #00FFD4, #5465FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+}
+
+.hero-contact p {
+  font-size: 1.3rem;
+  color: #D2DDFF;
+  opacity: 0.85;
+}
+
+/* ============ SECTIONS ============ */
+section {
+  padding: 5rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #00FFD4, #5465FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #D2DDFF;
+  opacity: 0.8;
+  margin-bottom: 3rem;
+}
+
+/* ============ TEAM SECTION ============ */
+.team-section {
+  padding: 5rem 2rem;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.team-member {
+  background: rgba(84, 101, 255, 0.1);
+  border: 1px solid rgba(0, 255, 212, 0.3);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.team-member:hover {
+  background: rgba(84, 101, 255, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 255, 212, 0.2);
+}
+
+.member-avatar {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.member-avatar img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid #00FFD4;
+  object-fit: cover;
+  display: block;
+}
+
+.team-member h3 {
+  font-size: 1.5rem;
+  color: #00FFD4;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.role {
+  color: #5465FF;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.description {
+  color: #D2DDFF;
+  opacity: 0.8;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.github-link {
+  color: #00FFD4;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(0, 255, 212, 0.5);
+  border-radius: 8px;
+}
+
+.github-link:hover {
+  background: rgba(0, 255, 212, 0.1);
+  border-color: #00FFD4;
+}
+
+.team-info {
+  background: rgba(84, 101, 255, 0.08);
+  border: 1px solid rgba(0, 255, 212, 0.2);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.team-info h3 {
+  color: #00FFD4;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.team-info p {
+  color: #D2DDFF;
+  opacity: 0.8;
+  line-height: 1.8;
+}
+
+/* ============ TECH STACK SECTION ============ */
+.tech-section {
+  padding: 5rem 2rem;
+}
+
+.tech-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.tech-category {
+  background: rgba(84, 101, 255, 0.1);
+  border: 1px solid rgba(0, 255, 212, 0.3);
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.tech-category h3 {
+  font-size: 1.3rem;
+  color: #00FFD4;
+  margin-bottom: 1.5rem;
+}
+
+.tech-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tech-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 255, 212, 0.1);
+}
+
+.tech-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.tech-name {
+  color: #5465FF;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.tech-desc {
+  color: #D2DDFF;
+  opacity: 0.75;
+  font-size: 0.9rem;
+}
+
+/* ============ ARCHITECTURE ============ */
+.architecture {
+  background: rgba(84, 101, 255, 0.08);
+  border: 1px solid rgba(0, 255, 212, 0.2);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-top: 4rem;
+}
+
+.architecture h3 {
+  color: #00FFD4;
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.arch-diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 2rem;
+}
+
+.arch-box {
+  background: rgba(84, 101, 255, 0.15);
+  border: 2px solid rgba(0, 255, 212, 0.5);
+  border-radius: 10px;
+  padding: 1.5rem;
+  min-width: 150px;
+  text-align: center;
+  flex: 1;
+  min-width: 120px;
+}
+
+.arch-box h4 {
+  color: #00FFD4;
+  margin-bottom: 0.5rem;
+}
+
+.arch-box p {
+  color: #D2DDFF;
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+.arch-arrow {
+  color: #5465FF;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+/* ============ DATA FLOW SECTION ============ */
+.dataflow-section {
+  padding: 5rem 2rem;
+}
+
+.dataflow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.flow-step {
+  background: rgba(84, 101, 255, 0.1);
+  border: 2px solid rgba(0, 255, 212, 0.3);
+  border-radius: 12px;
+  padding: 2rem;
+  width: 100%;
+  text-align: center;
+  position: relative;
+}
+
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #00FFD4, #5465FF);
+  border-radius: 50%;
+  color: #050208;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.flow-step h4 {
+  color: #00FFD4;
+  margin-bottom: 0.5rem;
+}
+
+.flow-step p {
+  color: #D2DDFF;
+  opacity: 0.8;
+  font-size: 0.95rem;
+}
+
+.flow-arrow {
+  color: #5465FF;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* ============ BIBLIOGRAPHY SECTION ============ */
+.bibliography-section {
+  padding: 5rem 2rem;
+}
+
+.references {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.ref-category {
+  background: rgba(84, 101, 255, 0.1);
+  border: 1px solid rgba(0, 255, 212, 0.3);
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.ref-category h3 {
+  color: #00FFD4;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.ref-category ul {
+  list-style: none;
+}
+
+.ref-category li {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(0, 255, 212, 0.1);
+}
+
+.ref-category li:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.ref-category strong {
+  color: #5465FF;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.ref-category span {
+  color: #D2DDFF;
+  opacity: 0.8;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.ref-category a {
+  color: #00FFD4;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.ref-category a:hover {
+  color: #5465FF;
+}
+
+/* ============ GITHUB SECTION ============ */
+.github-section {
+  padding: 5rem 2rem;
+  text-align: center;
+}
+
+.github-section > p {
+  font-size: 1.1rem;
+  color: #D2DDFF;
+  opacity: 0.85;
+  margin-bottom: 2rem;
+}
+
+.github-box {
+  background: rgba(84, 101, 255, 0.1);
+  border: 2px solid rgba(0, 255, 212, 0.3);
+  border-radius: 12px;
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  display: inline-block;
+}
+
+.github-box h3 {
+  color: #00FFD4;
+  margin-bottom: 1rem;
+}
+
+.github-link-large {
+  color: #5465FF;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  padding: 0.7rem 1.5rem;
+  border: 2px solid rgba(0, 255, 212, 0.3);
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.github-link-large:hover {
+  border-color: #5465FF;
+  color: #00FFD4;
+}
+
+.github-info {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(0, 255, 212, 0.1);
+}
+
+.info-item {
+  color: #D2DDFF;
+  font-size: 0.95rem;
+}
+
+.info-item strong {
+  color: #00FFD4;
+}
+
+/* ============ CONTACT INFO SECTION ============ */
+.contact-info-section {
+  padding: 5rem 2rem;
+  text-align: center;
+}
+
+.contact-info-section > p {
+  font-size: 1.1rem;
+  color: #D2DDFF;
+  opacity: 0.85;
+  margin-bottom: 3rem;
+}
+
+.contact-methods {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.contact-card {
+  background: rgba(84, 101, 255, 0.1);
+  border: 1px solid rgba(0, 255, 212, 0.3);
+  border-radius: 12px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.contact-card:hover {
+  background: rgba(84, 101, 255, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 255, 212, 0.2);
+}
+
+.contact-card h3 {
+  color: #00FFD4;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.contact-card p {
+  color: #D2DDFF;
+  opacity: 0.8;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.contact-link {
+  color: #5465FF;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(0, 255, 212, 0.5);
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.contact-link:hover {
+  color: #00FFD4;
+  border-color: #00FFD4;
+  background: rgba(0, 255, 212, 0.1);
+}
+
+/* ============ FOOTER ============ */
+footer {
+  background: rgba(5, 2, 8, 0.95);
+  border-top: 1px solid rgba(0, 255, 212, 0.2);
+  padding: 2rem;
+  text-align: center;
+  color: #D2DDFF;
+  opacity: 0.7;
+  font-size: 0.9rem;
+}
+
+/* ============ RESPONSIVE DESIGN ============ */
+@media (max-width: 768px) {
+  .hero-contact h1 {
+    font-size: 2.5rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  .navbar {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .nav-links {
+    gap: 1rem;
+    font-size: 0.85rem;
+  }
+
+  .arch-diagram {
+    flex-direction: column;
+  }
+
+  .arch-arrow {
+    transform: rotate(90deg);
+  }
+
+  .tech-overview {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-methods {
+    grid-template-columns: 1fr;
+  }
+
+  .github-info {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  section {
+    padding: 3rem 1rem;
+  }
+
+  .hero-contact {
+    padding: 10rem 1rem 3rem;
+  }
+
+  .hero-contact h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .logo-title {
+    font-size: 1.1rem;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+}

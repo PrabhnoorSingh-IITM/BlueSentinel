@@ -1,6 +1,3 @@
-/* Landing Page Specific Styles - BlueSentinel */
-/* Color Palette: #00FFD4 (cyan), #5465FF (blue), #D2DDFF (light blue), #050208 (dark) */
-
 * {
   margin: 0;
   padding: 0;
@@ -119,6 +116,9 @@ body {
   transition: all 0.3s ease;
   border: none;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .btn-primary:hover {
@@ -172,8 +172,8 @@ body {
 
 .hero-buttons {
   display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+  gap: 2rem;
+  flex-wrap: wrap; 
 }
 
 .btn-secondary {
@@ -198,7 +198,8 @@ body {
 .btn-icon {
   width: 20px;
   height: 20px;
-  filter: brightness(0) invert(1);
+  display: block;
+  flex-shrink: 0;
 }
 
 .hero-stats {
@@ -259,19 +260,19 @@ body {
 .marker-blue {
   background: #00FFD4;
   top: 30%;
-  left: 40%;
+  left: 43%;
 }
 
 .marker-green {
   background: #00FFD4;
   top: 60%;
-  left: 30%;
+  left: 38%;
 }
 
 .marker-yellow {
   background: #5465FF;
   top: 50%;
-  right: 35%;
+  right: 25%;
 }
 
 @keyframes pulse {
@@ -465,6 +466,28 @@ footer {
   padding: 2rem;
   text-align: center;
   border-top: 1px solid rgba(0, 255, 212, 0.2);
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.footer-links a {
+  color: #D2DDFF;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  opacity: 0.85;
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #00FFD4;
+  opacity: 1;
 }
 
 footer p {

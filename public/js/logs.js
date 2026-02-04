@@ -3,7 +3,89 @@ document.addEventListener('DOMContentLoaded', function() {
     loadIncidentLogs();
     setupMapInteractions();
     setupLogActions();
+    monitorSensorThresholds();
 });
+
+const thresholdConfig = {
+    temperature: { warning: { min: 10, max: 32 }, alert: { min: 5, max: 35 } },
+    pH: { warning: { min: 6.5, max: 8.5 }, alert: { min: 6.0, max: 9.0 } },
+    turbidity: { warning: { min: 0, max: 5 }, alert: { min: 0, max: 10 } },
+    dissolvedOxygen: { warning: { min: 5, max: 12 }, alert: { min: 3, max: 15 } },
+    salinity: { warning: { min: 20, max: 40 }, alert: { min: 15, max: 45 } }
+};
+
+const recentAlerts = new Map();
+
+function monitorSensorThresholds() {
+    if (!window.firebaseDB) {
+        console.warn('Firebase database not available for logs monitoring');
+        return;
+    }
+
+    window.firebaseDB.ref('BlueSentinel').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (!data) return;
+
+        evaluateSensor('temperature', data.temperature, 'Temperature');
+        evaluateSensor('pH', data.pH, 'pH');
+        evaluateSensor('turbidity', data.turbidity, 'Turbidity');
+        evaluateSensor('dissolvedOxygen', data.dissolvedOxygen, 'Dissolved O₂');
+        evaluateSensor('salinity', data.salinity, 'Salinity');
+    });
+}
+
+function evaluateSensor(key, value, label) {
+    if (value === undefined || value === null) return;
+
+    const thresholds = thresholdConfig[key];
+    const alertKey = `${key}`;
+    const now = Date.now();
+    const lastTime = recentAlerts.get(alertKey) || 0;
+
+    let severity = null;
+    if (value < thresholds.alert.min || value > thresholds.alert.max) {
+        severity = 'alert';
+    } else if (value < thresholds.warning.min || value > thresholds.warning.max) {
+        severity = 'warning';
+    }
+
+    if (!severity) return;
+    if (now - lastTime < 120000) return;
+
+    recentAlerts.set(alertKey, now);
+    createLogEntry({
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        type: label,
+        severity,
+        location: 'Live Sensor Feed',
+        details: `${label} reading out of range: ${value}`
+    });
+}
+
+function createLogEntry(log) {
+    const logsContainer = document.querySelector('.logs-container');
+    if (!logsContainer) return;
+
+    const entry = document.createElement('div');
+    entry.className = `log-entry ${log.severity}`;
+    entry.innerHTML = `
+        <div class="log-header">
+            <span class="log-time">${log.time}</span>
+            <span class="log-type ${log.severity}">${log.type}</span>
+            <span class="log-location">${log.location}</span>
+        </div>
+        <div class="log-details">
+            <p>${log.details}</p>
+            <div class="log-actions">
+                <button class="btn-acknowledge">Acknowledge</button>
+                ${log.severity !== 'normal' ? '<button class="btn-investigate">Investigate</button>' : ''}
+            </div>
+        </div>
+    `;
+
+    logsContainer.prepend(entry);
+    setupLogActions();
+}
 
 function loadIncidentLogs() {
     // Simulate loading logs from Firebase

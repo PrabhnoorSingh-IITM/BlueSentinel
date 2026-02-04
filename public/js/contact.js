@@ -1,4 +1,4 @@
-// Index page interactions and animations
+// Contact page interactions and animations
 document.addEventListener('DOMContentLoaded', function() {
     // Smooth scrolling for navigation links
     const navLinks = document.querySelectorAll('a[href^="#"]');
@@ -15,9 +15,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Animate stats on scroll
+    // Animate elements on scroll
     const observerOptions = {
-        threshold: 0.5,
+        threshold: 0.1,
         rootMargin: '0px'
     };
 
@@ -30,7 +30,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }, observerOptions);
 
     // Observe elements for animation
-    const animateElements = document.querySelectorAll('.stat-card, .card, .step');
+    const animateElements = document.querySelectorAll(
+        '.team-member, .tech-category, .ref-category, .contact-card, .arch-box, .flow-step'
+    );
     animateElements.forEach(el => observer.observe(el));
 });
 

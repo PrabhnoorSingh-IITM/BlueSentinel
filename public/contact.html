@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Contact Us & About | BlueSentinel</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="css/contact.css" />
+    </head>
+
+    <body>
+        <div class="container">
+            <!-- NAVBAR -->
+            <nav class="navbar">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <img src="./assets/images/logo.png" alt="BlueSentinel logo">
+                    </div>
+                    <div class="logo-text">
+                        <div class="logo-title">BlueSentinel</div>
+                        <div class="logo-subtitle">Ocean Intelligence Platform</div>
+                    </div>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#team">Team</a></li>
+                    <li><a href="#tech">Tech Stack</a></li>
+                    <li><a href="#bibliography">References</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="https://github.com/PrabhnoorSingh-IITM/BlueSentinel" target="_blank" rel="noopener noreferrer" class="github-icon">
+                        <img src="/public/assets/icons/github.svg" alt="GitHub">
+                    </a>
+                    <a href="dashboard.html" class="btn-primary">Dashboard</a>
+                </div>
+            </nav>
+
+            <!-- HERO SECTION -->
+            <section class="hero-contact">
+                <h1>Contact & About Us</h1>
+                <p>BlueSentinel - A Digital Nervous System for the Ocean</p>
+            </section>
+
+            <!-- TEAM SECTION -->
+            <section id="team" class="team-section">
+                <h2>Our Team</h2>
+                <p class="section-subtitle">Passionate engineers and developers protecting marine ecosystems</p>
+                
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="member-avatar">
+                            <img src="./assets/images/Prabhnoor.png" alt="Prabhnoor Singh">
+                        </div>
+                        <h3>Prabhnoor Singh</h3>
+                        <p class="role">Lead Developer & Project Lead</p>
+                        <p class="description">Full-stack developer specializing in IoT systems and cloud infrastructure. Architected the entire BlueSentinel platform.</p>
+                        <div class="social-links">
+                            <a href="https://github.com/PrabhnoorSingh-IITM" target="_blank" rel="noopener noreferrer" class="github-link">
+                                @PrabhnoorSingh-IITM
+                            </a>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar">
+                            <img src="./assets/images/logo.png" alt="Team Member 2">
+                        </div>
+                        <h3>Mehak Kaur</h3>
+                        <p class="role">IoT & Hardware Engineer</p>
+                        <p class="description">Leads sensor integration, firmware reliability, and field deployment setup.</p>
+                        <div class="social-links">
+                            <a href="https://github.com/MehakKaurSahdev" target="_blank" rel="noopener noreferrer" class="github-link">
+                                @MehakKaurSahdev
+                            </a>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar">
+                            <img src="./assets/images/logo.png" alt="Team Member 3">
+                        </div>
+                        <h3>Jaisveen Kaur</h3>
+                        <p class="role">ML & Analytics Engineer</p>
+                        <p class="description">Builds prediction models, health scoring, and anomaly detection pipelines.</p>
+                        <div class="social-links">
+                            <a href="https://github.com/jaisveenkaur" target="_blank" rel="noopener noreferrer" class="github-link">
+                                @jaisveenkaur
+                            </a>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar">
+                            <img src="./assets/images/logo.png" alt="Team Member 4">
+                        </div>
+                        <h3>Prabhleen Kaur</h3>
+                        <p class="role">Frontend & UX Engineer</p>
+                        <p class="description">Designs the dashboard UI, data visualizations, and interaction flows.</p>
+                        <div class="social-links">
+                            <a href="https://github.com/PrabhleenKaur07" target="_blank" rel="noopener noreferrer" class="github-link">
+                                @PrabhleenKaur07
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!--
+                <div class="team-info">
+                    <h3>Team Development</h3>
+                    <p>BlueSentinel is actively being developed with more team members joining the mission to protect ocean ecosystems. If you're interested in contributing to this project, we'd love to hear from you!</p>
+                </div>
+                -->
+            </section>
+
+            <!-- TECHNOLOGY STACK -->
+            <section id="tech" class="tech-section">
+                <h2>Technology Stack & Architecture</h2>
+                
+                <div class="tech-overview">
+                    <div class="tech-category">
+                        <h3>Hardware Layer</h3>
+                        <div class="tech-list">
+                            <div class="tech-item">
+                                <span class="tech-name">ESP32 Dev Module</span>
+                                <span class="tech-desc">Primary microcontroller for sensor data collection</span>
+                            </div>
+                            <div class="tech-item">
+                                <span class="tech-name">DS18B20</span>
+                                <span class="tech-desc">Temperature Sensor (Pin D4)</span>
+                            </div>
+                            <div class="tech-item">
+                                <span class="tech-name">pH Sensor Module</span>
+                                <span class="tech-desc">Water pH monitoring (Pin D32)</span>
+                            </div>
+                            <div class="tech-item">
+                                <span class="tech-name">Turbidity Sensor</span>
+                                <span class="tech-desc">Water clarity measurement (Pin D35)</span>
+                            </div>
+                            <div class="tech-item">
+                                <span class="tech-name">WiFi Module</span>
+                                <span class="tech-desc">Built-in WiFi for cloud connectivity</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tech-category">
+                        <h3>Cloud Infrastructure</h3>
+                        <div class="tech-list">
+                            <div class="tech-item">
+                                <span class="tech-name">Firebase Realtime Database</span>
+                                <span class="tech-desc">Core data storage and real-time synchronization</span>
+                            </div>
+                            <div class="tech-item">
+                                <span class="tech-name">Firebase Authentication</span>
+                                <span class="tech-desc">Secure device and user authentication</span>
+                            </div>
+                            <div class="tech-item">
+                                <span class="tech-name">Firebase Hosting</span>
+                                <span class="tech-desc">Web deployment and CDN</span>
+                            </div>
+                            <div class="tech-item">
+                                <span class="tech-name">Firebase Cloud Functions</span>
+                                <span class="tech-desc">Serverless backend processing</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tech-category">
+                        <h3>Frontend Technologies</h3>
+                        <div class="tech-list">
+                            <div class="tech-item">
+                                <span class="tech-name">HTML5 / CSS3 / JavaScript</span>
+                                <span class="tech-desc">Vanilla web development, no frameworks</span>
+                            </div>
+                            <div class="tech-item">
+                                <span class="tech-name">Chart.js v4.4.0</span>
+                                <span class="tech-desc">Beautiful responsive live graphs and visualizations</span>
+                            </div>
+                            <div class="tech-item">
+                                <span class="tech-name">Firebase SDK v9.22.0</span>
+                                <span class="tech-desc">Real-time data synchronization and authentication</span>
+                            </div>
+                            <div class="tech-item">
+                                <span class="tech-name">Glass Morphism Design</span>
+                                <span class="tech-desc">Modern frosted glass effects and animations</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tech-category">
+                        <h3>External APIs & Services</h3>
+                        <div class="tech-list">
+                            <div class="tech-item">
+                                <span class="tech-name">NewsAPI.org</span>
+                                <span class="tech-desc">Marine conservation and ocean news aggregation</span>
+                            </div>
+                            <div class="tech-item">
+                                <span class="tech-name">Twilio (Planned)</span>
+                                <span class="tech-desc">SMS notifications for authorities and alerts</span>
+                            </div>
+                            <div class="tech-item">
+                                <span class="tech-name">Weather APIs (Planned)</span>
+                                <span class="tech-desc">Environmental data integration</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ARCHITECTURE DIAGRAM -->
+                <div class="architecture">
+                    <h3>System Architecture</h3>
+                    <div class="arch-diagram">
+                        <div class="arch-box arch-hardware">
+                            <h4>Hardware</h4>
+                            <p>ESP32 + 3 Sensors</p>
+                        </div>
+                        <div class="arch-arrow">→</div>
+                        <div class="arch-box arch-cloud">
+                            <h4>Cloud</h4>
+                            <p>Firebase RTDB</p>
+                        </div>
+                        <div class="arch-arrow">→</div>
+                        <div class="arch-box arch-web">
+                            <h4>Dashboard</h4>
+                            <p>Live Web Interface</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DATA FLOW -->
+            <section class="dataflow-section">
+                <h2>Real-time Data Pipeline</h2>
+                <div class="dataflow">
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <h4>Sensor Reading</h4>
+                        <p>Every 5 seconds, ESP32 reads temperature, pH, and turbidity</p>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <h4>Data Transmission</h4>
+                        <p>Data sent via WiFi to Firebase Realtime Database</p>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <h4>Data Storage</h4>
+                        <p>Stored in Firebase with timestamp and validation</p>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="step-number">4</div>
+                        <h4>Real-time Consumption</h4>
+                        <p>Dashboard receives live updates via WebSocket</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BIBLIOGRAPHY & REFERENCES -->
+            <section id="bibliography" class="bibliography-section">
+                <h2>Bibliography & References</h2>
+                
+                <div class="references">
+                    <div class="ref-category">
+                        <h3>Marine Science & Conservation</h3>
+                        <ul>
+                            <li>
+                                <strong>Ocean Acidification:</strong> 
+                                <span>National Oceanic and Atmospheric Administration (NOAA) - Ocean Acidification Research</span>
+                            </li>
+                            <li>
+                                <strong>Water Quality Monitoring:</strong>
+                                <span>U.S. Environmental Protection Agency (EPA) - Water Quality Standards</span>
+                            </li>
+                            <li>
+                                <strong>Marine Ecosystems:</strong>
+                                <span>UNESCO - World Ocean Assessment II</span>
+                            </li>
+                            <li>
+                                <strong>Coral Reef Protection:</strong>
+                                <span>NOAA Coral Reef Conservation Program</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="ref-category">
+                        <h3>IoT & Sensor Technology</h3>
+                        <ul>
+                            <li>
+                                <strong>ESP32 Documentation:</strong>
+                                <span><a href="https://docs.espressif.com/projects/esp-idf/en/latest/" target="_blank">Espressif ESP32 Official Docs</a></span>
+                            </li>
+                            <li>
+                                <strong>Arduino Framework:</strong>
+                                <span><a href="https://www.arduino.cc/" target="_blank">Arduino Official Website</a></span>
+                            </li>
+                            <li>
+                                <strong>DS18B20 Sensor:</strong>
+                                <span>Maxim Integrated - DS18B20 1-Wire Temperature Sensor Datasheet</span>
+                            </li>
+                            <li>
+                                <strong>Water Quality Sensors:</strong>
+                                <span>Atlas Scientific - Water Quality Sensor Guides</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="ref-category">
+                        <h3>Cloud & Web Technologies</h3>
+                        <ul>
+                            <li>
+                                <strong>Firebase Documentation:</strong>
+                                <span><a href="https://firebase.google.com/docs" target="_blank">Google Firebase Official Docs</a></span>
+                            </li>
+                            <li>
+                                <strong>Chart.js:</strong>
+                                <span><a href="https://www.chartjs.org/" target="_blank">Chart.js Documentation</a></span>
+                            </li>
+                            <li>
+                                <strong>REST APIs:</strong>
+                                <span><a href="https://newsapi.org/" target="_blank">NewsAPI.org</a></span>
+                            </li>
+                            <li>
+                                <strong>WebSocket Protocol:</strong>
+                                <span>RFC 6455 - The WebSocket Protocol</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="ref-category">
+                        <h3>Data Analysis & Visualization</h3>
+                        <ul>
+                            <li>
+                                <strong>Real-time Data Processing:</strong>
+                                <span>Google Cloud - Real-time Data Streaming Architecture</span>
+                            </li>
+                            <li>
+                                <strong>Time Series Data:</strong>
+                                <span>InfluxDB - Time Series Data Best Practices</span>
+                            </li>
+                            <li>
+                                <strong>Data Visualization:</strong>
+                                <span>Edward Tufte - The Visual Display of Quantitative Information</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="ref-category">
+                        <h3>Security & Best Practices</h3>
+                        <ul>
+                            <li>
+                                <strong>IoT Security:</strong>
+                                <span>OWASP - Internet of Things Security</span>
+                            </li>
+                            <li>
+                                <strong>Firebase Security:</strong>
+                                <span><a href="https://firebase.google.com/docs/database/security" target="_blank">Firebase Realtime Database Security Rules</a></span>
+                            </li>
+                            <li>
+                                <strong>API Security:</strong>
+                                <span>OWASP API Security Top 10</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- GITHUB REPOSITORY -->
+            <section class="github-section">
+                <h2>Open Source Project</h2>
+                <p>BlueSentinel is open source and available on GitHub. We welcome contributions from developers, researchers, and ocean enthusiasts worldwide.</p>
+                <div class="github-box">
+                    <h3>GitHub Repository</h3>
+                    <p>
+                        <a href="https://github.com/PrabhnoorSingh-IITM/BlueSentinel" target="_blank" rel="noopener noreferrer" class="github-link-large">
+                            github.com/PrabhnoorSingh-IITM/BlueSentinel
+                        </a>
+                    </p>
+                    <div class="github-info">
+                        <div class="info-item">
+                            <strong>License:</strong> MIT
+                        </div>
+                        <div class="info-item">
+                            <strong>Status:</strong> Active Development
+                        </div>
+                        <div class="info-item">
+                            <strong>Type:</strong> Open Source
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CONTACT INFORMATION -->
+            <section class="contact-info-section">
+                <h2>Get In Touch</h2>
+                <p>Have questions or want to contribute? Reach out to us!</p>
+                
+                <div class="contact-methods">
+                    <div class="contact-card">
+                        <h3>GitHub Issues</h3>
+                        <p>Report bugs or suggest features on our GitHub repository</p>
+                        <a href="https://github.com/PrabhnoorSingh-IITM/BlueSentinel/issues" target="_blank" rel="noopener noreferrer" class="contact-link">Open an Issue</a>
+                    </div>
+
+                    <div class="contact-card">
+                        <h3>Follow Us</h3>
+                        <p>Stay updated with the latest project developments</p>
+                        <a href="https://github.com/PrabhnoorSingh-IITM" target="_blank" rel="noopener noreferrer" class="contact-link">GitHub Profile</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FOOTER -->
+            <footer>
+                <p>© 2026 BlueSentinel • Protecting Life Below Water</p>
+            </footer>
+        </div>
+
+        <script src="js/contact.js"></script>
+    </body>
+</html>
