@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>BlueSentinel | Dashboard</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/global.css">
+        <link rel="stylesheet" href="css/dashboard.css">
+        
+        <!-- Firebase SDKs -->
+        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+        
+        <!-- Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+        
+        <!-- Firebase Init -->
+        <script src="js/core/firebase-init.js" defer></script>
+        <script src="js/dashboard.js" defer></script>
+    </head>
+
+    <body>
+        <div class="container">
+        <main>
+            <!-- Logo -->
+            <nav class="navbar">
+                <a href="dashboard.html" class="logo">
+                   <div class="logo">
+  <div class="logo-icon">
+    <img src="assets/images/logo.png" alt="BlueSentinel logo">
+  </div>
+
+  <div class="logo-text">
+    <div class="logo-title">BlueSentinel</div>
+    <div class="logo-subtitle">Ocean Intelligence Platform</div>
+  </div>
+</div>
+</a>
+            </nav>
+            <div class="main-title">Dashboard</div>
+            
+            <!-- Cards Container -->
+            <div class="cards-container">
+                <div class="box">
+                    <span class="title">Water Temperature</span>
+                    <div>
+                        <strong>°C</strong>
+                        <div class="card-value" id="temp-value">--</div>
+                        <div class="card-unit">Celsius</div>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <span class="title">Water pH</span>
+                    <div>
+                        <strong>pH Level</strong>
+                        <div class="card-value" id="ph-value">--</div>
+                        <div class="card-unit">pH</div>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <span class="title">Turbidity</span>
+                    <div>
+                        <strong>NTU</strong>
+                        <div class="card-value" id="turbidity-value">--</div>
+                        <div class="card-unit">Clarity</div>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <span class="title">Dissolved O₂</span>
+                    <div>
+                        <strong>mg/L</strong>
+                        <div class="card-value" id="do-value">--</div>
+                        <div class="card-unit">Oxygen</div>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <span class="title">Salinity</span>
+                    <div>
+                        <strong>PSU</strong>
+                        <div class="card-value" id="salinity-value">--</div>
+                        <div class="card-unit">Salt Level</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Large Graph Card -->
+            <div class="graph-container">
+                <div class="box box-large">
+                    <span class="title">Live Data Graphs</span>
+                    <div id="graph-content" class="graph-area">
+                        <canvas id="sensor-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="insights-container">
+                <div class="box box-small">
+                    <span class="title">Active Alerts</span>
+                    <div>
+                        <strong>Open</strong>
+                        <div class="card-value">3</div>
+                        <div class="card-unit">Needs review</div>
+                    </div>
+                </div>
+
+                <div class="box box-small">
+                    <span class="title">Last Update</span>
+                    <div>
+                        <strong>Updated</strong>
+                        <div class="card-value">Live</div>
+                        <div class="card-unit">Now</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-container">
+                <div class="box box-wide">
+                    <span class="title">Recent Activity</span>
+                    <div class="activity-list">
+                        <div class="activity-item">Turbidity stabilized in Mumbai Bay</div>
+                        <div class="activity-item">Health score improved in Kochi Backwaters</div>
+                        <div class="activity-item">Alert routed to response team</div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <nav class="glass-nav">
+                    <a class="nav-item active" href="dashboard.html">
+                        <span class="icon"><img src="./assets/icons/estate.svg" alt="Dashboard"></span>
+                        <span class="label">Dashboard</span>
+                    </a>
+                        
+                    <a class="nav-item" href="news.html">
+                        <span class="icon"><img src="./assets/icons/newspaper.svg" alt="News"></span>
+                        <span class="label">News</span>
+                    </a>
+                        
+                    <a class="nav-item" href="logs.html">
+                        <span class="icon"><img src="./assets/icons/document-signed.svg" alt="Logs"></span>
+                        <span class="label">Logs</span>
+                    </a>
+        </main>
+        </div>
+    </body>
+</html>
