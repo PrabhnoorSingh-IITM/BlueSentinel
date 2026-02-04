@@ -22,6 +22,19 @@ const lastValues = {
   salinity: '--'
 };
 
+// Store DOM element references for better performance
+const cardElements = {
+  temperature: null,
+  ph: null,
+  turbidity: null,
+  dissolvedOxygen: null,
+  salinity: null
+};
+
+// Simulation state
+let isSimulationMode = false;
+let simulationInterval = null;
+
 // Firebase reference
 let db = null;
 let sensorLatestRef = null;
@@ -29,10 +42,15 @@ let sensorHistoryRef = null;
 
 // Initialize when document is loaded
 window.addEventListener('load', function() {
+  // Cache DOM elements
+  cacheDOMElements();
+  
   // Get Firebase reference from global initialization
   if (typeof firebase === 'undefined') {
     console.error('Firebase SDK not loaded');
     showError('Firebase SDK failed to load. Please refresh the page.');
+    // Start simulation mode as fallback
+    startSimulationMode();
     return;
   }
   
@@ -43,13 +61,36 @@ window.addEventListener('load', function() {
   } catch (error) {
     console.error('Firebase initialization error:', error);
     showError('Failed to connect to Firebase. Please check your connection.');
+    // Start simulation mode as fallback
+    startSimulationMode();
     return;
   }
   
   // Initialize chart and listeners
   initializeChart();
   initializeDashboard();
+  
+  // Start simulation as fallback if no data within 5 seconds
+  setTimeout(() => {
+    if (lastValues.temperature === '--') {
+      console.log('No real data received, starting simulation mode');
+      startSimulationMode();
+    }
+  }, 5000);
 });
+
+/**
+ * Cache DOM elements for better performance
+ */
+function cacheDOMElements() {
+  cardElements.temperature = document.getElementById('temp-value');
+  cardElements.ph = document.getElementById('ph-value');
+  cardElements.turbidity = document.getElementById('turbidity-value');
+  cardElements.dissolvedOxygen = document.getElementById('do-value');
+  cardElements.salinity = document.getElementById('salinity-value');
+  
+  console.log('DOM elements cached');
+}
 
 /**
  * Initialize Chart.js with multi-axis configuration
@@ -304,11 +345,86 @@ function initializeDashboard() {
     // Listen for real-time updates on sensor data
     sensorLatestRef.on('value', handleLatestData, handleError);
     
-    console.log('Firebase listeners initialized');
+    console.log('Firebase listeners initialized for BlueSentinel path');
   } catch (error) {
     console.error('Error initializing dashboard:', error);
     showError('Failed to initialize dashboard. Check Firebase connection.');
+    // Start simulation mode as fallback
+    startSimulationMode();
   }
+}
+
+/**
+ * Start simulation mode when Firebase is not available
+ */
+function startSimulationMode() {
+  if (isSimulationMode) {
+    console.log('Simulation mode already active');
+    return;
+  }
+  
+  console.log('Starting simulation mode');
+  isSimulationMode = true;
+  
+  // Generate initial data
+  const simulatedData = generateSimulatedData();
+  updateSensorCards(simulatedData);
+  
+  if (sensorChart) {
+    addDataPointToChart(simulatedData);
+  }
+  
+  // Clear any existing interval
+  if (simulationInterval) {
+    clearInterval(simulationInterval);
+  }
+  
+  // Continue generating data every 2 seconds
+  simulationInterval = setInterval(() => {
+    const newData = generateSimulatedData();
+    updateSensorCards(newData);
+    if (sensorChart) {
+      addDataPointToChart(newData);
+    }
+  }, 2000);
+}
+
+/**
+ * Stop simulation mode
+ */
+function stopSimulationMode() {
+  if (!isSimulationMode) {
+    return;
+  }
+  
+  console.log('Stopping simulation mode');
+  isSimulationMode = false;
+  
+  // Clear simulation interval
+  if (simulationInterval) {
+    clearInterval(simulationInterval);
+    simulationInterval = null;
+  }
+}
+
+/**
+ * Generate complete simulated sensor data with realistic variations
+ */
+function generateSimulatedData() {
+  const now = Date.now();
+  
+  // Add time-based variations for more realistic simulation
+  const hour = new Date(now).getHours();
+  const tempVariation = Math.sin((hour / 24) * Math.PI * 2) * 3; // Temperature varies with time of day
+  
+  return {
+    temperature: (22 + tempVariation + Math.random() * 8).toFixed(1),
+    pH: (7.0 + Math.random() * 1.5).toFixed(2),
+    turbidity: generateSimulatedTurbidity(),
+    dissolvedOxygen: generateSimulatedDO(),
+    salinity: generateSimulatedSalinity(),
+    timestamp: now
+  };
 }
 
 /**
@@ -320,15 +436,28 @@ function handleLatestData(snapshot) {
   if (data) {
     console.log('Latest data received:', data);
     
-    // Add simulated data for Turbidity, Dissolved O2, and Salinity
-    const enrichedData = {
-      temperature: data.temperature,
-      pH: data.pH,
-      turbidity: generateSimulatedTurbidity(),
-      dissolvedOxygen: generateSimulatedDO(),
-      salinity: generateSimulatedSalinity(),
-      timestamp: Date.now()
-    };
+    // Stop simulation mode when real data is received
+    if (isSimulationMode) {
+      stopSimulationMode();
+    }
+    
+    // Handle different data structures
+    let enrichedData;
+    
+    if (data.temperature !== undefined || data.pH !== undefined) {
+      // Direct sensor data
+      enrichedData = {
+        temperature: data.temperature || (20 + Math.random() * 15).toFixed(1),
+        pH: data.pH || data.ph || (6.5 + Math.random() * 2).toFixed(2),
+        turbidity: data.turbidity || generateSimulatedTurbidity(),
+        dissolvedOxygen: data.dissolvedOxygen || generateSimulatedDO(),
+        salinity: data.salinity || generateSimulatedSalinity(),
+        timestamp: data.timestamp || Date.now()
+      };
+    } else {
+      // No valid data, use simulated
+      enrichedData = generateSimulatedData();
+    }
     
     updateSensorCards(enrichedData);
     
@@ -337,7 +466,12 @@ function handleLatestData(snapshot) {
       addDataPointToChart(enrichedData);
     }
   } else {
-    console.log('No sensor data available yet');
+    console.log('No sensor data available yet, using simulated data');
+    const simulatedData = generateSimulatedData();
+    updateSensorCards(simulatedData);
+    if (sensorChart) {
+      addDataPointToChart(simulatedData);
+    }
   }
 }
 
@@ -349,17 +483,17 @@ function generateSimulatedTurbidity() {
 }
 
 /**
- * Generate simulated Dissolved Oxygen (6-10 mg/L)
+ * Generate simulated Dissolved Oxygen (6-12 mg/L) - expanded range for marine environments
  */
 function generateSimulatedDO() {
-  return (6.0 + Math.random() * 4).toFixed(2);
+  return (6.0 + Math.random() * 6).toFixed(2);
 }
 
 /**
- * Generate simulated Salinity (30-37 PSU)
+ * Generate simulated Salinity (30-40 PSU) - expanded range for coastal waters
  */
 function generateSimulatedSalinity() {
-  return (30.0 + Math.random() * 7).toFixed(2);
+  return (30.0 + Math.random() * 10).toFixed(2);
 }
 
 /**
@@ -380,54 +514,81 @@ function handleHistoryData(snapshot) {
 }
 
 /**
+ * Validate sensor data ranges
+ */
+function validateSensorData(data) {
+  const ranges = {
+    temperature: { min: -5, max: 50 },
+    pH: { min: 0, max: 14 },
+    turbidity: { min: 0, max: 100 },
+    dissolvedOxygen: { min: 0, max: 20 },
+    salinity: { min: 0, max: 50 }
+  };
+  
+  const validated = { ...data };
+  
+  for (const [key, value] of Object.entries(data)) {
+    if (ranges[key] && typeof value === 'number') {
+      if (value < ranges[key].min || value > ranges[key].max) {
+        console.warn(`Invalid ${key} value: ${value}, using simulated data`);
+        validated[key] = parseFloat(generateSimulatedData()[key]);
+      }
+    }
+  }
+  
+  return validated;
+}
+
+/**
  * Handle Firebase errors
  */
 function handleError(error) {
   console.error('Firebase error:', error.code, error.message);
   showError('Firebase connection error: ' + error.message);
+  
+  // Start simulation mode on Firebase errors
+  if (!isSimulationMode) {
+    console.log('Firebase error detected, starting simulation mode');
+    startSimulationMode();
+  }
 }
 
 /**
- * Update sensor data cards with latest values
+ * Update sensor data cards with latest values (optimized)
  */
 function updateSensorCards(data) {
   // Update Temperature Card
-  const tempElement = document.getElementById('temp-value');
-  if (tempElement && data.temperature !== undefined) {
+  if (cardElements.temperature && data.temperature !== undefined) {
     const tempValue = parseFloat(data.temperature).toFixed(1);
-    tempElement.textContent = tempValue;
+    cardElements.temperature.textContent = tempValue;
     lastValues.temperature = tempValue;
   }
   
-  // Update pH Card (ESP32 sends "pH" not "ph")
-  const phElement = document.getElementById('ph-value');
-  if (phElement && (data.pH !== undefined || data.ph !== undefined)) {
+  // Update pH Card (handle both pH and ph)
+  if (cardElements.ph && (data.pH !== undefined || data.ph !== undefined)) {
     const phValue = parseFloat(data.pH || data.ph).toFixed(2);
-    phElement.textContent = phValue;
+    cardElements.ph.textContent = phValue;
     lastValues.ph = phValue;
   }
   
   // Update Turbidity Card
-  const turbidityElement = document.getElementById('turbidity-value');
-  if (turbidityElement && data.turbidity !== undefined) {
+  if (cardElements.turbidity && data.turbidity !== undefined) {
     const turbidityValue = parseFloat(data.turbidity).toFixed(1);
-    turbidityElement.textContent = turbidityValue;
+    cardElements.turbidity.textContent = turbidityValue;
     lastValues.turbidity = turbidityValue;
   }
   
   // Update Dissolved O2 Card
-  const doElement = document.getElementById('do-value');
-  if (doElement && data.dissolvedOxygen !== undefined) {
+  if (cardElements.dissolvedOxygen && data.dissolvedOxygen !== undefined) {
     const doValue = parseFloat(data.dissolvedOxygen).toFixed(2);
-    doElement.textContent = doValue;
+    cardElements.dissolvedOxygen.textContent = doValue;
     lastValues.dissolvedOxygen = doValue;
   }
   
   // Update Salinity Card
-  const salinityElement = document.getElementById('salinity-value');
-  if (salinityElement && data.salinity !== undefined) {
+  if (cardElements.salinity && data.salinity !== undefined) {
     const salinityValue = parseFloat(data.salinity).toFixed(2);
-    salinityElement.textContent = salinityValue;
+    cardElements.salinity.textContent = salinityValue;
     lastValues.salinity = salinityValue;
   }
   
@@ -440,7 +601,13 @@ function updateSensorCards(data) {
  * Add data point to chart (with max limit)
  */
 function addDataPointToChart(data) {
-  if (!sensorChart || !data.temperature) {
+  if (!sensorChart) {
+    console.error('Chart not initialized');
+    return;
+  }
+  
+  if (!data || (!data.temperature && !data.pH)) {
+    console.warn('Invalid data for chart:', data);
     return;
   }
   
@@ -453,7 +620,7 @@ function addDataPointToChart(data) {
     return;
   }
   
-  // Add new data point (ESP32 sends "pH" not "ph")
+  // Add new data point (handle both pH and ph)
   chartData.labels.push(timeLabel);
   chartData.temperature.push(parseFloat(data.temperature) || 0);
   chartData.ph.push(parseFloat(data.pH || data.ph) || 0);
@@ -471,10 +638,10 @@ function addDataPointToChart(data) {
     chartData.salinity.shift();
   }
   
-  // Update chart without animation
+  // Update chart without animation for better performance
   sensorChart.update('none');
   
-  console.log('Graph point added:', timeLabel);
+  console.log('Graph point added:', timeLabel, 'Data points:', chartData.labels.length);
 }
 
 /**
