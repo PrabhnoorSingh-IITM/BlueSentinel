@@ -32,6 +32,7 @@ window.addEventListener('load', function() {
   // Get Firebase reference from global initialization
   if (typeof firebase === 'undefined') {
     console.error('Firebase SDK not loaded');
+    showError('Firebase SDK failed to load. Please refresh the page.');
     return;
   }
   
@@ -41,6 +42,7 @@ window.addEventListener('load', function() {
     console.log('Firebase database initialized');
   } catch (error) {
     console.error('Firebase initialization error:', error);
+    showError('Failed to connect to Firebase. Please check your connection.');
     return;
   }
   
@@ -495,7 +497,38 @@ function formatTime(timestamp) {
  */
 function showError(message) {
   console.error(message);
-  // Could add a toast notification here
+  
+  // Create or update error notification
+  let errorDiv = document.getElementById('error-notification');
+  if (!errorDiv) {
+    errorDiv = document.createElement('div');
+    errorDiv.id = 'error-notification';
+    errorDiv.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 59, 48, 0.9);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      max-width: 300px;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    `;
+    document.body.appendChild(errorDiv);
+  }
+  
+  errorDiv.textContent = message;
+  errorDiv.style.display = 'block';
+  
+  // Auto-hide after 5 seconds
+  setTimeout(() => {
+    if (errorDiv) {
+      errorDiv.style.display = 'none';
+    }
+  }, 5000);
 }
 
 /**

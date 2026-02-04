@@ -254,7 +254,10 @@ function acknowledgeLog(logId) {
             acknowledgedBy: 'current_user' // Replace with actual user ID
         }).catch(error => {
             console.error('Error acknowledging log:', error);
+            showNotification('Failed to acknowledge log', 'error');
         });
+    } else {
+        showNotification('Firebase not connected', 'error');
     }
 }
 
