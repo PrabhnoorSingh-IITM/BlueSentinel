@@ -29,11 +29,13 @@ async function loadNewsFromAPI() {
             updateNewsCards(apiNews);
         } else {
             // Fallback to sample data
+            console.log('API returned no data, using sample news');
             loadSampleNews();
         }
     } catch (error) {
         console.error('Error loading news from API:', error);
         // Fallback to sample data
+        console.log('Falling back to sample news due to API error');
         loadSampleNews();
     }
 }
