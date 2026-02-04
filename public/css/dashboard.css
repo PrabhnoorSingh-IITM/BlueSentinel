@@ -218,6 +218,46 @@ main {
   border: 2px solid rgba(255, 255, 255, 0.4);
 }
 
+/* Insights + Activity */
+.insights-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 10px auto 20px;
+  padding: 0 20px;
+}
+
+.box-small {
+  height: 180px;
+}
+
+.activity-container {
+  max-width: 1200px;
+  margin: 10px auto 20px;
+  padding: 0 20px;
+}
+
+.box-wide {
+  height: auto;
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.activity-item {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(84, 101, 255, 0.12);
+  border: 1px solid rgba(0, 255, 212, 0.2);
+  color: #D2DDFF;
+  font-size: 0.95rem;
+}
+
 .graph-area {
   flex: 1;
   display: flex;
