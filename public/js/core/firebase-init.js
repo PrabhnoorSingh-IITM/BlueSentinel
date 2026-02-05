@@ -2,6 +2,7 @@
 const firebaseConfig = {
   apiKey: "AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo",
   authDomain: "bluesentinel1.firebaseapp.com",
+  databaseURL: "https://bluesentinel1-default-rtdb.firebaseio.com",
   projectId: "bluesentinel1",
   storageBucket: "bluesentinel1.firebasestorage.app",
   messagingSenderId: "844615264671",

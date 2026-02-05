@@ -27,8 +27,8 @@ function monitorSensorThresholds() {
         if (!data) return;
 
         evaluateSensor('temperature', data.temperature, 'Temperature');
-        evaluateSensor('pH', data.pH, 'pH');
-        evaluateSensor('turbidity', data.turbidity, 'Turbidity');
+        evaluateSensor('pH', data.pH ?? data.ph, 'pH');
+        evaluateSensor('turbidity', normalizeTurbidity(data.turbidity ?? data.turbidityRaw ?? data.A0), 'Turbidity');
         evaluateSensor('dissolvedOxygen', data.dissolvedOxygen, 'Dissolved O₂');
         evaluateSensor('salinity', data.salinity, 'Salinity');
     });
@@ -58,8 +58,25 @@ function evaluateSensor(key, value, label) {
         type: label,
         severity,
         location: 'Live Sensor Feed',
-        details: `${label} reading out of range: ${value}`
+        details: `${label} reading out of range: ${value}`,
+        timestamp: now
     });
+}
+
+function normalizeTurbidity(value) {
+    if (value === undefined || value === null || value === '') return null;
+    const numeric = parseFloat(value);
+    if (Number.isNaN(numeric)) return null;
+
+    if (numeric > 50) {
+        const voltage = (numeric / 4095) * 3.3;
+        let ntu = -1120.4 * voltage * voltage + 5742.3 * voltage - 4352.9;
+        if (Number.isNaN(ntu)) return null;
+        ntu = Math.max(0, ntu);
+        return parseFloat(ntu.toFixed(2));
+    }
+
+    return numeric;
 }
 
 function createLogEntry(log) {
@@ -85,97 +102,82 @@ function createLogEntry(log) {
 
     logsContainer.prepend(entry);
     setupLogActions();
+    persistLogEntry(log);
+}
+
+function persistLogEntry(log) {
+    if (!window.firebaseDB) return;
+
+    const entry = {
+        time: log.time,
+        type: log.type,
+        severity: log.severity,
+        location: log.location,
+        details: log.details,
+        timestamp: log.timestamp || Date.now(),
+        acknowledged: false
+    };
+
+    window.firebaseDB.ref('logs').push(entry).catch(error => {
+        console.error('Failed to write log to Firebase:', error);
+    });
 }
 
 function loadIncidentLogs() {
-    // Simulate loading logs from Firebase
-    const logsData = [
-        {
-            id: 1,
-            time: '12:39am',
-            type: 'pH Alert',
-            severity: 'alert',
-            location: 'Mumbai Bay',
-            details: 'pH level dropped to 5.2 - below safe threshold',
-            timestamp: Date.now() - 3600000,
-            acknowledged: false
-        },
-        {
-            id: 2,
-            time: '11:45pm',
-            type: 'Temperature',
-            severity: 'warning',
-            location: 'Bangalore Lake',
-            details: 'Water temperature increased to 32°C - above optimal range',
-            timestamp: Date.now() - 7200000,
-            acknowledged: false
-        },
-        {
-            id: 3,
-            time: '10:30pm',
-            type: 'Maintenance',
-            severity: 'normal',
-            location: 'Delhi River',
-            details: 'Sensor calibration completed successfully',
-            timestamp: Date.now() - 10800000,
-            acknowledged: true
-        },
-        {
-            id: 4,
-            time: '9:15pm',
-            type: 'Turbidity',
-            severity: 'alert',
-            location: 'Chennai Coast',
-            details: 'Turbidity spike detected - possible sediment runoff',
-            timestamp: Date.now() - 14400000,
-            acknowledged: false
-        },
-        {
-            id: 5,
-            time: '8:00pm',
-            type: 'Health Score',
-            severity: 'normal',
-            location: 'Kolkata Port',
-            details: 'Marine health score improved to 85/100',
-            timestamp: Date.now() - 18000000,
-            acknowledged: true
-        }
-    ];
+    if (!window.firebaseDB) {
+        console.warn('Firebase database not available for logs');
+        return;
+    }
 
-    updateLogEntries(logsData);
+    const logsRef = window.firebaseDB.ref('logs').orderByChild('timestamp').limitToLast(50);
+    logsRef.on('value', (snapshot) => {
+        const logsData = [];
+        snapshot.forEach(child => {
+            logsData.push({ id: child.key, ...child.val() });
+        });
+
+        updateLogEntries(logsData.reverse());
+    });
 }
 
 function updateLogEntries(logsData) {
-    const logEntries = document.querySelectorAll('.log-entry');
-    
-    logEntries.forEach((entry, index) => {
-        if (logsData[index]) {
-            const log = logsData[index];
-            const timeElement = entry.querySelector('.log-time');
-            const typeElement = entry.querySelector('.log-type');
-            const locationElement = entry.querySelector('.log-location');
-            const detailsElement = entry.querySelector('.log-details p');
-            
-            if (timeElement) timeElement.textContent = log.time;
-            if (typeElement) typeElement.textContent = log.type;
-            if (locationElement) locationElement.textContent = log.location;
-            if (detailsElement) detailsElement.textContent = log.details;
-            
-            // Store log data for actions
-            entry.dataset.logId = log.id;
-            entry.dataset.acknowledged = log.acknowledged;
-            
-            // Update button states if acknowledged
-            if (log.acknowledged) {
-                const acknowledgeBtn = entry.querySelector('.btn-acknowledge');
-                if (acknowledgeBtn) {
-                    acknowledgeBtn.textContent = 'Acknowledged';
-                    acknowledgeBtn.disabled = true;
-                    acknowledgeBtn.style.opacity = '0.5';
-                }
-            }
-        }
+    const logsContainer = document.querySelector('.logs-container');
+    if (!logsContainer) return;
+
+    logsContainer.innerHTML = '';
+
+    logsData.forEach(log => {
+        const entry = document.createElement('div');
+        entry.className = `log-entry ${log.severity || 'normal'}`;
+        entry.dataset.logId = log.id;
+        entry.dataset.acknowledged = log.acknowledged ? 'true' : 'false';
+
+        entry.innerHTML = `
+            <div class="log-header">
+                <span class="log-time">${log.time || formatLogTime(log.timestamp)}</span>
+                <span class="log-type ${log.severity || 'normal'}">${log.type || 'Sensor'}</span>
+                <span class="log-location">${log.location || 'Unknown'}</span>
+            </div>
+            <div class="log-details">
+                <p>${log.details || 'No details available'}</p>
+                <div class="log-actions">
+                    <button class="btn-acknowledge" ${log.acknowledged ? 'disabled style="opacity:0.5;"' : ''}>
+                        ${log.acknowledged ? 'Acknowledged' : 'Acknowledge'}
+                    </button>
+                    ${(log.severity && log.severity !== 'normal') ? '<button class="btn-investigate">Investigate</button>' : ''}
+                </div>
+            </div>
+        `;
+
+        logsContainer.appendChild(entry);
     });
+
+    setupLogActions();
+}
+
+function formatLogTime(timestamp) {
+    if (!timestamp) return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
 function setupMapInteractions() {
@@ -304,10 +306,7 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
-// Auto-refresh logs every 30 seconds
-setInterval(() => {
-    loadIncidentLogs();
-}, 30000);
+// No simulated auto-refresh; logs update via Firebase listeners
 
 // Add pulse animation
 const style = document.createElement('style');

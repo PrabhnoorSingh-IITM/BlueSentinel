@@ -1,5 +1,15 @@
 {
   "rules": {
+    "BlueSentinel": {
+      ".read": true,
+      ".write": true,
+      ".indexOn": ["timestamp"]
+    },
+    "logs": {
+      ".read": true,
+      ".write": true,
+      ".indexOn": ["timestamp", "severity"]
+    },
     "sensors": {
       ".read": true,
       ".write": true,

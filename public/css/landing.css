@@ -341,6 +341,7 @@ body {
 /* ============ SECTIONS ============ */
 .section {
   padding: 5rem 2rem;
+  width: 100%;
   max-width: 1400px;
   margin: 0 auto;
   text-align: center;
@@ -367,7 +368,8 @@ body {
 .section.dark {
   background: rgba(5, 2, 8, 0.5);
   border-radius: 20px;
-  margin: 2rem;
+  margin: 2rem auto;
+  width: min(1400px, calc(100% - 4rem));
 }
 
 /* ============ CARDS ============ */
@@ -461,26 +463,65 @@ body {
 }
 
 /* ============ FOOTER ============ */
-footer {
-  background: rgba(5, 2, 8, 0.8);
-  padding: 2rem;
-  text-align: center;
+.site-footer {
+  background: rgba(5, 2, 8, 0.9);
   border-top: 1px solid rgba(0, 255, 212, 0.2);
+  padding: 3rem 2rem 1.5rem;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2rem;
+    align-items: center;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+    gap: 0.5rem;
+}
+
+
+.footer-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #00FFD4;
+}
+
+.footer-subtitle {
+  font-size: 0.8rem;
+  color: #D2DDFF;
+  opacity: 0.75;
+}
+
+.footer-tagline {
+  color: #D2DDFF;
+  opacity: 0.75;
+  line-height: 1.6;
+  max-width: 420px;
 }
 
 .footer-links {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.25rem;
-  margin-bottom: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(140px, 1fr));
+  gap: 0.75rem 1.5rem;
+  justify-items: start;
 }
 
 .footer-links a {
   color: #D2DDFF;
   text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 0.95rem;
+  font-weight: 600;
   opacity: 0.85;
   transition: color 0.3s ease, opacity 0.3s ease;
 }
@@ -490,9 +531,15 @@ footer {
   opacity: 1;
 }
 
-footer p {
+.footer-bottom {
+  max-width: 1200px;
+  margin: 2rem auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(0, 255, 212, 0.15);
+  text-align: center;
   color: #D2DDFF;
   opacity: 0.7;
+  font-size: 0.9rem;
 }
 
 /* ============ RESPONSIVE ============ */
@@ -515,6 +562,20 @@ footer p {
   }
 
   .hero-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-links {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .footer-links {
     grid-template-columns: 1fr;
   }
 }

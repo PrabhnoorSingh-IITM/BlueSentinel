@@ -24,13 +24,13 @@
         <main>
             <!-- Logo -->
             <nav class="navbar">
-                <a href="dashboard.html" class="logo">
+                <a href="index.html" class="logo">
                     <div class="logo-icon">
                         <img src="./assets/images/logo.png" alt="BlueSentinel logo">
                     </div>
                     <div class="logo-text">
                         <div class="logo-title">BlueSentinel</div>
-                        <div class="logo-subtitle">Ocean Intelligence Platform</div>
+                        <div class="logo-subtitle">Marine Intelligence Platform</div>
                     </div>
                 </a>
             </nav>
@@ -99,7 +99,7 @@
                     <span class="title">Active Alerts</span>
                     <div>
                         <strong>Open</strong>
-                        <div class="card-value">3</div>
+                        <div class="card-value" id="alert-count">0</div>
                         <div class="card-unit">Needs review</div>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
                     <span class="title">Last Update</span>
                     <div>
                         <strong>Updated</strong>
-                        <div class="card-value">Live</div>
+                        <div class="card-value" id="last-update-time">Live</div>
                         <div class="card-unit">Now</div>
                     </div>
                 </div>
@@ -117,10 +117,8 @@
             <div class="activity-container">
                 <div class="box box-wide">
                     <span class="title">Recent Activity</span>
-                    <div class="activity-list">
-                        <div class="activity-item">Turbidity stabilized in Mumbai Bay</div>
-                        <div class="activity-item">Health score improved in Kochi Backwaters</div>
-                        <div class="activity-item">Alert routed to response team</div>
+                    <div class="activity-list" id="recent-activity">
+                        <div class="activity-item">Initializing live data stream...</div>
                     </div>
                 </div>
             </div>
@@ -142,10 +140,6 @@
                         <span class="label">Logs</span>
                     </a>
                     
-                    <a class="nav-item" href="profile.html">
-                        <span class="icon"><img src="./assets/icons/user.svg" alt="Profile"></span>
-                        <span class="label">Profile</span>
-                    </a>
                 </nav>
         </main>
         </div>

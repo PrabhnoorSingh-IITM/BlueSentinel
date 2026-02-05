@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Dummy Logs - BlueSentinel</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            background: linear-gradient(135deg, #050208 0%, #1a0f2e 50%, #0a1628 100%);
+            color: #D2DDFF;
+            padding: 40px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(5, 2, 8, 0.8);
+            padding: 30px;
+            border-radius: 16px;
+            border: 2px solid rgba(0, 255, 212, 0.3);
+        }
+        h1 {
+            color: #00FFD4;
+            text-align: center;
+        }
+        button {
+            background: linear-gradient(135deg, #00FFD4, #5465FF);
+            color: #050208;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(0, 255, 212, 0.1);
+            border-left: 3px solid #00FFD4;
+        }
+        .error {
+            background: rgba(255, 59, 48, 0.2);
+            border-left: 3px solid #FF3B30;
+        }
+        .success {
+            background: rgba(0, 255, 212, 0.2);
+            border-left: 3px solid #00FFD4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Add 3 Dummy Logs to Firebase</h1>
+        <p>This will add 3 sample incident logs to your Firebase database for testing.</p>
+        <button onclick="addDummyLogs()">Add Dummy Logs</button>
+        <div id="status" style="display: none;"></div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
+    <!-- Firebase Init -->
+    <script src="js/core/firebase-init.js"></script>
+    
+    <script>
+        async function addDummyLogs() {
+            const statusDiv = document.getElementById('status');
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'status';
+            statusDiv.innerHTML = 'Adding logs to Firebase...';
+            
+            try {
+                const db = firebase.database();
+                
+                // Dummy logs matching real monitoring scenarios
+                const dummyLogs = [
+                    {
+                        time: new Date(Date.now() - 3600000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                        type: 'Temperature',
+                        severity: 'warning',
+                        location: 'Live Sensor Feed',
+                        details: 'Temperature reading out of range: 33.2°C - Above optimal range',
+                        timestamp: Date.now() - 3600000,
+                        acknowledged: false
+                    },
+                    {
+                        time: new Date(Date.now() - 1800000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                        type: 'Turbidity',
+                        severity: 'alert',
+                        location: 'Live Sensor Feed',
+                        details: 'Turbidity reading out of range: 8.5 NTU - Water clarity compromised',
+                        timestamp: Date.now() - 1800000,
+                        acknowledged: false
+                    },
+                    {
+                        time: new Date(Date.now() - 600000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                        type: 'pH',
+                        severity: 'warning',
+                        location: 'Live Sensor Feed',
+                        details: 'pH reading out of range: 8.7 - Slightly alkaline conditions detected',
+                        timestamp: Date.now() - 600000,
+                        acknowledged: false
+                    }
+                ];
+                
+                // Add each log to Firebase
+                for (let i = 0; i < dummyLogs.length; i++) {
+                    await db.ref('logs').push(dummyLogs[i]);
+                    statusDiv.innerHTML = `Added log ${i + 1} of ${dummyLogs.length}...`;
+                }
+                
+                statusDiv.className = 'status success';
+                statusDiv.innerHTML = `
+                    <strong>✅ Success!</strong><br>
+                    Added 3 dummy logs to Firebase.<br>
+                    <br>
+                    Logs added:<br>
+                    • Temperature warning (1 hour ago)<br>
+                    • Turbidity alert (30 min ago)<br>
+                    • pH warning (10 min ago)<br>
+                    <br>
+                    <a href="logs.html" style="color: #00FFD4;">View Logs Page</a>
+                `;
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = `
+                    <strong>❌ Error!</strong><br>
+                    ${error.message}
+                `;
+                console.error('Error adding logs:', error);
+            }
+        }
+    </script>
+</body>
+</html>

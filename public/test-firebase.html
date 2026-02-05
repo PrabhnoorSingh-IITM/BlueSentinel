@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Connection Test - BlueSentinel</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #050208 0%, #1a0f2e 50%, #0a1628 100%);
+            color: #00FFD4;
+            padding: 40px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(5, 2, 8, 0.8);
+            padding: 30px;
+            border-radius: 16px;
+            border: 2px solid rgba(0, 255, 212, 0.3);
+        }
+        h1 {
+            color: #00FFD4;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        button {
+            background: linear-gradient(135deg, #00FFD4, #5465FF);
+            color: #050208;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .log {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .success { color: #00FFD4; }
+        .error { color: #FF3B30; }
+        .warning { color: #FF9500; }
+        .info { color: #D2DDFF; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 Firebase Connection Test</h1>
+        <div>
+            <button onclick="testConnection()">1. Test Connection</button>
+            <button onclick="writeSensorData()">2. Write Test Sensor Data</button>
+            <button onclick="readSensorData()">3. Read Sensor Data</button>
+            <button onclick="startLiveStream()">4. Start Live Stream</button>
+            <button onclick="clearLog()">Clear Log</button>
+        </div>
+        <div id="log" class="log">
+            <div class="info">Ready to test Firebase connection...</div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo",
+            authDomain: "bluesentinel1.firebaseapp.com",
+            databaseURL: "https://bluesentinel1-default-rtdb.firebaseio.com",
+            projectId: "bluesentinel1",
+            storageBucket: "bluesentinel1.firebasestorage.app",
+            messagingSenderId: "844615264671",
+            appId: "1:844615264671:web:bdc4ef8d6ce7ec2c3c75aa",
+            measurementId: "G-1KCEZJL6JT"
+        };
+
+        let db;
+        let liveListener = null;
+
+        // Initialize Firebase
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.database();
+            log('✅ Firebase initialized successfully', 'success');
+        } catch (error) {
+            log('❌ Firebase initialization failed: ' + error.message, 'error');
+        }
+
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = type;
+            entry.textContent = `[${timestamp}] ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+            log('Log cleared', 'info');
+        }
+
+        async function testConnection() {
+            log('🔍 Testing Firebase connection...', 'info');
+            try {
+                const ref = db.ref('.info/connected');
+                ref.once('value', (snapshot) => {
+                    if (snapshot.val() === true) {
+                        log('✅ Connected to Firebase!', 'success');
+                    } else {
+                        log('❌ Not connected to Firebase', 'error');
+                    }
+                });
+            } catch (error) {
+                log('❌ Connection test failed: ' + error.message, 'error');
+            }
+        }
+
+        async function writeSensorData() {
+            log('📝 Writing test sensor data to /BlueSentinel...', 'info');
+            
+            const testData = {
+                temperature: 25.5 + (Math.random() * 5 - 2.5),
+                pH: 7.2 + (Math.random() * 0.4 - 0.2),
+                turbidity: 800 + Math.floor(Math.random() * 400),
+                timestamp: Date.now()
+            };
+            
+            try {
+                await db.ref('BlueSentinel').set(testData);
+                log('✅ Data written successfully!', 'success');
+                log('   Temperature: ' + testData.temperature.toFixed(2) + '°C', 'info');
+                log('   pH: ' + testData.pH.toFixed(2), 'info');
+                log('   Turbidity (raw): ' + testData.turbidity, 'info');
+            } catch (error) {
+                log('❌ Write failed: ' + error.message, 'error');
+            }
+        }
+
+        async function readSensorData() {
+            log('📖 Reading sensor data from /BlueSentinel...', 'info');
+            
+            try {
+                const snapshot = await db.ref('BlueSentinel').once('value');
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    log('✅ Data read successfully!', 'success');
+                    log('   Data: ' + JSON.stringify(data, null, 2), 'info');
+                } else {
+                    log('⚠️ No data found at /BlueSentinel', 'warning');
+                }
+            } catch (error) {
+                log('❌ Read failed: ' + error.message, 'error');
+            }
+        }
+
+        function startLiveStream() {
+            if (liveListener) {
+                log('⚠️ Already listening. Stopping current listener...', 'warning');
+                liveListener.off();
+            }
+            
+            log('🎧 Starting live data stream...', 'info');
+            
+            liveListener = db.ref('BlueSentinel');
+            liveListener.on('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    log('📡 Live update received:', 'success');
+                    log('   Temp: ' + (data.temperature || 'N/A') + '°C, pH: ' + (data.pH || 'N/A') + ', Turbidity: ' + (data.turbidity || 'N/A'), 'info');
+                } else {
+                    log('⚠️ No data in stream', 'warning');
+                }
+            }, (error) => {
+                log('❌ Stream error: ' + error.message, 'error');
+            });
+        }
+    </script>
+</body>
+</html>
