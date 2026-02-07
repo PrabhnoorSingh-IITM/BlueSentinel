@@ -1,3 +1,14 @@
 .env
 functions/.env
 hardware/esp32/**/secrets.h
+
+
+# Safe cleanup patterns
+.DS_Store
+**/node_modules/
+*.log
+tmp/
+dist/
+coverage/
+.vscode/
+.cache/
