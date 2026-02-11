@@ -16,7 +16,8 @@
         
         <!-- Firebase Init -->
         <script src="js/core/firebase-init.js" defer></script>
-        <script src="js/dashboard.js" defer></script>
+        <script src="js/dashboard-enhanced.js" defer></script>
+        <script src="js/ai-chatbot.js" defer></script>
     </head>
 
     <body>
@@ -84,11 +85,35 @@
                 </div>
             </div>
 
-            <!-- Large Graph Card -->
+            <!-- Graphs Section -->
+            <div class="graphs-container">
+                <div class="box box-medium">
+                    <span class="title">Temperature & pH</span>
+                    <div class="graph-area">
+                        <canvas id="temp-ph-chart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="box box-medium">
+                    <span class="title">Turbidity & Oxygen</span>
+                    <div class="graph-area">
+                        <canvas id="turbidity-oxygen-chart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="box box-medium">
+                    <span class="title">Salinity Levels</span>
+                    <div class="graph-area">
+                        <canvas id="salinity-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Combined Overview Graph -->
             <div class="graph-container">
                 <div class="box box-large">
-                    <span class="title">Live Data Graphs</span>
-                    <div id="graph-content" class="graph-area">
+                    <span class="title">Combined Overview</span>
+                    <div class="graph-area">
                         <canvas id="sensor-chart"></canvas>
                     </div>
                 </div>
@@ -148,6 +173,43 @@
                     </a>
                 </nav>
         </main>
+        
+        <!-- AI Chatbot -->
+        <div class="chatbot-container" id="chatbot-container">
+            <div class="chatbot-toggle" id="chatbot-toggle">
+                <img src="./assets/icons/ai.svg" alt="AI Assistant" class="chatbot-icon">
+                <span>AI Assistant</span>
+            </div>
+            
+            <div class="chatbot-window" id="chatbot-window">
+                <div class="chatbot-header">
+                    <h4>BlueSentinel AI Assistant</h4>
+                    <button class="chatbot-close" id="chatbot-close">×</button>
+                </div>
+                
+                <div class="chatbot-messages" id="chatbot-messages">
+                    <div class="ai-message">
+                        <p>👋 Hello! I'm your BlueSentinel AI assistant. I can help you with:</p>
+                        <ul>
+                            <li>📊 Understanding water quality data</li>
+                            <li>🌊 Ocean conservation information</li>
+                            <li>🔧 Technical support for the platform</li>
+                            <li>📈 Environmental insights and trends</li>
+                        </ul>
+                        <p>Feel free to ask me anything about BlueSentinel or ocean monitoring!</p>
+                    </div>
+                </div>
+                
+                <div class="chatbot-input-container">
+                    <input type="text" id="chatbot-input" placeholder="Ask me about BlueSentinel..." class="chatbot-input">
+                    <button id="chatbot-send" class="chatbot-send">
+                        <img src="./assets/icons/send.svg" alt="Send">
+                    </button>
+                </div>
+            </div>
         </div>
+        
+        <script src="js/dashboard.js" defer></script>
+        <script src="js/ai-chatbot.js" defer></script>
     </body>
 </html>
