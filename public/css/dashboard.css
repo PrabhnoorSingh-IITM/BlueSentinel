@@ -427,6 +427,52 @@ main {
     margin-top: 20px;
   }
 
+/* ============ GRAPHS ============ */
+.graphs-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.graph-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.box-medium {
+  background: rgba(84, 101, 255, 0.05);
+  border: 1px solid rgba(0, 255, 212, 0.2);
+  border-radius: 16px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  min-height: 300px;
+}
+
+.box-medium:hover {
+  transform: translateY(-4px);
+  border-color: #00FFD4;
+  box-shadow: 0 8px 24px rgba(0, 255, 212, 0.15);
+}
+
+/* Normal range highlighting */
+.normal-range {
+  background: rgba(0, 255, 100, 0.05);
+}
+
+.warning-range {
+  background: rgba(255, 193, 7, 0.1);
+}
+
+.critical-range {
+  background: rgba(220, 53, 69, 0.1);
+}
+
+/* Import AI chatbot styles */
+@import url('./ai-chatbot.css');
+
   .box-wide {
     height: 200px;
   }
