@@ -448,7 +448,8 @@ main {
   padding: 1.5rem;
   text-align: center;
   transition: all 0.3s ease;
-  min-height: 300px;
+  min-height: 350px;
+  position: relative;
 }
 
 .box-medium:hover {
@@ -457,17 +458,31 @@ main {
   box-shadow: 0 8px 24px rgba(0, 255, 212, 0.15);
 }
 
+.graph-area {
+  height: 280px !important;
+  width: 100% !important;
+  position: relative;
+}
+
+.graph-area canvas {
+  max-height: 100% !important;
+  max-width: 100% !important;
+}
+
 /* Normal range highlighting */
 .normal-range {
   background: rgba(0, 255, 100, 0.05);
+  border-color: rgba(0, 255, 100, 0.3);
 }
 
 .warning-range {
   background: rgba(255, 193, 7, 0.1);
+  border-color: rgba(255, 193, 7, 0.3);
 }
 
 .critical-range {
   background: rgba(220, 53, 69, 0.1);
+  border-color: rgba(220, 53, 69, 0.3);
 }
 
 /* Import AI chatbot styles */
