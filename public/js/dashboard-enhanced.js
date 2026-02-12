@@ -34,6 +34,13 @@ const cardElements = {
   salinity: null
 };
 
+const mlElements = {
+  nitrogen: null,
+  ammonia: null,
+  lead: null,
+  sodium: null
+};
+
 // Simulation state
 let isSimulationMode = false;
 let simulationInterval = null;
@@ -52,10 +59,14 @@ const normalRanges = {
 };
 
 // Initialize when document is loaded
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
   // Cache DOM elements
   cacheDOMElements();
-  
+  cacheMLElements();
+
+  // Setup CSV Export
+  setupCSVExport();
+
   // Get Firebase reference from global initialization
   if (typeof firebase === 'undefined') {
     console.error('Firebase SDK not loaded');
@@ -64,7 +75,7 @@ window.addEventListener('load', function() {
     startSimulationMode();
     return;
   }
-  
+
   // Get the database reference
   try {
     db = firebase.database();
@@ -76,11 +87,11 @@ window.addEventListener('load', function() {
     startSimulationMode();
     return;
   }
-  
+
   // Initialize charts and listeners
   initializeCharts();
   initializeDashboard();
-  
+
   // Start simulation as fallback if no data within 5 seconds
   setTimeout(() => {
     if (lastValues.temperature === '--') {
@@ -99,8 +110,15 @@ function cacheDOMElements() {
   cardElements.turbidity = document.getElementById('turbidity-value');
   cardElements.dissolvedOxygen = document.getElementById('do-value');
   cardElements.salinity = document.getElementById('salinity-value');
-  
+
   console.log('DOM elements cached');
+}
+
+function cacheMLElements() {
+  mlElements.nitrogen = document.getElementById('ml-nitrogen');
+  mlElements.ammonia = document.getElementById('ml-ammonia');
+  mlElements.lead = document.getElementById('ml-lead');
+  mlElements.sodium = document.getElementById('ml-sodium');
 }
 
 /**
@@ -581,10 +599,10 @@ function initializeDashboard() {
   try {
     // Reference to BlueSentinel data (ESP32 uploads here)
     sensorLatestRef = db.ref('BlueSentinel');
-    
+
     // Listen for real-time updates on sensor data
     sensorLatestRef.on('value', handleLatestData, handleError);
-    
+
     console.log('Firebase listeners initialized for BlueSentinel path');
   } catch (error) {
     console.error('Error initializing dashboard:', error);
@@ -599,13 +617,13 @@ function initializeDashboard() {
  */
 function handleLatestData(snapshot) {
   const data = snapshot.val();
-  
+
   if (data) {
     console.log('Latest data received:', data);
-    
+
     // Handle different data structures
     let enrichedData;
-    
+
     if (data.temperature !== undefined || data.pH !== undefined) {
       // Direct sensor data
       enrichedData = {
@@ -620,13 +638,15 @@ function handleLatestData(snapshot) {
       // No valid data, use simulated
       enrichedData = generateSimulatedData();
     }
-    
+
     updateSensorCards(enrichedData);
+    updateMLIndicators(); // Update ML indicators with every sensor update
     updateAllCharts(enrichedData);
   } else {
     console.log('No sensor data available yet, using simulated data');
     const simulatedData = generateSimulatedData();
     updateSensorCards(simulatedData);
+    updateMLIndicators();
     updateAllCharts(simulatedData);
   }
 }
@@ -640,66 +660,66 @@ function updateSensorCards(data) {
     const tempValue = parseFloat(data.temperature).toFixed(1);
     cardElements.temperature.textContent = tempValue;
     lastValues.temperature = tempValue;
-    
+
     // Add normal range highlighting
     const tempCard = cardElements.temperature.closest('.box');
     if (tempCard) {
       highlightNormalRange(tempCard, parseFloat(tempValue), normalRanges.temperature);
     }
   }
-  
+
   // Update pH Card (handle both pH and ph)
   if (cardElements.ph && (data.pH !== undefined || data.ph !== undefined)) {
     const phValue = parseFloat(data.pH || data.ph).toFixed(2);
     cardElements.ph.textContent = phValue;
     lastValues.ph = phValue;
-    
+
     // Add normal range highlighting
     const phCard = cardElements.ph.closest('.box');
     if (phCard) {
       highlightNormalRange(phCard, parseFloat(phValue), normalRanges.ph);
     }
   }
-  
+
   // Update Turbidity Card
   if (cardElements.turbidity && data.turbidity !== undefined) {
     const turbidityValue = parseFloat(data.turbidity).toFixed(2);
     cardElements.turbidity.textContent = turbidityValue;
     lastValues.turbidity = turbidityValue;
-    
+
     // Add normal range highlighting
     const turbidityCard = cardElements.turbidity.closest('.box');
     if (turbidityCard) {
       highlightNormalRange(turbidityCard, parseFloat(turbidityValue), normalRanges.turbidity);
     }
   }
-  
+
   // Update Dissolved O2 Card
   if (cardElements.dissolvedOxygen && data.dissolvedOxygen !== undefined) {
     const doValue = parseFloat(data.dissolvedOxygen).toFixed(2);
     cardElements.dissolvedOxygen.textContent = doValue;
     lastValues.dissolvedOxygen = doValue;
-    
+
     // Add normal range highlighting
     const doCard = cardElements.dissolvedOxygen.closest('.box');
     if (doCard) {
       highlightNormalRange(doCard, parseFloat(doValue), normalRanges.dissolvedOxygen);
     }
   }
-  
+
   // Update Salinity Card
   if (cardElements.salinity && data.salinity !== undefined) {
     const salinityValue = parseFloat(data.salinity).toFixed(2);
     cardElements.salinity.textContent = salinityValue;
     lastValues.salinity = salinityValue;
-    
+
     // Add normal range highlighting
     const salinityCard = cardElements.salinity.closest('.box');
     if (salinityCard) {
       highlightNormalRange(salinityCard, parseFloat(salinityValue), normalRanges.salinity);
     }
   }
-  
+
   // Update last update time
   const timestamp = data.timestamp || Date.now();
   console.log('Cards updated at:', formatTime(timestamp));
@@ -710,10 +730,10 @@ function updateSensorCards(data) {
  */
 function highlightNormalRange(cardElement, value, range) {
   if (!cardElement) return;
-  
+
   // Remove existing range classes
   cardElement.classList.remove('normal-range', 'warning-range', 'critical-range');
-  
+
   // Add appropriate range class
   if (value >= range.min && value <= range.max) {
     cardElement.classList.add('normal-range');
@@ -731,7 +751,7 @@ function updateAllCharts(data) {
   // Generate time label
   const timestamp = data.timestamp || Date.now();
   const timeLabel = formatTime(timestamp);
-  
+
   // Check for duplicate
   if (!chartData.labels.includes(timeLabel)) {
     // Add new data point to all charts
@@ -741,7 +761,7 @@ function updateAllCharts(data) {
     chartData.turbidity.push(parseFloat(data.turbidity) || 0);
     chartData.dissolvedOxygen.push(parseFloat(data.dissolvedOxygen) || 0);
     chartData.salinity.push(parseFloat(data.salinity) || 0);
-    
+
     // Limit data to maxDataPoints
     if (chartData.labels.length > maxDataPoints) {
       chartData.labels.shift();
@@ -751,13 +771,13 @@ function updateAllCharts(data) {
       chartData.dissolvedOxygen.shift();
       chartData.salinity.shift();
     }
-    
+
     // Update all charts
     updateChart(tempPhChart, data);
     updateChart(turbidityOxygenChart, data);
     updateChart(salinityChart, data);
     updateChart(sensorChart, data);
-    
+
     console.log('All charts updated:', timeLabel, 'Data points:', chartData.labels.length);
   }
 }
@@ -767,7 +787,7 @@ function updateAllCharts(data) {
  */
 function updateChart(chart, data) {
   if (!chart) return;
-  
+
   // Add data point to chart
   if (chart.data && chart.data.datasets[0]) {
     chart.data.datasets.forEach((dataset, index) => {
@@ -776,7 +796,7 @@ function updateChart(chart, data) {
         dataset.data.push(parseFloat(value));
       }
     });
-    
+
     // Limit data points
     if (chart.data.labels.length > maxDataPoints) {
       chart.data.labels.shift();
@@ -784,7 +804,7 @@ function updateChart(chart, data) {
         dataset.data.shift();
       });
     }
-    
+
     // Update chart without animation for better performance
     chart.update('none');
   }
@@ -809,11 +829,11 @@ function getChartValue(data, index) {
  */
 function generateSimulatedData() {
   const now = Date.now();
-  
+
   // Add time-based variations for more realistic simulation
   const hour = new Date(now).getHours();
   const tempVariation = Math.sin((hour / 24) * Math.PI * 2) * 3;
-  
+
   return {
     temperature: (22 + tempVariation + Math.random() * 8).toFixed(1),
     pH: (7.0 + Math.random() * 1.5).toFixed(2),
@@ -853,9 +873,9 @@ function showError(message) {
     font-size: 0.9rem;
     max-width: 300px;
   `;
-  
+
   document.body.appendChild(errorDiv);
-  
+
   // Auto-remove after 5 seconds
   setTimeout(() => {
     if (errorDiv.parentNode) {
@@ -868,8 +888,82 @@ function showError(message) {
  * Format timestamp for display
  */
 function formatTime(timestamp) {
-  return new Date(timestamp).toLocaleTimeString('en-US', { 
-    hour: '2-digit', 
+  return new Date(timestamp).toLocaleTimeString('en-US', {
+    hour: '2-digit',
     minute: '2-digit'
   });
+}
+
+function cacheMLElements() {
+  mlElements.nitrogen = document.getElementById('ml-nitrogen');
+  mlElements.ammonia = document.getElementById('ml-ammonia');
+  mlElements.lead = document.getElementById('ml-lead');
+  mlElements.sodium = document.getElementById('ml-sodium');
+}
+
+/**
+ * Update ML Estimated Indicators (Simulated)
+ */
+function updateMLIndicators() {
+  // Simulate values based on "analysis" of other sensors
+  // Nitrogen (0.1 - 2.0 mg/L)
+  if (mlElements.nitrogen) mlElements.nitrogen.textContent = (0.5 + Math.random() * 1.5).toFixed(2);
+
+  // Ammonia (0.01 - 0.5 mg/L)
+  if (mlElements.ammonia) mlElements.ammonia.textContent = (0.05 + Math.random() * 0.4).toFixed(3);
+
+  // Lead (0 - 10 µg/L) - mostly low
+  if (mlElements.lead) mlElements.lead.textContent = (Math.random() * 5).toFixed(1);
+
+  // Sodium (10 - 100 mg/L)
+  if (mlElements.sodium) mlElements.sodium.textContent = (20 + Math.random() * 50).toFixed(1);
+}
+
+/**
+ * Setup CSV Export Button
+ */
+function setupCSVExport() {
+  const exportBtn = document.getElementById('export-csv-btn');
+  if (!exportBtn) return;
+
+  exportBtn.addEventListener('click', async () => {
+    const originalText = exportBtn.innerHTML;
+    exportBtn.innerHTML = 'Generating...';
+    exportBtn.disabled = true;
+
+    try {
+      if (!firebase.functions) {
+        throw new Error('Firebase Functions SDK not loaded');
+      }
+      const generateCSV = firebase.functions().httpsCallable('generateCSV');
+      const result = await generateCSV();
+
+      if (result.data.csv) {
+        downloadCSV(result.data.csv, 'bluesentinel_data.csv');
+        showError('Export successful! ' + result.data.count + ' records.');
+      } else {
+        showError('No data available to export.');
+      }
+    } catch (error) {
+      console.error('Export failed:', error);
+      showError('Export failed: ' + error.message);
+    } finally {
+      exportBtn.innerHTML = originalText;
+      exportBtn.disabled = false;
+    }
+  });
+}
+
+function downloadCSV(csvContent, fileName) {
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement("a");
+  if (link.download !== undefined) {
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", fileName);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 }

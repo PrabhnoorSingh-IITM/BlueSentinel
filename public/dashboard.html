@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>BlueSentinel | Dashboard</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/global.css">
-        <link rel="stylesheet" href="css/dashboard.css">
-        
-        <!-- Firebase SDKs -->
-        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-        
-        <!-- Chart.js -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-        
-        <!-- Firebase Init -->
-        <script src="js/core/firebase-init.js" defer></script>
-        <script src="js/dashboard-enhanced.js" defer></script>
-        <script src="js/ai-chatbot.js" defer></script>
-    </head>
 
-    <body>
-        <div class="container">
+<head>
+    <meta charset="UTF-8" />
+    <title>BlueSentinel | Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Firebase Init -->
+    <script src="js/core/firebase-init.js" defer></script>
+    <script src="js/dashboard-enhanced.js" defer></script>
+    <script src="js/ai-chatbot.js" defer></script>
+    <script src="js/theme-toggle.js" defer></script>
+</head>
+
+<body>
+    <div class="container">
         <main>
             <!-- Logo -->
             <nav class="navbar">
@@ -34,9 +36,19 @@
                         <div class="logo-subtitle">Ocean Intelligence Platform</div>
                     </div>
                 </a>
+                <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+                    <!-- Icon injected by JS -->
+                </button>
             </nav>
-            <div class="main-title">Dashboard</div>
-            
+            <div class="dashboard-header">
+                <div class="main-title">Dashboard</div>
+                <button id="export-csv-btn" class="btn-secondary"
+                    style="gap: 0.5rem; padding: 0.5rem 1rem; font-size: 0.9rem;">
+                    <img src="./assets/icons/document-signed.svg" alt="Export" style="width: 16px; height: 16px;">
+                    Export Data (CSV)
+                </button>
+            </div>
+
             <!-- Cards Container -->
             <div class="cards-container">
                 <div class="box">
@@ -85,6 +97,41 @@
                 </div>
             </div>
 
+            <!-- ML Estimated Indicators -->
+            <div class="ml-section">
+                <h3 class="section-title">ML Estimated Indicators <span class="badge-ai">AI Projected</span></h3>
+                <div class="cards-container">
+                    <div class="box ml-card">
+                        <span class="title">Dissolved Nitrogen</span>
+                        <div>
+                            <div class="card-value" id="ml-nitrogen">--</div>
+                            <div class="card-unit">mg/L</div>
+                        </div>
+                    </div>
+                    <div class="box ml-card">
+                        <span class="title">Ammonia</span>
+                        <div>
+                            <div class="card-value" id="ml-ammonia">--</div>
+                            <div class="card-unit">mg/L</div>
+                        </div>
+                    </div>
+                    <div class="box ml-card">
+                        <span class="title">Lead (Pb)</span>
+                        <div>
+                            <div class="card-value" id="ml-lead">--</div>
+                            <div class="card-unit">µg/L</div>
+                        </div>
+                    </div>
+                    <div class="box ml-card">
+                        <span class="title">Sodium</span>
+                        <div>
+                            <div class="card-value" id="ml-sodium">--</div>
+                            <div class="card-unit">mg/L</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Graphs Section -->
             <div class="graphs-container">
                 <div class="box box-medium">
@@ -93,14 +140,14 @@
                         <canvas id="temp-ph-chart"></canvas>
                     </div>
                 </div>
-                
+
                 <div class="box box-medium">
                     <span class="title">Turbidity & Oxygen</span>
                     <div class="graph-area">
                         <canvas id="turbidity-oxygen-chart"></canvas>
                     </div>
                 </div>
-                
+
                 <div class="box box-medium">
                     <span class="title">Salinity Levels</span>
                     <div class="graph-area">
@@ -108,7 +155,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Combined Overview Graph -->
             <div class="graph-container">
                 <div class="box box-large">
@@ -150,43 +197,43 @@
                 </div>
             </div>
 
-            
+
             <nav class="glass-nav">
-                    <a class="nav-item active" href="dashboard.html">
-                        <span class="icon"><img src="./assets/icons/estate.svg" alt="Dashboard"></span>
-                        <span class="label">Dashboard</span>
-                    </a>
-                        
-                    <a class="nav-item" href="news.html">
-                        <span class="icon"><img src="./assets/icons/newspaper.svg" alt="News"></span>
-                        <span class="label">News</span>
-                    </a>
-                        
-                    <a class="nav-item" href="logs.html">
-                        <span class="icon"><img src="./assets/icons/document-signed.svg" alt="Logs"></span>
-                        <span class="label">Logs</span>
-                    </a>
-                    
-                    <a class="nav-item" href="forums.html">
-                        <span class="icon"><img src="./assets/icons/document-signed.svg" alt="Forums"></span>
-                        <span class="label">Forums</span>
-                    </a>
-                </nav>
+                <a class="nav-item active" href="dashboard.html">
+                    <span class="icon"><img src="./assets/icons/estate.svg" alt="Dashboard"></span>
+                    <span class="label">Dashboard</span>
+                </a>
+
+                <a class="nav-item" href="news.html">
+                    <span class="icon"><img src="./assets/icons/newspaper.svg" alt="News"></span>
+                    <span class="label">News</span>
+                </a>
+
+                <a class="nav-item" href="logs.html">
+                    <span class="icon"><img src="./assets/icons/document-signed.svg" alt="Logs"></span>
+                    <span class="label">Logs</span>
+                </a>
+
+                <a class="nav-item" href="forums.html">
+                    <span class="icon"><img src="./assets/icons/document-signed.svg" alt="Forums"></span>
+                    <span class="label">Forums</span>
+                </a>
+            </nav>
         </main>
-        
+
         <!-- AI Chatbot -->
         <div class="chatbot-container" id="chatbot-container">
             <div class="chatbot-toggle" id="chatbot-toggle">
                 <img src="./assets/icons/ai.svg" alt="AI Assistant" class="chatbot-icon">
                 <span>AI Assistant</span>
             </div>
-            
+
             <div class="chatbot-window" id="chatbot-window">
                 <div class="chatbot-header">
                     <h4>BlueSentinel AI Assistant</h4>
                     <button class="chatbot-close" id="chatbot-close">×</button>
                 </div>
-                
+
                 <div class="chatbot-messages" id="chatbot-messages">
                     <div class="ai-message">
                         <p>👋 Hello! I'm your BlueSentinel AI assistant. I can help you with:</p>
@@ -199,17 +246,19 @@
                         <p>Feel free to ask me anything about BlueSentinel or ocean monitoring!</p>
                     </div>
                 </div>
-                
+
                 <div class="chatbot-input-container">
-                    <input type="text" id="chatbot-input" placeholder="Ask me about BlueSentinel..." class="chatbot-input">
+                    <input type="text" id="chatbot-input" placeholder="Ask me about BlueSentinel..."
+                        class="chatbot-input">
                     <button id="chatbot-send" class="chatbot-send">
                         <img src="./assets/icons/send.svg" alt="Send">
                     </button>
                 </div>
             </div>
         </div>
-        
+
         <script src="js/dashboard.js" defer></script>
         <script src="js/ai-chatbot.js" defer></script>
-    </body>
+</body>
+
 </html>
