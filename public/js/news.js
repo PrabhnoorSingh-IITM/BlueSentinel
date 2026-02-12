@@ -1,5 +1,5 @@
 // News page functionality with API integration
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     loadNewsFromAPI();
     setupCardInteractions();
 });
@@ -24,7 +24,7 @@ async function loadNewsFromAPI() {
     try {
         // Try loading from API first
         const apiNews = await fetchMarineNews();
-        
+
         if (apiNews && apiNews.length > 0) {
             updateNewsCards(apiNews);
         } else {
@@ -41,23 +41,21 @@ async function loadNewsFromAPI() {
 }
 
 async function fetchMarineNews() {
-    // Example using NewsAPI.org
-    const response = await fetch(`${NEWS_API_CONFIG.newsApi.baseUrl}?q=ocean%20pollution%20OR%20marine%20conservation%20OR%20coral%20reef&apiKey=${NEWS_API_CONFIG.newsApi.apiKey}&pageSize=6&sortBy=publishedAt&language=en`);
-    
-    if (!response.ok) {
-        throw new Error('Failed to fetch news');
+    try {
+        // Use Firebase Cloud Function to avoid exposing API key
+        if (!firebase.functions) {
+            console.warn('Firebase Functions SDK not loaded, falling back to sample data');
+            throw new Error('Firebase Functions Object not found');
+        }
+
+        const getNews = firebase.functions().httpsCallable('getNews');
+        const result = await getNews();
+
+        return result.data;
+    } catch (error) {
+        console.error('Cloud Function Error:', error);
+        throw error;
     }
-    
-    const data = await response.json();
-    
-    // Transform API data to our format
-    return data.articles.map(article => ({
-        title: article.title,
-        content: article.description,
-        date: formatRelativeTime(new Date(article.publishedAt)),
-        url: article.url,
-        source: article.source.name
-    }));
 }
 
 function loadSampleNews() {
@@ -106,17 +104,17 @@ function loadSampleNews() {
             source: "BlueSentinel"
         }
     ];
-    
+
     updateNewsCards(sampleNews);
 }
 
 function updateNewsCards(newsData) {
     const newsGrid = document.querySelector('.news-grid');
     if (!newsGrid) return;
-    
+
     // Clear existing cards
     newsGrid.innerHTML = '';
-    
+
     // Create new cards
     newsData.forEach(news => {
         const card = createNewsCard(news);
@@ -137,14 +135,14 @@ function createNewsCard(newsData) {
             </svg>
         </div>
     `;
-    
+
     // Add click handler
     card.addEventListener('click', () => {
         if (newsData.url && newsData.url !== '#') {
             window.open(newsData.url, '_blank');
         }
     });
-    
+
     return card;
 }
 
@@ -155,7 +153,7 @@ function setupCardInteractions() {
         card.addEventListener('mouseenter', () => {
             // Add hover effects if needed
         });
-        
+
         card.addEventListener('mouseleave', () => {
             // Remove hover effects if needed
         });
@@ -167,7 +165,7 @@ function formatRelativeTime(date) {
     const diffInMs = now - date;
     const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
     const diffInDays = Math.floor(diffInHours / 24);
-    
+
     if (diffInHours < 1) {
         return 'Just now';
     } else if (diffInHours < 24) {
