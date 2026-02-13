@@ -1,267 +1,586 @@
+/* =========================================
+   BlueSentinel V2.0 - BlueSentinel Modern Design System
+   ========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap');
+
 :root {
-  /* Core Palette */
-  --color-cyan: #00FFD4;
-  --color-blue: #5465FF;
-  --color-light-blue: #D2DDFF;
-  --color-dark-bg: #050208;
-  --color-dark-surface: rgba(5, 2, 8, 0.95);
-  --color-text-main: #D2DDFF;
-  --color-text-muted: #94a3b8;
+  /* --- PALETTE: BLUESENTINEL DEPTHS --- */
+  --color-void: #050510;
+  /* Deepest background */
+  --color-abyss: #0a0f1e;
+  /* Secondary background */
+  --color-surface: rgba(20, 30, 50, 0.6);
+  /* Glass surface */
 
-  /* Theme Variables (Default Dark) */
-  --bg-body: linear-gradient(135deg, #050208 0%, #1a0f2e 50%, #0a1628 100%);
-  --bg-nav: rgba(5, 2, 8, 0.95);
-  --border-nav: rgba(0, 255, 212, 0.3);
-  --text-primary: #D2DDFF;
-  --card-bg: rgba(15, 23, 42, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.1);
+  /* --- ACCENTS: BIOLUMINESCENCE --- */
+  --color-cyan: #00F0FF;
+  /* Primary Action / Highlight */
+  --color-cyan-glow: rgba(0, 240, 255, 0.4);
+  --color-teal: #00D4FF;
+  /* Secondary Accent */
+  --color-purple: #7000FF;
+  /* Gradient accent */
+
+  /* --- STATUS --- */
+  --color-success: #00FF9D;
+  --color-warning: #FFD600;
+  --color-danger: #FF4D4D;
+
+  /* --- TYPOGRAPHY --- */
+  --font-main: 'Inter', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+  --text-primary: #E0E6ED;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+
+  /* --- DIMENSIONS --- */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 9999px;
+
+  /* --- EFFECTS --- */
+  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  --neon-glow: 0 0 10px var(--color-cyan-glow);
+  --transition-fast: 0.2s ease;
+  --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-[data-theme="light"] {
-  --bg-body: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-  --bg-nav: rgba(255, 255, 255, 0.9);
-  --border-nav: rgba(84, 101, 255, 0.2);
-  --text-primary: #1e293b;
-  --card-bg: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(0, 0, 0, 0.05);
-  --color-cyan: #00b4d8;
-  /* Darker cyan for light mode visibility */
-  --color-text-main: #0f172a;
-  --color-text-muted: #475569;
-}
-
+/* --- RESET & BASE --- */
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 body {
-  background: var(--bg-body);
+  background-color: var(--color-void);
+  background-image:
+    radial-gradient(circle at 15% 50%, rgba(112, 0, 255, 0.05), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.05), transparent 25%);
   color: var(--text-primary);
-  transition: background 0.3s ease, color 0.3s ease;
+  font-family: var(--font-main);
+  line-height: 1.6;
   min-height: 100vh;
-}
-
-/* NAVBAR */
-
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  padding: 0.75rem 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  /* Changed to space-between for better layout */
-  align-items: center;
-  background: var(--bg-nav);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  border-bottom: 2px solid var(--border-nav);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  transition: background 0.3s ease, border-color 0.3s ease;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.logo-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.logo-icon img {
-  height: 48px;
-  width: 48px;
-  object-fit: contain;
-}
-
-.logo-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
-  gap: 0.15rem;
-}
-
-.logo-title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--color-cyan);
-  letter-spacing: 0.5px;
-}
-
-.logo-subtitle {
-  font-size: 0.8rem;
-  color: var(--color-text-main);
-  font-weight: 400;
-}
-
-/* Theme Toggle Button */
-.theme-toggle-btn {
-  background: transparent;
-  border: 1px solid var(--border-nav);
-  color: var(--text-primary);
-  padding: 0.5rem;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  margin-left: 1rem;
-}
-
-.theme-toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: scale(1.1);
-}
-
-.theme-toggle-btn svg {
-  width: 20px;
-  height: 20px;
-  fill: currentColor;
-}
-
-.page-title {
-  display: none;
-}
-
-/* Hide nav-links and nav-actions on dashboard pages initially, specific pages can override */
-.nav-links {
-  display: none;
-}
-
-.nav-actions {
-  display: none;
-}
-
-/* BUTTONS */
-
-.btn-primary,
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.875rem 1.75rem;
-  font-weight: 600;
-  font-size: 1rem;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  border: none;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--color-cyan), var(--color-blue));
-  color: #050208;
-  /* Always dark text on primary button */
-  border-radius: 50px;
-  box-shadow: 0 0 20px rgba(0, 255, 212, 0.4);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 255, 212, 0.5);
-}
-
-.btn-secondary {
-  background: transparent;
-  color: var(--color-cyan);
-  border: 2px solid var(--color-cyan);
-  border-radius: 8px;
-}
-
-.btn-secondary:hover {
-  background: rgba(0, 255, 212, 0.1);
-}
-
-.btn-icon {
-  width: 20px;
-  height: 20px;
-}
-
-/* Common Layout Utilities */
-.container {
-  width: 100%;
-  min-height: 100vh;
-  position: relative;
   overflow-x: hidden;
 }
 
-main {
-  padding-top: 100px;
-  /* Space for fixed navbar */
-  padding-bottom: 100px;
-  /* Space for footer/nav */
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition-fast);
 }
 
-/* Card Styles reused across pages */
-.card,
-.box {
-  background: var(--card-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
-  border-radius: 12px;
-  color: var(--text-primary);
-  transition: transform 0.2s, box-shadow 0.2s;
+ul {
+  list-style: none;
 }
 
-/* Footer */
-footer {
-  padding: 3rem 2rem;
-  text-align: center;
-  font-size: 0.9rem;
-  position: relative;
-  z-index: 1;
-  background: rgba(0, 0, 0, 0.2);
-  margin-top: auto;
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
 }
 
-.footer-content {
-  max-width: 1200px;
+/* --- TYPOGRAPHY --- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #fff 0%, var(--color-cyan) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* --- LAYOUT UTILITIES --- */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  width: 100%;
+  padding-bottom: 120px;
+  /* Space for floating nav */
+}
+
+.page-center {
+  max-width: 1600px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+/* --- COMPONENT: SIDEBAR --- */
+/* --- COMPONENT: FLOATING NAV --- */
+.floating-nav {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(13, 17, 23, 0.85);
+  /* Abyss color with high opacity */
+  backdrop-filter: blur(20px);
+  border: var(--glass-border);
+  border-radius: 50px;
+  /* Pill shape */
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
   gap: 2rem;
-  text-align: left;
-  margin-bottom: 2rem;
+  z-index: 1000;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  width: auto;
+  max-width: 90vw;
 }
 
-.footer-section h3 {
-  color: var(--color-cyan);
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
+/* Hide brand in floating nav */
+.floating-nav .brand {
+  display: none;
 }
 
-.footer-links {
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.brand-logo {
+  width: 40px;
+  height: 40px;
+  filter: brightness(0) invert(1);
+  /* Force white */
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+}
+
+.nav-item {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  border-radius: 16px;
+  color: var(--text-secondary);
+  transition: var(--transition-fast);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.nav-item .label {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.nav-item:hover,
+.nav-item.active {
+  background: rgba(0, 240, 255, 0.1);
+  color: var(--color-cyan);
+}
+
+.nav-item.active {
+  box-shadow: inset 2px 0 0 0 var(--color-cyan);
+}
+
+.nav-icon {
+  width: 24px;
+  height: 24px;
+  /* filter: invert(1); Removed for font icons */
+}
+
+/* Specific fix for Bootstrap Icons */
+i.nav-icon {
+  width: auto;
+  height: auto;
+  font-size: 1.2rem;
+  filter: none;
+}
+
+/* --- COMPONENT: BENTO GRID --- */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+  padding-bottom: 2rem;
+}
+
+/* Universal Card Style */
+.bento-card {
+  background: var(--color-surface);
+  border: var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.bento-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 240, 255, 0.3);
+  box-shadow: 0 12px 40px rgba(0, 240, 255, 0.1);
+}
+
+/* Grid Spans */
+.span-3 {
+  grid-column: span 3;
+}
+
+.span-4 {
+  grid-column: span 4;
+}
+
+.span-6 {
+  grid-column: span 6;
+}
+
+.span-8 {
+  grid-column: span 8;
+}
+
+.span-12 {
+  grid-column: span 12;
+}
+
+/* Card Headers */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* Value Display (Big Numbers) */
+.value-display {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  margin: 0.5rem 0;
+}
+
+.unit {
+  font-size: 1rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-left: 0.25rem;
+}
+
+/* Indicators (Pills) */
+.status-pill {
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.status-normal {
+  background: rgba(0, 255, 157, 0.15);
+  color: var(--color-success);
+}
+
+.status-warning {
+  background: rgba(255, 214, 0, 0.15);
+  color: var(--color-warning);
+}
+
+.status-danger {
+  background: rgba(255, 77, 77, 0.15);
+  color: var(--color-danger);
+}
+
+/* --- BUTTONS --- */
+.btn-primary {
+  background: var(--color-cyan);
+  color: var(--color-void);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
   gap: 0.5rem;
 }
 
-.footer-links a {
-  color: var(--color-text-muted);
-  text-decoration: none;
-  transition: color 0.2s;
+.btn-primary:hover {
+  background: #fff;
+  box-shadow: 0 0 15px var(--color-cyan);
+  transform: translateY(-2px);
 }
 
-.footer-links a:hover {
-  color: var(--color-cyan);
+.btn-primary img {
+  filter: invert(1);
 }
 
-.footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 1.5rem;
-  color: var(--color-text-muted);
+.btn-icon {
+  background: rgba(255, 255, 255, 0.1);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  /* Added flex */
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+  color: #fff;
+  /* Ensure font icons are white */
+}
+
+.btn-icon img {
+  filter: invert(1);
+}
+
+/* Helper for direct img usage */
+img.btn-icon,
+i.btn-icon {
+  filter: none;
+  /* Reset for i */
+  background: none;
+}
+
+.btn-icon:hover {
+  background: var(--color-cyan);
+  color: var(--color-void);
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media (max-width: 1024px) {
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .span-3,
+  .span-4,
+  .span-6,
+  .span-8 {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    margin-bottom: 80px;
+    padding: 1rem;
+  }
+
+  .sidebar {
+    display: none;
+    /* Just in case */
+  }
+
+  .floating-nav {
+    width: 90%;
+    bottom: 1.5rem;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    justify-content: space-around;
+  }
+
+  .brand {
+    display: none;
+  }
+
+  .nav-links {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .nav-item {
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.7rem;
+    padding: 0.5rem;
+  }
+
+  .nav-item .label {
+    display: block;
+  }
+
+  /* Ensure labels align */
+
+  .bento-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .bento-card {
+    width: 100%;
+  }
+}
+
+/* --- CHATBOT --- */
+.chatbot-toggler {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 60px;
+  height: 60px;
+  background: var(--color-purple);
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(112, 0, 255, 0.4);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+.chatbot-toggler:hover {
+  transform: scale(1.1) rotate(10deg);
+}
+
+.chatbot-toggler img {
+  width: 30px;
+  height: 30px;
+  filter: invert(1);
+}
+
+.chatbot-window {
+  position: fixed;
+  bottom: 6rem;
+  right: 2rem;
+  width: 380px;
+  height: 500px;
+  background: var(--color-abyss);
+  border: var(--glass-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000;
+  transform-origin: bottom right;
+  animation: popIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.chat-header {
+  background: rgba(112, 0, 255, 0.1);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: var(--glass-border);
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.user-message {
+  align-self: flex-end;
+  background: var(--color-purple);
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 12px 12px 0 12px;
+  max-width: 80%;
+  font-size: 0.9rem;
+}
+
+.ai-message {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  padding: 0.75rem 1rem;
+  border-radius: 12px 12px 12px 0;
+  max-width: 80%;
+  font-size: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.chat-input-area {
+  padding: 1rem;
+  border-top: var(--glass-border);
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.chat-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.75rem;
+  border-radius: var(--radius-pill);
+  color: white;
+  outline: none;
+  font-family: inherit;
+}
+
+.chat-input:focus {
+  border-color: var(--color-purple);
+}
+
+.chat-send {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-void);
+  font-weight: bold;
 }

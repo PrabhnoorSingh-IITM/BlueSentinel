@@ -1,309 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>NGOs & Government Initiatives | BlueSentinel</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="css/global.css" />
-        <link rel="stylesheet" href="css/forums.css" />
-    </head>
 
-    <body>
-        <div class="container">
-            <!-- NAVBAR -->
-            <nav class="navbar">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <img src="./assets/images/logo.png" alt="BlueSentinel logo">
-                    </div>
-                    <div class="logo-text">
-                        <div class="logo-title">BlueSentinel</div>
-                        <div class="logo-subtitle">Ocean Intelligence Platform</div>
-                    </div>
-                </div>
-                <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="news.html">Marine News</a></li>
-                    <li><a href="logs.html">Incident Logs</a></li>
-                </ul>
-                <div class="nav-actions">
-                    <a href="https://github.com/PrabhnoorSingh-IITM/BlueSentinel" target="_blank" rel="noopener noreferrer" class="github-icon">
-                        <img src="/assets/icons/github.svg" alt="GitHub">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlueSentinel | Community Forums</title>
+    <link rel="stylesheet" href="css/global.css">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="js/core/firebase-init.js" defer></script>
+    <script src="js/theme-toggle.js" defer></script>
+    <script src="js/theme-toggle.js" defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        .forum-thread {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .forum-thread:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--color-cyan);
+            transform: translateY(-2px);
+        }
+
+        .thread-meta {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .report-form-container {
+            border: 1px solid var(--color-cyan);
+            background: rgba(0, 240, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            display: none;
+            /* Hidden by default */
+        }
+
+        .thread-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+        }
+    </style>
+    <script>
+        function toggleReportForm() {
+            const form = document.querySelector('.report-form-container');
+            const btn = document.getElementById('new-report-btn');
+            if (form.style.display === 'none' || !form.style.display) {
+                form.style.display = 'block';
+                btn.innerHTML = 'Cancel Report';
+                btn.style.background = 'var(--color-void)';
+                btn.style.border = '1px solid var(--color-danger)';
+                btn.style.color = 'var(--color-danger)';
+            } else {
+                form.style.display = 'none';
+                btn.innerHTML = '+ New Field Report';
+                btn.style.background = 'var(--color-primary)';
+                btn.style.border = 'none';
+                btn.style.color = '#000';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('manual-entry-form');
+            if (form) {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    // Mock Submission
+                    const btn = form.querySelector('button[type="submit"]');
+                    const originalText = btn.innerHTML;
+
+                    btn.innerHTML = '<span class="typing-dots">Submitting to Community...</span>';
+                    btn.disabled = true;
+
+                    setTimeout(() => {
+                        alert("Report Submitted to Community Feed!");
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                        form.reset();
+                        toggleReportForm(); // Close form
+
+                        // Ideally: prepend new thread to list
+                    }, 1500);
+                });
+            }
+        });
+    </script>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- FLOATING NAVIGATION -->
+        <nav class="floating-nav">
+            <div class="nav-links">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="bi bi-speedometer2 nav-icon"></i>
+                    <span class="label">Monitor</span>
+                </a>
+                <a href="news.html" class="nav-item">
+                    <i class="bi bi-newspaper nav-icon"></i>
+                    <span class="label">News</span>
+                </a>
+                <a href="logs.html" class="nav-item">
+                    <i class="bi bi-file-earmark-text nav-icon"></i>
+                    <span class="label">Logs</span>
+                </a>
+                <a href="archive.html" class="nav-item">
+                    <i class="bi bi-archive nav-icon"></i>
+                    <span class="label">Archives</span>
+                </a>
+                <a href="forums.html" class="nav-item active">
+                    <i class="bi bi-people nav-icon"></i>
+                    <span class="label">Forums</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="main-content">
+
+            <div class="page-center" style="max-width: 900px;">
+                <!-- Header -->
+                <header class="dashboard-header"
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <a href="dashboard.html" style="text-decoration: none; display: block;">
+                        <h1 class="text-gradient" style="font-size: 2rem;">Community Forums</h1>
+                        <p style="color: var(--text-muted);">Collaborate with researchers and report local observations
+                        </p>
                     </a>
-                    <a href="dashboard.html" class="btn-primary">Launch Dashboard</a>
-                </div>
-            </nav>
-
-            <!-- HERO SECTION -->
-            <section class="hero-forums">
-                <h1>NGOs & Government Initiatives</h1>
-                <p>Collaborative platform for ocean conservation organizations and government agencies to share initiatives, coordinate efforts, and amplify impact.</p>
-            </section>
-
-            <!-- INITIATIVES SECTION -->
-            <section class="initiatives-section">
-                <h2>Featured Ocean Protection Initiatives</h2>
-                <p class="section-subtitle">Discover and collaborate on marine conservation efforts worldwide</p>
-                
-                <div class="initiatives-grid">
-                    <!-- GOVERNMENT INITIATIVES -->
-                    <div class="initiative-category">
-                        <h3>🏛️️ Government Programs</h3>
-                        
-                        <div class="initiative-card">
-                            <div class="initiative-header">
-                                <h4>UN Ocean Decade</h4>
-                                <span class="initiative-status active">Active</span>
-                            </div>
-                            <div class="initiative-content">
-                                <p class="initiative-desc">United Nations-led initiative for ocean science and sustainable development. Coordinating global efforts to protect marine ecosystems through 2030.</p>
-                                <div class="initiative-meta">
-                                    <span class="initiative-org">United Nations</span>
-                                    <span class="initiative-date">2021-2030</span>
-                                </div>
-                                <div class="initiative-actions">
-                                    <button class="btn-small">Join Initiative</button>
-                                    <button class="btn-small">Share Resources</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="initiative-card">
-                            <div class="initiative-header">
-                                <h4>NOAA Coral Reef Conservation</h4>
-                                <span class="initiative-status active">Active</span>
-                            </div>
-                            <div class="initiative-content">
-                                <p class="initiative-desc">US National Oceanic and Atmospheric Administration program focused on protecting and restoring coral reef ecosystems through research and monitoring.</p>
-                                <div class="initiative-meta">
-                                    <span class="initiative-org">NOAA</span>
-                                    <span class="initiative-date">Ongoing</span>
-                                </div>
-                                <div class="initiative-actions">
-                                    <button class="btn-small">View Data</button>
-                                    <button class="btn-small">Partner</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="initiative-card">
-                            <div class="initiative-header">
-                                <h4>EU Marine Strategy Framework</h4>
-                                <span class="initiative-status active">Active</span>
-                            </div>
-                            <div class="initiative-content">
-                                <p class="initiative-desc">European Union's comprehensive framework for marine environmental policy, protection, and sustainable use of ocean resources.</p>
-                                <div class="initiative-meta">
-                                    <span class="initiative-org">European Union</span>
-                                    <span class="initiative-date">2021-2027</span>
-                                </div>
-                                <div class="initiative-actions">
-                                    <button class="btn-small">Access Resources</button>
-                                    <button class="btn-small">Collaborate</button>
-                                </div>
-                            </div>
-                        </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button id="theme-toggle" class="btn-icon">
+                            <i class="bi bi-sun-fill"></i>
+                        </button>
+                        <button id="new-report-btn" class="btn-primary" onclick="toggleReportForm()">
+                            + New Field Report
+                        </button>
                     </div>
+                </header>
 
-                    <!-- NGO INITIATIVES -->
-                    <div class="initiative-category">
-                        <h3>🌊 NGO & Non-Profit Programs</h3>
-                        
-                        <div class="initiative-card">
-                            <div class="initiative-header">
-                                <h4>Ocean Conservancy</h4>
-                                <span class="initiative-status active">Active</span>
+                <!-- Hidden Report Form -->
+                <div class="report-form-container">
+                    <h3 style="margin-bottom: 1.5rem; color: var(--color-cyan);">Submit Field Observation</h3>
+                    <form id="manual-entry-form" style="display: flex; flex-direction: column; gap: 2rem;">
+                        <!-- Simplified inputs for quick reporting -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                            <!-- Temp -->
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <label style="color: var(--text-secondary); font-size: 0.9rem;">Temperature (°C)</label>
+                                <input type="number" step="0.1" placeholder="e.g. 24.5" required
+                                    style="background: rgba(255, 77, 77, 0.05); border: 1px solid rgba(255, 77, 77, 0.3); padding: 0.8rem; border-radius: 8px; color: white; outline: none;">
                             </div>
-                            <div class="initiative-content">
-                                <p class="initiative-desc">International NGO working to protect ocean ecosystems and marine life through science-based advocacy, policy, and direct conservation action.</p>
-                                <div class="initiative-meta">
-                                    <span class="initiative-org">Ocean Conservancy</span>
-                                    <span class="initiative-date">Since 1987</span>
-                                </div>
-                                <div class="initiative-actions">
-                                    <button class="btn-small">Support</button>
-                                    <button class="btn-small">Learn More</button>
-                                </div>
+                            <!-- pH -->
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <label style="color: var(--text-secondary); font-size: 0.9rem;">pH Level</label>
+                                <input type="number" step="0.1" placeholder="e.g. 7.2" required
+                                    style="background: rgba(0, 240, 255, 0.05); border: 1px solid rgba(0, 240, 255, 0.3); padding: 0.8rem; border-radius: 8px; color: white; outline: none;">
                             </div>
                         </div>
-
-                        <div class="initiative-card">
-                            <div class="initiative-header">
-                                <h4>World Wildlife Fund</h4>
-                                <span class="initiative-status active">Active</span>
-                            </div>
-                            <div class="initiative-content">
-                                <p class="initiative-desc">Global conservation organization leading efforts to protect marine species and their habitats through scientific research and policy advocacy.</p>
-                                <div class="initiative-meta">
-                                    <span class="initiative-org">WWF</span>
-                                    <span class="initiative-date">Since 1961</span>
-                                </div>
-                                <div class="initiative-actions">
-                                    <button class="btn-small">Donate</button>
-                                    <button class="btn-small">Get Involved</button>
-                                </div>
-                            </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <label style="color: var(--text-secondary); font-size: 0.9rem;">Notes</label>
+                            <textarea rows="3" placeholder="Describe water conditions..."
+                                style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 0.8rem; border-radius: 8px; color: white; outline: none; resize: vertical;"></textarea>
                         </div>
-
-                        <div class="initiative-card">
-                            <div class="initiative-header">
-                                <h4>Greenpeace</h4>
-                                <span class="initiative-status active">Active</span>
-                            </div>
-                            <div class="initiative-content">
-                                <p class="initiative-desc">Environmental organization using peaceful protest and creative communication to expose global environmental problems and promote solutions for a green and peaceful future.</p>
-                                <div class="initiative-meta">
-                                    <span class="initiative-org">Greenpeace International</span>
-                                    <span class="initiative-date">Since 1971</span>
-                                </div>
-                                <div class="initiative-actions">
-                                    <button class="btn-small">Join Campaign</button>
-                                    <button class="btn-small">Volunteer</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="initiative-card">
-                            <div class="initiative-header">
-                                <h4>The Nature Conservancy</h4>
-                                <span class="initiative-status active">Active</span>
-                            </div>
-                            <div class="initiative-content">
-                                <p class="initiative-desc">Global environmental organization working to protect lands and waters through science, policy, and partnership with indigenous communities.</p>
-                                <div class="initiative-meta">
-                                    <span class="initiative-org">TNC</span>
-                                    <span class="initiative-date">Since 1951</span>
-                                </div>
-                                <div class="initiative-actions">
-                                    <button class="btn-small">Support</button>
-                                    <button class="btn-small">Partner</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SUBMIT INITIATIVE -->
-            <section class="submit-section">
-                <h2>Share Your Initiative</h2>
-                <p class="section-subtitle">NGOs and government agencies can submit their ocean conservation initiatives to be featured on this platform</p>
-                
-                <div class="submit-form">
-                    <form class="initiative-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="org-name">Organization Name *</label>
-                                <input type="text" id="org-name" name="org-name" required placeholder="Enter your organization name">
-                            </div>
-                            <div class="form-group">
-                                <label for="org-type">Organization Type *</label>
-                                <select id="org-type" name="org-type" required>
-                                    <option value="">Select type</option>
-                                    <option value="government">Government Agency</option>
-                                    <option value="ngo">Non-Profit NGO</option>
-                                    <option value="research">Research Institution</option>
-                                    <option value="community">Community Group</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="initiative-title">Initiative Title *</label>
-                                <input type="text" id="initiative-title" name="initiative-title" required placeholder="Enter initiative title">
-                            </div>
-                            <div class="form-group">
-                                <label for="initiative-status">Status *</label>
-                                <select id="initiative-status" name="initiative-status" required>
-                                    <option value="">Select status</option>
-                                    <option value="planning">Planning Phase</option>
-                                    <option value="active">Active</option>
-                                    <option value="completed">Completed</option>
-                                    <option value="ongoing">Ongoing</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="initiative-desc">Description *</label>
-                            <textarea id="initiative-desc" name="initiative-desc" rows="6" required placeholder="Describe your ocean conservation initiative, goals, and impact"></textarea>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="start-date">Start Date</label>
-                                <input type="date" id="start-date" name="start-date">
-                            </div>
-                            <div class="form-group">
-                                <label for="end-date">End Date (if applicable)</label>
-                                <input type="date" id="end-date" name="end-date">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="contact-email">Contact Email *</label>
-                            <input type="email" id="contact-email" name="contact-email" required placeholder="organization@example.com">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="website">Website</label>
-                            <input type="url" id="website" name="website" placeholder="https://example.com">
-                        </div>
-                        
-                        <div class="form-actions">
-                            <button type="submit" class="btn-primary">Submit Initiative</button>
-                            <button type="reset" class="btn-secondary">Clear Form</button>
-                        </div>
+                        <button type="submit" class="btn-primary" style="justify-content: center;">Submit to
+                            Community</button>
                     </form>
                 </div>
-            </section>
 
-            <!-- FOOTER -->
-            <footer>
-                <div class="footer-content">
-                    <div class="footer-section">
-                        <h3>Platform</h3>
-                        <div class="footer-links">
-                            <a href="index.html">Home</a>
-                            <a href="dashboard.html">Dashboard</a>
-                            <a href="news.html">Marine News</a>
-                            <a href="logs.html">Incident Logs</a>
-                            <a href="forums.html">NGOs & Initiatives</a>
-                        </div>
-                    </div>
-                    
-                    <div class="footer-section">
-                        <h3>Resources</h3>
-                        <div class="footer-links">
-                            <a href="contact.html#team">Team</a>
-                            <a href="contact.html#tech">Tech Stack</a>
-                            <a href="contact.html#bibliography">Bibliography</a>
-                            <a href="docs/architecture.html">Architecture</a>
-                            <a href="https://github.com/PrabhnoorSingh-IITM/BlueSentinel" target="_blank" rel="noopener noreferrer">GitHub</a>
-                        </div>
-                    </div>
-                    
-                    <div class="footer-section">
-                        <h3>Connect</h3>
-                        <div class="footer-links">
-                            <a href="mailto:bluesentinel.team@gmail.com">Contact Us</a>
-                            <a href="https://github.com/PrabhnoorSingh-IITM/BlueSentinel" target="_blank" rel="noopener noreferrer">GitHub</a>
-                            <a href="https://bluesentinel1.web.app" target="_blank" rel="noopener noreferrer">Live Platform</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="footer-bottom">
-                    <p>© 2026 BlueSentinel • Protecting Life Below Water</p>
-                    <div class="footer-tech">
-                        <span>Built with ❤️ using Firebase, ESP32, and Chart.js</span>
-                    </div>
-                </div>
-            </footer>
-        </div>
+                <!-- Discussions List -->
+                <div class="forums-list">
 
-        <script src="js/forums.js"></script>
-    </body>
+                    <!-- Pinned Thread -->
+                    <div class="forum-thread" style="border-left: 3px solid var(--color-warning);">
+                        <div class="thread-meta">
+                            <span class="thread-tag"
+                                style="background: rgba(255, 214, 0, 0.2); color: var(--color-warning);">Announcement</span>
+                            <span>• Admin • 2 hours ago</span>
+                        </div>
+                        <h3 style="color: white; margin-bottom: 0.5rem;">System Update: Deployment of Node-Beta-2</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                            We have successfully deployed the new sensor array near the delta. Community members should
+                            expect to see new data streams coming online within the next 24 hours. Please report any
+                            anomalies here.
+                        </p>
+                    </div>
+
+                    <!-- Thread 1 -->
+                    <div class="forum-thread">
+                        <div class="thread-meta">
+                            <span class="thread-tag">Field Report</span>
+                            <span>• Dr. Sarah Chen • 5 hours ago</span>
+                        </div>
+                        <h3 style="color: white; margin-bottom: 0.5rem;">Unusual Algal Bloom near Sector 4</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                            Visual observation confirms increased turbidity and greenish tint. Correlates with the
+                            recent temperature spike. Suggest increasing sampling frequency in this sector.
+                        </p>
+                    </div>
+
+                    <!-- Thread 2 -->
+                    <div class="forum-thread">
+                        <div class="thread-meta">
+                            <span class="thread-tag">Question</span>
+                            <span>• Student_LabGroup • 1 day ago</span>
+                        </div>
+                        <h3 style="color: white; margin-bottom: 0.5rem;">Interpreting pH fluctuations during rainfall
+                        </h3>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                            Does the system automatically account for acid rain runoff in the predictive model? We are
+                            seeing a dip to 6.8 after last night's storm.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+</body>
+
 </html>
