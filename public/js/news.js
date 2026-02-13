@@ -108,6 +108,41 @@ function loadSampleNews() {
             url: "#",
             url: "#",
             source: "Science Daily"
+        },
+        {
+            title: "Microplastics Found in Deepest Ocean Trench",
+            content: "New submersible expedition confirms presence of microplastics at 11,000 meters depth, raising concerns about deep-sea ecosystem contamination.",
+            date: "5 days ago",
+            url: "#",
+            source: "National Geographic"
+        },
+        {
+            title: "Global Treaty on Plastic Pollution Advances",
+            content: "UN member states agree on framework for legally binding international instrument to end plastic pollution by 2040.",
+            date: "6 days ago",
+            url: "#",
+            source: "UN News"
+        },
+        {
+            title: "AI-Powered Drones Clean Coastal Waters",
+            content: "Autonomous solar-powered drones collect 500kg of floating debris daily in pilot program off the coast of California.",
+            date: "1 week ago",
+            url: "#",
+            source: "TechCrunch"
+        },
+        {
+            title: "Ocean Warming Impacts Fisheries",
+            content: "Record high ocean temperatures are disrupting fish breeding cycles, leading to reduced catch yields in tropical regions.",
+            date: "1 week ago",
+            url: "#",
+            source: "Reuters Environment"
+        },
+        {
+            title: "Community-Led Mangrove Restoration Success",
+            content: "Local communities in Southeast Asia restore 5,000 hectares of mangrove forest, boosting coastal resilience and biodiversity.",
+            date: "2 weeks ago",
+            url: "#",
+            source: "World Bank Climate"
         }
     ];
 
