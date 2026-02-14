@@ -1,0 +1,115 @@
+/* Floating Dock CSS */
+:root {
+    --dock-bg: rgba(20, 20, 20, 0.4);
+    --dock-border: rgba(255, 255, 255, 0.1);
+    --dock-icon-size: 40px;
+    --dock-max-scale: 2.0;
+    /* Restored higher scale */
+    --dock-item-gap: 10px;
+}
+
+.dock-container {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: flex-end;
+    /* Align items to bottom so they grow upwards */
+    gap: var(--dock-item-gap);
+    padding: 12px;
+    background: var(--dock-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--dock-border);
+    border-radius: 20px;
+    /* Restored tighter radius */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    height: auto;
+    transition: width 0.3s ease;
+}
+
+.dock-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: var(--dock-icon-size);
+    height: var(--dock-icon-size);
+    transition: width 0.1s, height 0.1s, transform 0.1s;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+/* Icon Container */
+.dock-icon-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background 0.3s, border-color 0.3s;
+    overflow: hidden;
+}
+
+.dock-item.active .dock-icon-container {
+    background: rgba(0, 240, 255, 0.15);
+    border-color: var(--color-cyan);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+}
+
+.dock-item:hover .dock-icon-container {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.dock-icon {
+    width: 60%;
+    /* Relative to container */
+    height: 60%;
+    font-size: 1.2rem;
+    /* Base fallback */
+    color: var(--text-secondary);
+    transition: color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dock-item.active .dock-icon {
+    color: var(--color-cyan);
+}
+
+.dock-item:hover .dock-icon {
+    color: #fff;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+}
+
+/* Tooltip (Restored) */
+.dock-tooltip {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    white-space: nowrap;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dock-item:hover .dock-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}

@@ -1,344 +1,171 @@
+<!-- markdownlint-disable MD033 -->
 # BlueSentinel - Ocean Intelligence Platform
 
 <div align="center">
   <h3>A Digital Nervous System for the Ocean</h3>
   <p><strong>Real-time marine monitoring, pollution detection, and ecosystem protection</strong></p>
+  <p>
+    <a href="https://bluesentinel1.web.app">View Live Dashboard</a>
+    ·
+    <a href="https://github.com/PrabhnoorSingh-IITM/BlueSentinel/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/PrabhnoorSingh-IITM/BlueSentinel/pulls">Request Feature</a>
+  </p>
 </div>
 
 ---
 
-## Overview
+## 🌊 Overview
 
-BlueSentinel addresses a critical challenge in marine conservation: the inability to detect water quality degradation in real-time. By the time conventional monitoring identifies a pollution event, ecosystems have often suffered irreversible damage. Our platform bridges this gap with continuous sensor monitoring, intelligent analysis, and immediate alerts.
+**BlueSentinel** addresses a critical challenge in marine conservation: the inability to detect water quality degradation in real-time. By the time conventional monitoring identifies a pollution event, ecosystems have often suffered irreversible damage. Our platform bridges this gap with continuous sensor monitoring, intelligent analysis, and immediate alerts.
 
 The system combines IoT hardware with cloud infrastructure to provide authorities and researchers with actionable intelligence about ocean health. We track five critical water quality parameters and present data through an intuitive dashboard designed for rapid decision-making.
 
-**Live Platform**: [https://bluesentinel1.web.app](https://bluesentinel1.web.app)
+---
+
+## 🚀 Key Features (V2.1 "BlueSentinel" Update)
+
+### 🖥️ Next-Gen Dashboard
+
+- **Bento Grid Layout**: Modular, responsive card system for optimal data density.
+- **Mac-Style Dock**: Sleek, icon-only floating navigation with magnification effects.
+- **Glassmorphism UI**: Premium "BlueSentinel Modern" aesthetic with frosted glass elements and neon accents.
+- **Dark Mode Native**: Optimized for low-light monitoring environments.
+
+### 🤖 AI-Powered Intelligence
+
+- **Gemini Integration**: Real-time water health analysis using Google's Gemini models.
+- **Hybrid AI Engine**: Context-aware analysis of pH, Turbidity, and Dissolved Oxygen.
+- **Smart Remediation**: Suggests chemical and physical treatments for critical sensor readings (e.g., "Add buffering agents for high acidity").
+
+### 🌍 3D Geospatial Visualization
+
+- **Interactive Globe**: Uses `globe.gl` to render a 3D Earth with glowing incident markers.
+- **Night-Mode Topology**: Stunning visual representation of log locations (e.g., Toxic algae blooms, pH spikes).
+
+### 📊 Comprehensive Monitoring
+
+- **Real-Time Sensors**: Tracks Temperature, pH, Turbidity, Dissolved Oxygen (DO).
+- **Predictive ML**: Integrated machine learning models project future water quality trends.
+- **Community Forums**: Submit field reports and collaborate with other researchers.
+- **News Aggregator**: Curated marine conservation updates from global sources.
 
 ---
 
-## Features
+## 🛠️ Technology Stack
 
-### Real-Time Water Quality Monitoring
-BlueSentinel tracks five essential water quality parameters:
-- **Temperature**: Monitors thermal variations that affect marine life
-- **pH Level**: Detects acidification and alkalinity changes
-- **Turbidity**: Measures water clarity and sediment levels
-- **Dissolved Oxygen**: Tracks oxygen availability for aquatic life
-- **Salinity**: Monitors salt concentration variations
+### Hardware & IoT
 
-### Live Dashboard
-The dashboard provides immediate visibility into ocean conditions:
-- Real-time sensor readings updated every 5 seconds
-- Interactive multi-parameter graphs with 30-point history
-- Glass morphism UI design optimized for quick comprehension
-- Responsive layout supporting mobile, tablet, and desktop devices
+- **ESP32**: Main controller handling sensor data acquisition.
+- **Sensors**: DS18B20 (Temp), Analog pH, Turbidity, DO via ADC.
+- **Connectivity**: WiFi-based HTTPS upload to Firebase Realtime Database.
 
-### Incident Logging System
-Every threshold breach is automatically logged with:
-- Timestamp and location data
-- Alert severity classification (warning/critical)
-- Response action tracking
-- Historical incident records
+### Frontend (Vanilla Stack)
 
-### Marine News Integration
-Curated ocean conservation news from reliable sources keeps teams informed about:
-- Research breakthroughs in marine science
-- Policy changes affecting water quality
-- Conservation initiatives and their outcomes
-- Best practices from successful interventions
+- **Core**: HTML5, CSS3 (Variables + Flexbox/Grid), ES6 JavaScript.
+- **Visuals**:
+  - `Globe.gl` (3D Visualization)
+  - `Chart.js` (Time-series Graphing)
+  - `Bootstrap Icons` & `Unicons`
+  - `Canvas API` (Constellation/Particle Backgrounds)
+
+### Backend & Cloud
+
+- **Firebase**:
+  - **Realtime Database**: Instant data syncing across devices.
+  - **Hosting**: Global CDN delivery.
+  - **Cloud Functions**: Serverless logic for alerts.
+- **Gemini API**: Generative AI for ecosystem analysis.
 
 ---
 
-## Technology Stack
-
-### Hardware Components
-- **ESP32 Development Board**: Primary microcontroller
-- **DS18B20 Temperature Sensor**: Waterproof digital temperature measurement
-- **pH Sensor Module**: Analog pH detection with calibration support
-- **Turbidity Sensor**: Optical clarity measurement
-- **WiFi Connectivity**: Built-in ESP32 wireless module
-
-### Cloud Infrastructure
-- **Firebase Realtime Database**: Millisecond-latency data synchronization
-- **Firebase Hosting**: Global CDN deployment
-- **Firebase Authentication**: Secure device and user access
-- **Firebase Cloud Functions**: Serverless backend processing
-
-### Frontend Technologies
-- **HTML5/CSS3/JavaScript**: Pure vanilla implementation for performance
-- **Chart.js 4.4.0**: High-performance data visualization
-- **Firebase SDK 9.22.0**: Real-time data binding
-- **Glass Morphism Design**: Modern, accessible interface styling
-
-### External Services
-- **NewsAPI.org**: Marine conservation news aggregation
-
----
-
-## System Architecture
+## 🏗️ System Architecture
 
 BlueSentinel operates as a three-layer system:
 
-**1. Sensor Layer (ESP32)**
-   - Reads physical sensors every 5 seconds
-   - Validates and formats measurement data
-   - Authenticates with Firebase
-   - Uploads readings via HTTPS
-
-**2. Cloud Layer (Firebase)**
-   - Stores incoming sensor data in real-time database
-   - Triggers cloud functions for threshold monitoring
-   - Serves static assets via CDN
-   - Manages authentication and access control
-
-**3. Presentation Layer (Web Dashboard)**
-   - Subscribes to real-time database changes
-   - Updates UI elements dynamically
-   - Renders multi-axis time-series graphs
-   - Handles user interactions and navigation
-
-Data flows unidirectionally from sensors through the cloud to visualization, ensuring consistency and reducing latency.
+1. **Sensor Layer (ESP32)**: Reads physical sensors every 5 seconds, validates data, and uploads to Firebase via HTTPS.
+2. **Cloud Layer (Firebase)**: Stores incoming sensor data, manages authentication, and serves the web application.
+3. **Presentation Layer (Web Dashboard)**: Subscribes to real-time database changes, renders dynamic graphs, and provides AI-driven insights.
 
 ---
 
-## Getting Started
+## 🏁 Getting Started
 
-### View Live Dashboard
-Visit [https://bluesentinel1.web.app](https://bluesentinel1.web.app) to explore the platform.
+### Prerequisites
 
-### Run Locally
-
-**Prerequisites**:
 - Node.js 16+ and npm
-- Firebase CLI
+- Firebase CLI (`npm install -g firebase-tools`)
 - Git
 
-**Installation**:
+### Installation
+
+1. **Clone the repository**
+
+    ```bash
+    git clone https://github.com/PrabhnoorSingh-IITM/BlueSentinel.git
+    cd BlueSentinel
+    ```
+
+2. **Install dependencies** (primarily for Firebase functions if used)
+
+    ```bash
+    npm install
+    ```
+
+3. **Serve locally**
+
+    ```bash
+    firebase serve
+    ```
+
+    Navigate to `http://localhost:5000` to access the dashboard.
+
+### Deployment
+
 ```bash
-# Clone repository
-git clone https://github.com/PrabhnoorSingh-IITM/BlueSentinel.git
-cd BlueSentinel
-
-# Install dependencies
-npm install
-
-# Serve locally
-firebase serve
-```
-
-Navigate to `http://localhost:5000` to access the dashboard.
-
-### Deploy to Firebase
-
-```bash
-# Install Firebase CLI globally
-npm install -g firebase-tools
-
-# Authenticate
-firebase login
-
-# Deploy hosting
 firebase deploy --only hosting
 ```
 
 ---
 
-## Hardware Setup
+## 📂 Project Structure
 
-### Required Components
-- ESP32 Dev Module
-- DS18B20 waterproof temperature sensor
-- pH sensor module with BNC connector
-- Turbidity sensor with analog output
-- Jumper wires and breadboard
-- 5V power supply or USB cable
-
-### Wiring Diagram
-```
-ESP32 GPIO    Sensor         Connection
-─────────────────────────────────────────
-GPIO 4    →   DS18B20       Data line
-GPIO 32   →   pH Sensor     Analog output
-GPIO 35   →   Turbidity     Analog output
-3.3V      →   Sensors       Power (VCC)
-GND       →   Sensors       Ground
-```
-
-### Firmware Configuration
-
-1. Install Arduino IDE and ESP32 board support
-2. Add required libraries:
-   - Firebase_ESP_Client
-   - OneWire
-   - DallasTemperature
-
-3. Update `hardware/esp32/BlueSentinel/src/config.h`:
-   ```cpp
-   #define WIFI_SSID "your_network_name"
-   #define WIFI_PASSWORD "your_password"
-   #define API_KEY "your_firebase_api_key"
-   #define DATABASE_URL "https://your-project.firebaseio.com"
-   ```
-
-4. Upload firmware to ESP32 and monitor serial output at 115200 baud
-
----
-
-## Project Structure
-
-```
+```text
 BlueSentinel/
 ├── public/                    # Frontend application
-│   ├── css/                  # Stylesheets
+│   ├── css/                  # Stylesheets (global, landing, dock, etc.)
 │   ├── js/                   # JavaScript modules
-│   │   ├── dashboard.js      # Main dashboard logic
-│   │   ├── logs.js          # Incident logging
-│   │   ├── news.js          # News integration
-│   │   └── core/            # Firebase initialization
-│   ├── assets/              # Images and static resources
-│   ├── dashboard.html       # Main dashboard
-│   ├── news.html           # Marine news page
-│   ├── logs.html           # Incident logs
-│   ├── contact.html        # Team and documentation
-│   └── index.html          # Landing page
-├── hardware/
-│   └── esp32/
-│       └── BlueSentinel/    # Arduino firmware
-├── functions/               # Firebase cloud functions
-│   ├── api/                # API endpoints
-│   └── triggers/           # Database triggers
-├── docs/                   # Technical documentation
-├── firebase.json          # Firebase configuration
-├── package.json          # Node dependencies
-└── README.md            # This file
+│   │   ├── core/             # Firebase init
+│   │   ├── dashboard-enhanced.js # Main dashboard logic
+│   │   ├── forums.js         # Community forums logic
+│   │   ├── logs.js           # Incident logging & Globe
+│   │   └── ...
+│   ├── assets/               # Images and icons
+│   ├── dashboard.html        # Main dashboard
+│   ├── index.html            # Landing page
+│   └── ...
+├── hardware/                 # ESP32 Firmware
+├── docs/                     # Documentation & Implementation Plans
+├── firebase.json             # Firebase configuration
+└── README.md                 # This file
 ```
 
 ---
 
-## Database Schema
+## 👥 Team
 
-### Sensor Data Node
-```json
-{
-  "BlueSentinel": {
-    "temperature": 24.5,
-    "pH": 7.8,
-    "turbidity": 2.3,
-    "dissolvedOxygen": 8.2,
-    "salinity": 35.0,
-    "timestamp": 1738454400000
-  }
-}
-```
+BlueSentinel is developed by a passionate team of engineers:
 
-### Update Frequency
-- **Sensor reading interval**: 5 seconds
-- **Dashboard refresh rate**: Real-time (WebSocket)
-- **Graph data points**: Rolling 30-point window
-
----
-
-## Security
-
-BlueSentinel implements multiple security layers:
-
-- **Device Authentication**: ESP32 uses service account credentials for database access
-- **Firebase Security Rules**: Database rules restrict unauthorized reads/writes
-- **HTTPS Encryption**: All data transmission uses TLS 1.3
-- **API Key Protection**: Sensitive keys stored in environment configuration
-
-For production deployments, additional security measures are recommended:
-- User authentication with role-based access control
-- Rate limiting on API endpoints
-- Audit logging for compliance
-- Regular security audits and penetration testing
-
----
-
-## Environmental Impact
-
-### Immediate Benefits
-- **Early Detection**: Identify contamination events within minutes instead of days
-- **Rapid Response**: Provide authorities with real-time data for faster intervention
-- **Ecosystem Protection**: Prevent irreversible damage through proactive monitoring
-- **Cost Efficiency**: Reduce cleanup costs by catching problems early
-
-### Long-Term Vision
-BlueSentinel aims to become a scalable platform for comprehensive ocean health monitoring. Future development will focus on:
-- Geographic expansion with networked sensor arrays
-- Machine learning models for predictive analytics
-- Integration with government response systems
-- Open data initiatives for marine research
-
----
-
-## Development Roadmap
-
-### Current Capabilities
-- ✅ Three hardware sensors operational (Temperature, pH, Turbidity)
-- ✅ Real-time Firebase integration
-- ✅ Live dashboard with multi-parameter graphing
-- ✅ Responsive web design
-- ✅ Incident logging system
-- ✅ Marine news integration
-
-### Near-Term Goals
-- Threshold-based automated alerts via SMS/email
-- Historical data storage and trend analysis
-- Multi-device support with location tracking
-- Enhanced anomaly detection algorithms
-- Data export functionality (CSV/JSON)
-
-### Long-Term Objectives
-- Mobile application for field teams
-- Machine learning models for water quality prediction
-- Interactive geographic mapping interface
-- Integration with environmental agencies
-- Community-driven sensor network expansion
-
----
-
-## Team
-
-BlueSentinel is developed by a team of engineers and developers passionate about ocean conservation:
-
-- **Prabhnoor Singh** - Lead Developer & Project Lead
-- **Mehak Kaur** - IoT & Hardware Engineer  
+- **Prabhnoor Singh** - Lead Developer & Architect
+- **Mehak Kaur** - IoT & Hardware Engineer
 - **Jaisveen Kaur** - ML & Analytics Engineer
 - **Prabhleen Kaur** - Frontend & UX Engineer
 
-For detailed team information and project documentation, visit the [Contact page](https://bluesentinel1.web.app/contact.html).
-
 ---
 
-## Contributing
-
-We welcome contributions from developers, researchers, and ocean enthusiasts. To contribute:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/enhancement`)
-3. Commit your changes with clear messages
-4. Push to your fork (`git push origin feature/enhancement`)
-5. Open a pull request with a detailed description
-
-Please review our architecture and API documentation in the `docs/` directory before contributing.
-
----
-
-## License
+## 📄 License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) file for details.
-
----
-
-## Contact
-
-**GitHub Repository**: [https://github.com/PrabhnoorSingh-IITM/BlueSentinel](https://github.com/PrabhnoorSingh-IITM/BlueSentinel)
-
-**Live Platform**: [https://bluesentinel1.web.app](https://bluesentinel1.web.app)
-
-For project inquiries, collaboration opportunities, or technical support, please open an issue on GitHub or visit our [contact page](https://bluesentinel1.web.app/contact.html).
 
 ---
 

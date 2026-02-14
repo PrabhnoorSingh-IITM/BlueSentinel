@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Monoton&family=Space+Grotesk:wght@400;500;700&display=swap');
 
 :root {
   /* --- PALETTE: BLUESENTINEL DEPTHS --- */
@@ -42,6 +42,16 @@
   --neon-glow: 0 0 10px var(--color-cyan-glow);
   --transition-fast: 0.2s ease;
   --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-logo: 'Monoton', sans-serif;
+}
+
+/* User requested Negan font */
+@font-face {
+  font-family: 'Negan';
+  src: url('../assets/fonts/Negan.ttf') format('truetype');
+  /* Placeholder path */
+  font-weight: normal;
+  font-style: normal;
 }
 
 [data-theme="light"] {
@@ -167,9 +177,8 @@ h6 {
 }
 
 .brand-logo {
-   width: 40px;
+  width: 40px;
   height: 40px;
-  filter: brightness(0) invert(1);
 }
 
 .nav-mini-logo {
@@ -598,4 +607,37 @@ i.btn-icon {
   justify-content: center;
   color: var(--color-void);
   font-weight: bold;
+}
+
+/* --- ANIMATIONS & EFFECTS --- */
+
+/* Custom Cursor - Disabled
+@media (pointer: fine) {
+ ...
+} 
+*/
+
+/* Scroll Reveal */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered Load Animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -12,41 +12,53 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-functions-compat.js"></script>
-    <script src="js/core/firebase-init.js" defer></script>
-    <script src="js/ai-chatbot.js" defer></script>
-    <script src="js/dashboard-enhanced.js" defer></script>
-    <script src="js/theme-toggle.js" defer></script>
+    <script src="js/core/firebase-init.js?v=2.6" defer></script>
+    <script src="js/ai-chatbot.js?v=2.6" defer></script>
+    <script src="js/dashboard-enhanced.js?v=2.6" defer></script>
+    <script src="js/visual-effects.js?v=1.0" defer></script>
+    <script src="js/theme-toggle.js?v=2.6" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@iconscout/unicons@4.0.8/css/line.min.css">
+    <link rel="stylesheet" href="css/dock.css">
+    <script src="js/dock.js" defer></script>
 </head>
 
 <body>
 
     <div class="app-container">
         <!-- SIDEBAR NAVIGATION -->
-        <!-- FLOATING NAVIGATION -->
-        <nav class="floating-nav">
-            <div class="nav-links">
-                <a href="dashboard.html" class="nav-item active">
-                    <i class="bi bi-speedometer2 nav-icon"></i>
-                    <span class="label">Monitor</span>
-                </a>
-                <a href="news.html" class="nav-item">
-                    <i class="bi bi-newspaper nav-icon"></i>
-                    <span class="label">News</span>
-                </a>
-                <a href="logs.html" class="nav-item">
-                    <i class="bi bi-file-earmark-text nav-icon"></i>
-                    <span class="label">Logs</span>
-                </a>
-                <a href="archive.html" class="nav-item">
-                    <i class="bi bi-archive nav-icon"></i>
-                    <span class="label">Archives</span>
-                </a>
-                <a href="forums.html" class="nav-item">
-                    <i class="bi bi-people nav-icon"></i>
-                    <span class="label">Forums</span>
-                </a>
-            </div>
+        <!-- FLOATING DOCK NAVIGATION -->
+        <nav class="dock-container">
+            <a href="dashboard.html" class="dock-item active">
+                <div class="dock-icon-container">
+                    <i class="bi bi-speedometer2 dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">Monitor</div>
+            </a>
+            <a href="news.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-newspaper dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">News</div>
+            </a>
+            <a href="logs.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-file-earmark-text dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">Logs</div>
+            </a>
+            <a href="archive.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-archive dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">Archives</div>
+            </a>
+            <a href="forums.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-people dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">Forums</div>
+            </a>
         </nav>
 
         <!-- MAIN CONTENT AREA -->
@@ -55,36 +67,39 @@
             <!-- Centered Wrapper -->
             <div class="page-center">
                 <!-- Header -->
-                <header class="dashboard-header"
+                <header class="dashboard-header reveal-on-scroll"
                     style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; position: relative;">
                     <!-- Left Spacer for centering -->
                     <div style="width: 120px;"></div>
 
                     <!-- Centered Brand -->
-                    <a href="dashboard.html"
-                        style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; text-decoration: none;">
+                    <a href="index.html"
+                        style="display: flex; flex-direction: row; align-items: center; gap: 1rem; text-decoration: none;">
                         <img src="./assets/images/logo.png" alt="BlueSentinel" class="brand-logo"
-                            style="width: 48px; height: 48px;">
-                        <h1 class="text-gradient" style="font-size: 1.8rem; letter-spacing: 2px;">BLUESENTINEL</h1>
+                            style="width: auto; height: 48px;">
+                        <h1 class="text-gradient"
+                            style="font-family: var(--font-logo); font-size: 2.5rem; letter-spacing: 1px; margin: 0; text-transform: none;">
+                            BlueSentinel</h1>
                     </a>
 
                     <!-- Right Controls -->
                     <div
-    style="display: flex; gap: 0.8rem; align-items: center; width: 160px; justify-content: flex-end;">
+                        style="display: flex; gap: 0.8rem; align-items: center; width: 160px; justify-content: flex-end;">
 
-    <!-- Logo -->
-    <img src="./assets/icons/darkmode.svg" alt="Theme Logo" class="nav-mini-logo" id="themeLogo" style="width: 24px; height: 24px; cursor: pointer;">
+                        <!-- Theme Toggle -->
+                        <i class="uil uil-brightness" id="theme-toggle"
+                            style="font-size: 1.5rem; cursor: pointer; display: inline-block; min-width: 24px;"></i>
 
-    <!-- Export -->
-    <button id="export-csv-btn" class="btn-primary"
-        style="padding: 0.5rem 1rem; font-size: 0.8rem;">
-        Export
-    </button>
-</div>
+                        <!-- Export -->
+                        <button id="export-csv-btn" class="btn-primary"
+                            style="padding: 0.5rem 1rem; font-size: 0.8rem;">
+                            Export
+                        </button>
+                    </div>
                 </header>
 
                 <!-- BENTO GRID LAYOUT -->
-                <div class="bento-grid">
+                <div class="bento-grid reveal-on-scroll">
 
                     <!-- ROW 1: SENSORS (Top Priority - 4 Cards) -->
 
@@ -224,11 +239,12 @@
                     <div class="bento-card span-6">
                         <div class="card-header">
                             <span class="card-title">Water Health Index</span>
-                            <span class="status-pill status-success">Excellent</span>
+                            <span class="status-pill status-success" id="water-health-status">Excellent</span>
                         </div>
                         <div
                             style="display: flex; align-items: center; justify-content: center; height: 100%; flex-direction: column;">
-                            <h2 style="font-size: 4rem; color: var(--color-success); margin: 0;">94/100</h2>
+                            <h2 style="font-size: 4rem; color: var(--color-success); margin: 0;"
+                                id="water-health-score">--/100</h2>
                             <p style="color: var(--text-muted);">Composite Score</p>
                         </div>
                     </div>

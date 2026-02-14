@@ -1,419 +1,558 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Contact Us & About | BlueSentinel</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="css/contact.css" />
-    </head>
 
-    <body>
-        <div class="container">
-            <!-- NAVBAR -->
-            <nav class="navbar">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <img src="./assets/images/logo.png" alt="BlueSentinel logo">
-                    </div>
-                    <div class="logo-text">
-                        <div class="logo-title">BlueSentinel</div>
-                        <div class="logo-subtitle">Ocean Intelligence Platform</div>
-                    </div>
+<head>
+    <meta charset="UTF-8" />
+    <title>Contact Us & About | BlueSentinel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/landing.css" />
+    <!-- Global CSS for variables -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="js/core/firebase-init.js" defer></script>
+
+    <style>
+        /* Custom Styles for Contact Form matching Landing Theme */
+        .contact-form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 212, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: #00FFD4;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 1.2rem;
+            background: rgba(10, 25, 47, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #D2DDFF;
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            border-color: #00FFD4;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+            background: rgba(10, 25, 47, 0.9);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        /* Member Card Specifics */
+        .member-avatar img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid #00FFD4;
+            object-fit: cover;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+
+        .social-links {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 255, 212, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00FFD4;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background: #00FFD4;
+            color: #050208;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+        }
+
+        /* Timeline / RoadMap Styles */
+        .roadmap-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+
+        .roadmap-item {
+            background: rgba(84, 101, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid #00FFD4;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .roadmap-title {
+            color: #00FFD4;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .roadmap-status {
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: rgba(0, 255, 212, 0.2);
+            color: #00FFD4;
+        }
+
+        /* Biblio Styles */
+        .bib-list {
+            list-style: none;
+            text-align: left;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .bib-item {
+            background: rgba(5, 2, 8, 0.6);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .bib-icon {
+            color: #5465FF;
+            font-size: 1.2rem;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="noise-bg">
+        <div class="noise-overlay"></div>
+    </div>
+    <canvas id="dotted-glow-canvas"></canvas>
+
+    <div class="container">
+        <!-- NAVBAR -->
+        <nav class="navbar">
+            <a href="index.html" class="logo" style="text-decoration: none;">
+                <div class="logo-icon">
+                    <img src="./assets/images/logo.png" alt="BlueSentinel logo">
                 </div>
-                <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="#team">Team</a></li>
-                    <li><a href="#tech">Tech Stack</a></li>
-                    <li><a href="#bibliography">References</a></li>
-                </ul>
-                <div class="nav-actions">
-                    <a href="https://github.com/PrabhnoorSingh-IITM/BlueSentinel" target="_blank" rel="noopener noreferrer" class="github-icon">
-                        <img src="/assets/icons/github.svg" alt="GitHub">
+                <div class="logo-text">
+                    <div class="logo-title">BlueSentinel</div>
+                    <div class="logo-subtitle">River Intelligence Platform</div>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#workflow">Workflow</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="#tech">Tech</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="https://github.com/PrabhnoorSingh-IITM/BlueSentinel" target="_blank" rel="noopener noreferrer"
+                    class="github-icon">
+                    <img src="./assets/icons/github.svg" alt="GitHub">
+                </a>
+                <a href="dashboard.html" class="btn-primary">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+            </div>
+        </nav>
+
+        <!-- HERO SECTION -->
+        <section class="hero" style="padding-top: 10rem; text-align: center;">
+            <div class="hero-content" style="display: block;">
+                <h1 class="hero-title">Beyond <span class="text-gradient-cyan">Monitoring</span></h1>
+                <p class="hero-description" style="max-width: 700px; margin: 1.5rem auto;">
+                    BlueSentinel is an end-to-end intelligence platform. From raw sensor data to AI-driven ecosystem
+                    insights.
+                </p>
+                <div class="hero-buttons" style="justify-content: center; margin-top: 2rem;">
+                    <a href="#contact" class="btn-primary glow-effect">
+                        Get In Touch
                     </a>
-                    <a href="dashboard.html" class="btn-primary">Dashboard</a>
+                    <a href="https://github.com/PrabhnoorSingh-IITM/BlueSentinel" target="_blank" class="btn-secondary">
+                        <i class="bi bi-github"></i> Source Code
+                    </a>
                 </div>
-            </nav>
+            </div>
+        </section>
 
-            <!-- HERO SECTION -->
-            <section class="hero-contact">
-                <h1>Contact & About Us</h1>
-                <p>BlueSentinel - A Digital Nervous System for the Ocean</p>
-            </section>
+        <!-- WORKFLOW SECTION -->
+        <section id="workflow" class="section light reveal-on-scroll">
+            <h2>Workflow: From River to Cloud</h2>
+            <div class="steps">
+                <div class="step reveal-on-scroll" style="transition-delay: 0ms">
+                    <i class="bi bi-water" style="display:block; font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                    1. Sense
+                </div>
+                <div class="step reveal-on-scroll" style="transition-delay: 100ms">
+                    <i class="bi bi-wifi" style="display:block; font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                    2. Transmit
+                </div>
+                <div class="step reveal-on-scroll" style="transition-delay: 200ms">
+                    <i class="bi bi-server" style="display:block; font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                    3. Store
+                </div>
+                <div class="step reveal-on-scroll" style="transition-delay: 300ms">
+                    <i class="bi bi-cpu" style="display:block; font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                    4. Analyze
+                </div>
+                <div class="step reveal-on-scroll" style="transition-delay: 400ms">
+                    <i class="bi bi-graph-up-arrow" style="display:block; font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                    5. Visualize
+                </div>
+            </div>
+        </section>
 
-            <!-- TEAM SECTION -->
-            <section id="team" class="team-section">
-                <h2>Our Team</h2>
-                <p class="section-subtitle">Passionate engineers and developers protecting marine ecosystems</p>
-                
-                <div class="team-grid">
-                    <div class="team-member">
-                        <div class="member-avatar">
-                            <img src="./assets/images/Prabhnoor.png" alt="Prabhnoor Singh">
-                        </div>
-                        <h3>Prabhnoor Singh</h3>
-                        <p class="role">Lead Developer & Project Lead</p>
-                        <p class="description">Full-stack developer specializing in IoT systems and cloud infrastructure. Architected the entire BlueSentinel platform.</p>
-                        <div class="social-links">
-                            <a href="https://github.com/PrabhnoorSingh-IITM" target="_blank" rel="noopener noreferrer" class="github-link">
-                                @PrabhnoorSingh-IITM
-                            </a>
-                        </div>
+        <!-- TEAM SECTION -->
+        <section id="team" class="section reveal-on-scroll">
+            <h2>Mission Team</h2>
+            <p class="subtitle">Led by Prabhnoor Singh, driving innovation in river monitoring.</p>
+
+            <div class="cards">
+                <!-- Member 1: Prabhnoor (Lead) -->
+                <div class="card tilt-card reveal-on-scroll"
+                    style="border-color: #00FFD4; box-shadow: 0 0 30px rgba(0, 255, 212, 0.15);">
+                    <div class="member-avatar">
+                        <img src="./assets/images/Prabhnoor.png" alt="Prabhnoor Singh">
                     </div>
-                    <div class="team-member">
-                        <div class="member-avatar">
-                            <img src="./assets/images/Mehak.jpeg" alt="Mehak Kaur">
-                        </div>
-                        <h3>Mehak Kaur</h3>
-                        <p class="role">IoT & Hardware Engineer</p>
-                        <p class="description">Leads sensor integration, firmware reliability, and field deployment setup.</p>
-                        <div class="social-links">
-                            <a href="https://github.com/MehakKaurSahdev" target="_blank" rel="noopener noreferrer" class="github-link">
-                                @MehakKaurSahdev
-                            </a>
-                        </div>
-                    </div>
-                    <div class="team-member">
-                        <div class="member-avatar">
-                            <img src="./assets/images/Jaisveen.jpg" alt="Jaisveen Kaur">
-                        </div>
-                        <h3>Jaisveen Kaur</h3>
-                        <p class="role">ML & Analytics Engineer</p>
-                        <p class="description">Builds prediction models, health scoring, and anomaly detection pipelines.</p>
-                        <div class="social-links">
-                            <a href="https://github.com/jaisveenkaur" target="_blank" rel="noopener noreferrer" class="github-link">
-                                @jaisveenkaur
-                            </a>
-                        </div>
-                    </div>
-                    <div class="team-member">
-                        <div class="member-avatar">
-                            <img src="./assets/images/Prabhleen.jpeg" alt="Prabhleen Kaur">
-                        </div>
-                        <h3>Prabhleen Kaur</h3>
-                        <p class="role">Frontend & UX Engineer</p>
-                        <p class="description">Designs dashboard UI, data visualizations, and interaction flows.</p>
-                        <div class="social-links">
-                            <a href="https://github.com/PrabhleenKaur07" target="_blank" rel="noopener noreferrer" class="github-link">
-                                @PrabhleenKaur07
-                            </a>
-                        </div>
+                    <h3>Prabhnoor Singh</h3>
+                    <p style="color: #00FFD4; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: 1px;">TEAM LEAD &
+                        ARCHITECT</p>
+                    <p>Designed and built the entire BlueSentinel platform. From the IoT hardware circuit to the
+                        full-stack web dashboard and Gemini AI integration. </p>
+                    <div class="social-links">
+                        <a href="https://github.com/PrabhnoorSingh-IITM" target="_blank" class="social-link"
+                            style="border-color: #00FFD4; color: #00FFD4;"><i class="bi bi-github"></i></a>
+                        <a href="https://www.linkedin.com/in/prabhnoor-singh7/" target="_blank" class="social-link"
+                            style="border-color: #0077b5; color: #0077b5;"><i class="bi bi-linkedin"></i></a>
                     </div>
                 </div>
 
-                <!--
-                <div class="team-info">
-                    <h3>Team Development</h3>
-                    <p>BlueSentinel is actively being developed with more team members joining the mission to protect ocean ecosystems. If you're interested in contributing to this project, we'd love to hear from you!</p>
-                </div>
-                -->
-            </section>
-
-            <!-- TECHNOLOGY STACK -->
-            <section id="tech" class="tech-section">
-                <h2>Technology Stack & Architecture</h2>
-                
-                <div class="tech-overview">
-                    <div class="tech-category">
-                        <h3>Hardware Layer</h3>
-                        <div class="tech-list">
-                            <div class="tech-item">
-                                <span class="tech-name">ESP32 Dev Module</span>
-                                <span class="tech-desc">Primary microcontroller for sensor data collection</span>
-                            </div>
-                            <div class="tech-item">
-                                <span class="tech-name">DS18B20</span>
-                                <span class="tech-desc">Temperature Sensor (Pin D4)</span>
-                            </div>
-                            <div class="tech-item">
-                                <span class="tech-name">pH Sensor Module</span>
-                                <span class="tech-desc">Water pH monitoring (Pin D32)</span>
-                            </div>
-                            <div class="tech-item">
-                                <span class="tech-name">Turbidity Sensor</span>
-                                <span class="tech-desc">Water clarity measurement (Pin D35)</span>
-                            </div>
-                            <div class="tech-item">
-                                <span class="tech-name">WiFi Module</span>
-                                <span class="tech-desc">Built-in WiFi for cloud connectivity</span>
-                            </div>
-                        </div>
+                <!-- Member 2: Mehak -->
+                <div class="card tilt-card reveal-on-scroll" style="transition-delay: 100ms">
+                    <div class="member-avatar">
+                        <img src="./assets/images/Mehak.jpeg" alt="Mehak Kaur">
                     </div>
-
-                    <div class="tech-category">
-                        <h3>Cloud Infrastructure</h3>
-                        <div class="tech-list">
-                            <div class="tech-item">
-                                <span class="tech-name">Firebase Realtime Database</span>
-                                <span class="tech-desc">Core data storage and real-time synchronization</span>
-                            </div>
-                            <div class="tech-item">
-                                <span class="tech-name">Firebase Authentication</span>
-                                <span class="tech-desc">Secure device and user authentication</span>
-                            </div>
-                            <div class="tech-item">
-                                <span class="tech-name">Firebase Hosting</span>
-                                <span class="tech-desc">Web deployment and CDN</span>
-                            </div>
-                            <div class="tech-item">
-                                <span class="tech-name">Firebase Cloud Functions</span>
-                                <span class="tech-desc">Serverless backend processing</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tech-category">
-                        <h3>Frontend Technologies</h3>
-                        <div class="tech-list">
-                            <div class="tech-item">
-                                <span class="tech-name">HTML5 / CSS3 / JavaScript</span>
-                                <span class="tech-desc">Vanilla web development, no frameworks</span>
-                            </div>
-                            <div class="tech-item">
-                                <span class="tech-name">Chart.js v4.4.0</span>
-                                <span class="tech-desc">Beautiful responsive live graphs and visualizations</span>
-                            </div>
-                            <div class="tech-item">
-                                <span class="tech-name">Firebase SDK v9.22.0</span>
-                                <span class="tech-desc">Real-time data synchronization and authentication</span>
-                            </div>
-                            <div class="tech-item">
-                                <span class="tech-name">Glass Morphism Design</span>
-                                <span class="tech-desc">Modern frosted glass effects and animations</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tech-category">
-                        <h3>External APIs & Services</h3>
-                        <div class="tech-list">
-                            <div class="tech-item">
-                                <span class="tech-name">NewsAPI.org</span>
-                                <span class="tech-desc">Marine conservation and ocean news aggregation</span>
-                            </div>
-                            <div class="tech-item">
-                                <span class="tech-name">Twilio (Planned)</span>
-                                <span class="tech-desc">SMS notifications for authorities and alerts</span>
-                            </div>
-                            <div class="tech-item">
-                                <span class="tech-name">Weather APIs (Planned)</span>
-                                <span class="tech-desc">Environmental data integration</span>
-                            </div>
-                        </div>
+                    <h3>Mehak Kaur</h3>
+                    <p style="color: #5465FF; font-weight: 600; margin-bottom: 0.5rem;">Hardware Assistant</p>
+                    <p>Helped with sensor component sourcing and initial circuit assembly testing.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/MehakKaurSahdev" target="_blank" class="social-link"><i
+                                class="bi bi-github"></i></a>
+                        <a href="#" target="_blank" class="social-link"
+                            style="color: #0077b5; border-color: rgba(0, 119, 181, 0.3)"><i
+                                class="bi bi-linkedin"></i></a>
                     </div>
                 </div>
 
-                <!-- ARCHITECTURE DIAGRAM -->
-                <div class="architecture">
-                    <h3>System Architecture</h3>
-                    <div class="arch-diagram">
-                        <div class="arch-box arch-hardware">
-                            <h4>Hardware</h4>
-                            <p>ESP32 + 3 Sensors</p>
-                        </div>
-                        <div class="arch-arrow">→</div>
-                        <div class="arch-box arch-cloud">
-                            <h4>Cloud</h4>
-                            <p>Firebase RTDB</p>
-                        </div>
-                        <div class="arch-arrow">→</div>
-                        <div class="arch-box arch-web">
-                            <h4>Dashboard</h4>
-                            <p>Live Web Interface</p>
-                        </div>
+                <!-- Member 3: Jaisveen -->
+                <div class="card tilt-card reveal-on-scroll" style="transition-delay: 200ms">
+                    <div class="member-avatar">
+                        <img src="./assets/images/Jaisveen.jpg" alt="Jaisveen Kaur">
+                    </div>
+                    <h3>Jaisveen Kaur</h3>
+                    <p style="color: #5465FF; font-weight: 600; margin-bottom: 0.5rem;">Data Support</p>
+                    <p>Assisted in collecting water samples and verifying dataset entries.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/jaisveenkaur" target="_blank" class="social-link"><i
+                                class="bi bi-github"></i></a>
+                        <a href="#" target="_blank" class="social-link"
+                            style="color: #0077b5; border-color: rgba(0, 119, 181, 0.3)"><i
+                                class="bi bi-linkedin"></i></a>
                     </div>
                 </div>
-            </section>
 
-            <!-- DATA FLOW -->
-            <section class="dataflow-section">
-                <h2>Real-time Data Pipeline</h2>
-                <div class="dataflow">
-                    <div class="flow-step">
-                        <div class="step-number">1</div>
-                        <h4>Sensor Reading</h4>
-                        <p>Every 5 seconds, ESP32 reads temperature, pH, and turbidity</p>
+                <!-- Member 4: Prabhleen -->
+                <div class="card tilt-card reveal-on-scroll" style="transition-delay: 300ms">
+                    <div class="member-avatar">
+                        <img src="./assets/images/Prabhleen.jpeg" alt="Prabhleen Kaur">
                     </div>
-                    <div class="flow-arrow">↓</div>
-                    <div class="flow-step">
-                        <div class="step-number">2</div>
-                        <h4>Data Transmission</h4>
-                        <p>Data sent via WiFi to Firebase Realtime Database</p>
-                    </div>
-                    <div class="flow-arrow">↓</div>
-                    <div class="flow-step">
-                        <div class="step-number">3</div>
-                        <h4>Data Storage</h4>
-                        <p>Stored in Firebase with timestamp and validation</p>
-                    </div>
-                    <div class="flow-arrow">↓</div>
-                    <div class="flow-step">
-                        <div class="step-number">4</div>
-                        <h4>Real-time Consumption</h4>
-                        <p>Dashboard receives live updates via WebSocket</p>
+                    <h3>Prabhleen Kaur</h3>
+                    <p style="color: #5465FF; font-weight: 600; margin-bottom: 0.5rem;">Design Contributor</p>
+                    <p>Provided input on color schemes and initial layout sketches.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/PrabhleenKaur07" target="_blank" class="social-link"><i
+                                class="bi bi-github"></i></a>
+                        <a href="#" target="_blank" class="social-link"
+                            style="color: #0077b5; border-color: rgba(0, 119, 181, 0.3)"><i
+                                class="bi bi-linkedin"></i></a>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- BIBLIOGRAPHY & REFERENCES -->
-            <section id="bibliography" class="bibliography-section">
-                <h2>Bibliography & References</h2>
-                
-                <div class="references">
-                    <div class="ref-category">
-                        <h3>Marine Science & Conservation</h3>
-                        <ul>
-                            <li>
-                                <strong>Ocean Acidification:</strong> 
-                                <span>National Oceanic and Atmospheric Administration (NOAA) - Ocean Acidification Research</span>
-                            </li>
-                            <li>
-                                <strong>Water Quality Monitoring:</strong>
-                                <span>U.S. Environmental Protection Agency (EPA) - Water Quality Standards</span>
-                            </li>
-                            <li>
-                                <strong>Marine Ecosystems:</strong>
-                                <span>UNESCO - World Ocean Assessment II</span>
-                            </li>
-                            <li>
-                                <strong>Coral Reef Protection:</strong>
-                                <span>NOAA Coral Reef Conservation Program</span>
-                            </li>
-                        </ul>
-                    </div>
+        <!-- SYSTEM ARCHITECTURE -->
+        <section id="architecture" class="section light reveal-on-scroll">
+            <h2>System Architecture</h2>
+            <p class="subtitle">A robust three-layer architecture designed for low latency and high reliability.</p>
 
-                    <div class="ref-category">
-                        <h3>IoT & Sensor Technology</h3>
-                        <ul>
-                            <li>
-                                <strong>ESP32 Documentation:</strong>
-                                <span><a href="https://docs.espressif.com/projects/esp-idf/en/latest/" target="_blank">Espressif ESP32 Official Docs</a></span>
-                            </li>
-                            <li>
-                                <strong>Arduino Framework:</strong>
-                                <span><a href="https://www.arduino.cc/" target="_blank">Arduino Official Website</a></span>
-                            </li>
-                            <li>
-                                <strong>DS18B20 Sensor:</strong>
-                                <span>Maxim Integrated - DS18B20 1-Wire Temperature Sensor Datasheet</span>
-                            </li>
-                            <li>
-                                <strong>Water Quality Sensors:</strong>
-                                <span>Atlas Scientific - Water Quality Sensor Guides</span>
-                            </li>
-                        </ul>
-                    </div>
+            <div class="cards">
+                <div class="card tilt-card reveal-on-scroll" style="border-left: 4px solid #00FFD4;">
+                    <h3><i class="bi bi-cpu-fill" style="margin-right: 0.5rem;"></i> Edge Layer</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem;">ESP32 Microcontroller Nodes</p>
+                    <ul style="text-align: left; opacity: 0.8; padding-left: 1.2rem; margin-top: 1rem;">
+                        <li>Sensors: DS18B20, pH, Turbidity</li>
+                        <li>Protocol: HTTPS over WiFi</li>
+                        <li>Update Rate: 5 Seconds</li>
+                    </ul>
+                </div>
 
-                    <div class="ref-category">
-                        <h3>Cloud & Web Technologies</h3>
-                        <ul>
-                            <li>
-                                <strong>Firebase Documentation:</strong>
-                                <span><a href="https://firebase.google.com/docs" target="_blank">Google Firebase Official Docs</a></span>
-                            </li>
-                            <li>
-                                <strong>Chart.js:</strong>
-                                <span><a href="https://www.chartjs.org/" target="_blank">Chart.js Documentation</a></span>
-                            </li>
-                            <li>
-                                <strong>REST APIs:</strong>
-                                <span><a href="https://newsapi.org/" target="_blank">NewsAPI.org</a></span>
-                            </li>
-                            <li>
-                                <strong>WebSocket Protocol:</strong>
-                                <span>RFC 6455 - The WebSocket Protocol</span>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="card tilt-card reveal-on-scroll"
+                    style="border-left: 4px solid #5465FF; transition-delay: 100ms;">
+                    <h3><i class="bi bi-cloud-check-fill" style="margin-right: 0.5rem;"></i> Cloud Layer</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem;">Google Firebase Platform</p>
+                    <ul style="text-align: left; opacity: 0.8; padding-left: 1.2rem; margin-top: 1rem;">
+                        <li>Realtime Database (NoSQL)</li>
+                        <li>Cloud Functions (Triggers)</li>
+                        <li>Gemini 1.5 Pro Wrapper</li>
+                    </ul>
+                </div>
 
-                    <div class="ref-category">
-                        <h3>Data Analysis & Visualization</h3>
-                        <ul>
-                            <li>
-                                <strong>Real-time Data Processing:</strong>
-                                <span>Google Cloud - Real-time Data Streaming Architecture</span>
-                            </li>
-                            <li>
-                                <strong>Time Series Data:</strong>
-                                <span>InfluxDB - Time Series Data Best Practices</span>
-                            </li>
-                            <li>
-                                <strong>Data Visualization:</strong>
-                                <span>Edward Tufte - The Visual Display of Quantitative Information</span>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="card tilt-card reveal-on-scroll"
+                    style="border-left: 4px solid #7000FF; transition-delay: 200ms;">
+                    <h3><i class="bi bi-laptop-fill" style="margin-right: 0.5rem;"></i> Client Layer</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem;">BlueSentinel Web Dashboard</p>
+                    <ul style="text-align: left; opacity: 0.8; padding-left: 1.2rem; margin-top: 1rem;">
+                        <li>Vanilla JS & WebSocket</li>
+                        <li>Chart.js Visualization</li>
+                        <li>3D Geospatial Engine</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
-                    <div class="ref-category">
-                        <h3>Security & Best Practices</h3>
-                        <ul>
-                            <li>
-                                <strong>IoT Security:</strong>
-                                <span>OWASP - Internet of Things Security</span>
-                            </li>
-                            <li>
-                                <strong>Firebase Security:</strong>
-                                <span><a href="https://firebase.google.com/docs/database/security" target="_blank">Firebase Realtime Database Security Rules</a></span>
-                            </li>
-                            <li>
-                                <strong>API Security:</strong>
-                                <span>OWASP API Security Top 10</span>
-                            </li>
-                        </ul>
+        <!-- TECH STACK -->
+        <section id="tech" class="section reveal-on-scroll">
+            <h2>Detailed Technology Stack</h2>
+            <p class="subtitle">The open-source ecosystem powering BlueSentinel.</p>
+
+            <div class="cards" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                <div class="card reveal-on-scroll">
+                    <h3
+                        style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; margin-bottom: 1rem;">
+                        Hardware & Firmware</h3>
+                    <div class="tech" style="justify-content: flex-start; margin: 0;">
+                        <span>ESP32</span>
+                        <span>C++ / Arduino</span>
+                        <span>DallasTemperature</span>
+                        <span>OneWire</span>
+                        <span>WiFi.h</span>
+                        <span>HTTPClient</span>
                     </div>
                 </div>
-            </section>
 
-            <!-- GITHUB REPOSITORY -->
-            <section class="github-section">
-                <h2>Open Source Project</h2>
-                <p>BlueSentinel is open source and available on GitHub. We welcome contributions from developers, researchers, and ocean enthusiasts worldwide.</p>
-                <div class="github-box">
-                    <h3>GitHub Repository</h3>
-                    <p>
-                        <a href="https://github.com/PrabhnoorSingh-IITM/BlueSentinel" target="_blank" rel="noopener noreferrer" class="github-link-large">
-                            github.com/PrabhnoorSingh-IITM/BlueSentinel
-                        </a>
-                    </p>
-                    <div class="github-info">
-                        <div class="info-item">
-                            <strong>License:</strong> MIT
-                        </div>
-                        <div class="info-item">
-                            <strong>Status:</strong> Active Development
-                        </div>
-                        <div class="info-item">
-                            <strong>Type:</strong> Open Source
-                        </div>
+                <div class="card reveal-on-scroll" style="transition-delay: 100ms">
+                    <h3
+                        style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; margin-bottom: 1rem;">
+                        Frontend Core</h3>
+                    <div class="tech" style="justify-content: flex-start; margin: 0;">
+                        <span>HTML5</span>
+                        <span>CSS3 Variables</span>
+                        <span>ES6+ JavaScript</span>
+                        <span>Inter Font</span>
                     </div>
                 </div>
-            </section>
 
-            <!-- CONTACT INFORMATION -->
-            <section class="contact-info-section">
-                <h2>Get In Touch</h2>
-                <p>Have questions or want to contribute? Reach out to us!</p>
-                
-                <div class="contact-methods">
-                    <div class="contact-card">
-                        <h3>GitHub Issues</h3>
-                        <p>Report bugs or suggest features on our GitHub repository</p>
-                        <a href="https://github.com/PrabhnoorSingh-IITM/BlueSentinel/issues" target="_blank" rel="noopener noreferrer" class="contact-link">Open an Issue</a>
-                    </div>
-
-                    <div class="contact-card">
-                        <h3>Follow Us</h3>
-                        <p>Stay updated with the latest project developments</p>
-                        <a href="https://github.com/PrabhnoorSingh-IITM" target="_blank" rel="noopener noreferrer" class="contact-link">GitHub Profile</a>
+                <div class="card reveal-on-scroll" style="transition-delay: 200ms">
+                    <h3
+                        style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; margin-bottom: 1rem;">
+                        Libraries & APIs</h3>
+                    <div class="tech" style="justify-content: flex-start; margin: 0;">
+                        <span>Chart.js</span>
+                        <span>Leaflet.js</span>
+                        <span>Globe.gl</span>
+                        <span>Google Gemini API</span>
+                        <span>Bootstrap Icons</span>
                     </div>
                 </div>
-            </section>
 
-            <!-- FOOTER -->
-            <footer>
-                <p>© 2026 BlueSentinel • Protecting Life Below Water</p>
-            </footer>
-        </div>
+                <div class="card reveal-on-scroll" style="transition-delay: 300ms">
+                    <h3
+                        style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; margin-bottom: 1rem;">
+                        Infrastructure</h3>
+                    <div class="tech" style="justify-content: flex-start; margin: 0;">
+                        <span>Firebase Realtime DB</span>
+                        <span>Firebase Hosting</span>
+                        <span>Git & GitHub</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
+        <!-- ROADMAP -->
+        <section id="roadmap" class="section light reveal-on-scroll">
+            <h2>Development Roadmap</h2>
+            <div class="roadmap-container">
+                <div class="roadmap-item reveal-on-scroll">
+                    <div class="roadmap-title">
+                        <span>Phase 1: Proof of Concept</span>
+                        <span class="roadmap-status">COMPLETED</span>
+                    </div>
+                    <p style="font-size: 0.9rem; opacity: 0.8;">Sensor calibration, ESP32 connectivity, and basic
+                        Firebase integration.</p>
+                </div>
+
+                <div class="roadmap-item reveal-on-scroll">
+                    <div class="roadmap-title">
+                        <span>Phase 2: BlueSentinel Update (Current)</span>
+                        <span class="roadmap-status">COMPLETED</span>
+                    </div>
+                    <p style="font-size: 0.9rem; opacity: 0.8;">UI Overhaul, Gemini AI Integration, 3D Reports, and
+                        Advanced Analytics.</p>
+                </div>
+
+                <div class="roadmap-item reveal-on-scroll" style="border-left-color: #5465FF;">
+                    <div class="roadmap-title" style="color: #5465FF;">
+                        <span>Phase 3: Network Scaling</span>
+                        <span class="roadmap-status" style="color: #5465FF; background: rgba(84, 101, 255, 0.2);">IN
+                            PROGRESS</span>
+                    </div>
+                    <p style="font-size: 0.9rem; opacity: 0.8;">Deploying multi-node mesh network for wider river
+                        coverage.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BIBLIOGRAPHY -->
+        <section id="bibliography" class="section reveal-on-scroll">
+            <h2>Bibliography & Data Sources</h2>
+            <ul class="bib-list">
+                <li class="bib-item reveal-on-scroll">
+                    <i class="bi bi-journal-text bib-icon"></i>
+                    <div>
+                        <strong>NOAA (National Oceanic and Atmospheric Administration)</strong><br>
+                        <span style="font-size: 0.85rem; opacity: 0.7;">Ocean Acidification Program: Research on pH
+                            levels and aquatic life impact. Used for threshold calibration.</span>
+                    </div>
+                </li>
+                <li class="bib-item reveal-on-scroll">
+                    <i class="bi bi-droplet-half bib-icon"></i>
+                    <div>
+                        <strong>EPA (Environmental Protection Agency)</strong><br>
+                        <span style="font-size: 0.85rem; opacity: 0.7;">National Water Quality Criteria for Turbidity
+                            and Dissolved Oxygen in freshwater ecosystems.</span>
+                    </div>
+                </li>
+                <li class="bib-item reveal-on-scroll">
+                    <i class="bi bi-globe-americas bib-icon"></i>
+                    <div>
+                        <strong>UNESCO</strong><br>
+                        <span style="font-size: 0.85rem; opacity: 0.7;">World Ocean Assessment II: Global trends in
+                            marine pollution and heavy metal contamination.</span>
+                    </div>
+                </li>
+                <li class="bib-item reveal-on-scroll">
+                    <i class="bi bi-chip bib-icon"></i>
+                    <div>
+                        <strong>Espressif Systems</strong><br>
+                        <span style="font-size: 0.85rem; opacity: 0.7;">ESP32 Technical Reference Manual and ESP-IDF
+                            Documentation for low-power wireless implementation.</span>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <!-- CONTACT FORM -->
+        <section id="contact" class="section dark reveal-on-scroll">
+            <h2 style="margin-bottom: 3rem;">Send a Message</h2>
+
+            <div class="contact-form-container">
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" id="name" class="form-input" placeholder="Enter your name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" id="email" class="form-input" placeholder="name@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject" class="form-label">Subject</label>
+                        <select id="subject" class="form-select">
+                            <option value="general">General Inquiry</option>
+                            <option value="collab">Collaboration</option>
+                            <option value="support">Technical Support</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea id="message" class="form-textarea" placeholder="How can we help?" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-primary glow-effect"
+                        style="width: 100%; justify-content: center; padding: 1rem;">
+                        Send Message <i class="bi bi-send-fill" style="margin-left: 0.5rem;"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="#team">Team</a>
+                <a href="#tech">Tech Stack</a>
+                <a href="https://github.com/PrabhnoorSingh-IITM/BlueSentinel" target="_blank">GitHub</a>
+            </div>
+            <p>© 2026 BlueSentinel • Protecting Freshwater Ecosystems</p>
+        </footer>
+
+        <!-- SCRIPTS -->
+        <!-- Note: We use landing-effects.js for shared animations -->
+        <script src="js/landing-effects.js"></script>
+        <script src="js/visual-effects.js"></script>
         <script src="js/contact.js"></script>
-    </body>
+    </div>
+</body>
+
 </html>

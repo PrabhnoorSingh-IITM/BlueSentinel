@@ -93,7 +93,7 @@ window.addEventListener('load', function () {
       startSimulationMode();
     }
     // Force Analysis Check after 4 seconds regardless of mode
-    if (!window.hasInitialAnalysis && window.getSystemAnalysis) {
+    if (!window.hasInitialAnalysis && window.getWaterHealthAnalysis) {
       console.log("Forcing initial analysis check...");
       refreshAnalysis(lastValues);
     }
@@ -345,11 +345,14 @@ function updateSensorCards(data) {
   // Trigger Analysis Update (Throttled or on manual refresh)
   // We won't call it every data update to save API quota.
   // Instead, we assume a separate timer or button handles it, OR we call it once on load/first-data.
-  if (!window.hasInitialAnalysis && window.getSystemAnalysis) {
+  if (!window.hasInitialAnalysis && window.getWaterHealthAnalysis) {
     refreshAnalysis(data);
-    window.hasInitialAnalysis = true;
+    // window.hasInitialAnalysis = true; // Moved inside function
   }
 }
+
+// Store latest AI treatments
+window.latestTreatments = {};
 
 async function refreshAnalysis(data) {
   const textEl = document.getElementById('analysis-text');
@@ -359,23 +362,56 @@ async function refreshAnalysis(data) {
   textEl.style.display = 'none';
   loadingEl.style.display = 'block';
 
-  if (window.getSystemAnalysis) {
-    try {
-      const analysis = await window.getSystemAnalysis(data || lastValues);
-      textEl.textContent = analysis;
+  // Prevent multiple double-calls
+  window.hasInitialAnalysis = true;
 
-      // Check keywords for status
+  if (window.getWaterHealthAnalysis) {
+    try {
+      // Gather both display values and ML placeholder values for the prompt
+      const fullData = {
+        ...data,
+        nitrogen: mlElements.nitrogen ? mlElements.nitrogen.textContent : 'N/A',
+        ammonia: mlElements.ammonia ? mlElements.ammonia.textContent : 'N/A',
+        lead: mlElements.lead ? mlElements.lead.textContent : 'N/A',
+        sodium: mlElements.sodium ? mlElements.sodium.textContent : 'N/A'
+      };
+
+      const result = await window.getWaterHealthAnalysis(fullData);
+
+      // Store dynamic treatments
+      window.latestTreatments = result.treatments || {};
+
+      // Update Analysis Text
+      textEl.textContent = result.analysis;
+
+      // Update Analysis Status Pill
       const statusEl = document.getElementById('analysis-status');
-      if (analysis.toLowerCase().includes('critical') || analysis.toLowerCase().includes('danger')) {
-        statusEl.className = 'status-pill status-danger';
-        statusEl.textContent = 'Critical';
-      } else if (analysis.toLowerCase().includes('caution') || analysis.toLowerCase().includes('risk')) {
-        statusEl.className = 'status-pill status-warning';
-        statusEl.textContent = 'Warning';
-      } else {
-        statusEl.className = 'status-pill status-normal';
-        statusEl.textContent = 'Optimal';
+      if (result.status) {
+        statusEl.textContent = result.status;
+        if (result.status === 'Critical') statusEl.className = 'status-pill status-danger';
+        else if (result.status === 'Warning') statusEl.className = 'status-pill status-warning';
+        else statusEl.className = 'status-pill status-normal';
       }
+
+      // Update Water Health Index (Dynamic from Gemini)
+      const scoreEl = document.getElementById('water-health-score');
+      const healthStatusEl = document.getElementById('water-health-status');
+      if (scoreEl && healthStatusEl) {
+        scoreEl.textContent = `${result.score}/100`;
+        healthStatusEl.textContent = result.status || 'Unknown';
+
+        if (result.score >= 80) {
+          healthStatusEl.className = 'status-pill status-success';
+          scoreEl.style.color = 'var(--color-success)';
+        } else if (result.score >= 50) {
+          healthStatusEl.className = 'status-pill status-warning';
+          scoreEl.style.color = 'var(--color-warning)';
+        } else {
+          healthStatusEl.className = 'status-pill status-danger';
+          scoreEl.style.color = 'var(--color-danger)';
+        }
+      }
+
     } catch (err) {
       console.error("Dashboard Analysis Error:", err);
       textEl.textContent = "Analysis failed to load. Checking connection...";
@@ -464,26 +500,40 @@ function openSolution(cardElement, value, range) {
   const isHigh = value > range.max;
 
   let advice = "";
-  if (metric.includes("Temperature")) {
-    advice = isHigh ? "Cooling system required. Check for thermal pollution or effluent discharge." : "Water too cold. Check for deep water upwelling.";
-  } else if (metric.includes("pH")) {
-    advice = isHigh ? "High Alkalinity. Add organic acids or reduce aeration." : "High Acidity. Add buffering agents (sodium carbonate) immediately.";
-  } else if (metric.includes("Turbidity")) {
-    advice = "High Turbidity. Inspect for soil erosion, runoff, or algal bloom. Deploy settlement tanks.";
-  } else if (metric.includes("Oxygen")) {
-    advice = "Low Oxygen (Hypoxia). Activate emergency aeration systems and check bio-filters.";
-    advice = "Low Oxygen (Hypoxia). Activate emergency aeration systems and check bio-filters.";
+
+  // 1. Try Dynamic AI Advice first
+  // Map UI titles to JSON keys
+  let aiKey = null;
+  if (metric.includes("Temperature")) aiKey = "Temperature";
+  else if (metric.includes("pH")) aiKey = "pH";
+  else if (metric.includes("Oxygen")) aiKey = "Dissolved Oxygen"; // Key from AI prompt
+  else if (metric.includes("Turbidity")) aiKey = "Turbidity";
+
+  if (aiKey && window.latestTreatments && window.latestTreatments[aiKey]) {
+    advice = window.latestTreatments[aiKey];
+    console.log("Using AI Advice for " + aiKey);
   } else {
-    advice = "Sensor reading out of range. Calibrate sensor and check connections.";
+    // 2. Fallback to Hardcoded Logic
+    if (metric.includes("Temperature")) {
+      advice = isHigh ? "Cooling system required. Check for thermal pollution or effluent discharge." : "Water too cold. Check for deep water upwelling.";
+    } else if (metric.includes("pH")) {
+      advice = isHigh ? "High Alkalinity. Add organic acids or reduce aeration." : "High Acidity. Add buffering agents (sodium carbonate) immediately.";
+    } else if (metric.includes("Turbidity")) {
+      advice = "High Turbidity. Inspect for soil erosion, runoff, or algal bloom. Deploy settlement tanks.";
+    } else if (metric.includes("Oxygen")) {
+      advice = "Low Oxygen (Hypoxia). Activate emergency aeration systems and check bio-filters.";
+    } else {
+      advice = "Sensor reading out of range. Calibrate sensor and check connections.";
+    }
   }
 
   // Trigger Chatbot with this specific advice
   const toggler = document.getElementById('chatbot-toggle');
-  const window = document.getElementById('chatbot-window');
+  const chatWindow = document.getElementById('chatbot-window');
   const messageContainer = document.getElementById('chatbot-messages');
 
-  if (window.style.display === 'none') {
-    window.style.display = 'flex'; // Open chatbot
+  if (chatWindow.style.display === 'none') {
+    chatWindow.style.display = 'flex'; // Open chatbot
   }
 
   // Inject solution into chat

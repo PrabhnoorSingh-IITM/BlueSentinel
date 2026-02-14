@@ -64,47 +64,83 @@
         }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/dock.css">
+    <script src="js/dock.js" defer></script>
+
+    <!-- Globe.gl (3D Earth) -->
+    <script src="https://unpkg.com/globe.gl"></script>
+
+    <script src="js/visual-effects.js"></script>
 </head>
 
 <body>
     <div class="app-container">
         <!-- SIDEBAR -->
         <!-- FLOATING NAVIGATION -->
-        <nav class="floating-nav">
-            <div class="nav-links">
-                <a href="dashboard.html" class="nav-item">
-                    <i class="bi bi-speedometer2 nav-icon"></i>
-                    <span class="label">Monitor</span>
-                </a>
-                <a href="news.html" class="nav-item">
-                    <i class="bi bi-newspaper nav-icon"></i>
-                    <span class="label">News</span>
-                </a>
-                <a href="logs.html" class="nav-item active">
-                    <i class="bi bi-file-earmark-text nav-icon"></i>
-                    <span class="label">Logs</span>
-                </a>
-                <a href="archive.html" class="nav-item">
-                    <i class="bi bi-archive nav-icon"></i>
-                    <span class="label">Archives</span>
-                </a>
-                <a href="forums.html" class="nav-item">
-                    <i class="bi bi-people nav-icon"></i>
-                    <span class="label">Forums</span>
-                </a>
-            </div>
+        <!-- FLOATING DOCK NAVIGATION -->
+        <nav class="dock-container">
+            <a href="dashboard.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-speedometer2 dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">Monitor</div>
+            </a>
+            <a href="news.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-newspaper dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">News</div>
+            </a>
+            <a href="logs.html" class="dock-item active">
+                <div class="dock-icon-container">
+                    <i class="bi bi-file-earmark-text dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">Logs</div>
+            </a>
+            <a href="archive.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-archive dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">Archives</div>
+            </a>
+            <a href="forums.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-people dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">Forums</div>
+            </a>
         </nav>
 
         <!-- MAIN CONTENT -->
         <main class="main-content">
-            <header class="card-header" style="margin-bottom: 2rem;">
-                <a href="dashboard.html" style="text-decoration: none; display: block;">
-                    <h1 class="text-gradient" style="font-size: 2rem;">System Logs</h1>
-                    <p style="color: var(--text-muted);">Historical alerts and maintenance records</p>
+            <header class="card-header reveal-on-scroll" style="margin-bottom: 2rem;">
+                <a href="dashboard.html"
+                    style="text-decoration: none; display: flex; flex-direction: row; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                    <img src="./assets/images/logo.png" alt="BlueSentinel" class="brand-logo"
+                        style="width: auto; height: 48px;">
+                    <h1 class="text-gradient"
+                        style="font-family: var(--font-logo); font-size: 2.5rem; letter-spacing: 1px; margin: 0; text-transform: none;">
+                        BlueSentinel</h1>
                 </a>
+                <div style="text-align: center;">
+                    <h2 class="text-gradient" style="font-size: 2rem; margin-top: 0.5rem;">System Logs</h2>
+                    <p style="color: var(--text-muted);">Historical alerts and maintenance records</p>
+                </div>
             </header>
 
-            <div class="bento-card span-12">
+            <!-- Incident Map -->
+            <div class="bento-card span-12 reveal-on-scroll" style="margin-bottom: 1.5rem;">
+                <div class="card-header">
+                    <span class="card-title"><i class="bi bi-geo-alt-fill" style="margin-right: 8px;"></i>Incident
+                        Locations</span>
+                    <div class="status-pill status-normal">Live</div>
+                </div>
+                <div id="logs-map" style="height: 350px; width: 100%; border-radius: 12px; z-index: 1;"></div>
+            </div>
+
+            <div class="bento-card span-12 reveal-on-scroll">
                 <table class="log-table">
                     <thead>
                         <tr>

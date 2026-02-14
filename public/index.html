@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>BlueSentinel | River Intelligence Platform</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="css/landing.css" />
+</head>
+
+<body>
+    <div class="noise-bg">
+        <div class="noise-overlay"></div>
+    </div>
+    <canvas id="dotted-glow-canvas"></canvas>
+
+    <div class="container">
+        <!-- NAVBAR -->
+        <nav class="navbar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <img src="./assets/images/logo.png" alt="BlueSentinel logo">
+                </div>
+                <div class="logo-text">
+                    <div class="logo-title">BlueSentinel</div>
+                    <div class="logo-subtitle">River Intelligence Platform</div>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#how">How It Works</a></li>
+                <li><a href="#impact">Impact</a></li>
+                <li><a href="#technology">Technology</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="https://github.com/PrabhnoorSingh-IITM/BlueSentinel" target="_blank" rel="noopener noreferrer"
+                    class="github-icon">
+                    <img src="/public/assets/icons/github.svg" alt="GitHub">
+                </a>
+                <a href="dashboard.html" class="btn-primary">Launch Dashboard</a>
+            </div>
+        </nav>
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-content">
+
+                <!-- LEFT SIDE -->
+                <div class="hero-left">
+                    <h1 class="hero-title">Monitor Rivers <br><span class="text-gradient-cyan">At Warp Speed</span></h1>
+                    <h2 class="hero-subtitle">
+                        <span id="typewriter-text"></span><span class="cursor-blink">|</span>
+                    </h2>
+
+                    <p class="hero-description">
+                        The world's first River Intelligence Grid.
+                        Predict anomalies, track heavy metals, and visualize water health in real-time.
+                    </p>
+
+                    <div class="hero-buttons">
+                        <a href="dashboard.html" class="btn-primary glow-effect">
+                            <img src="./assets/icons/eye.svg" alt="Launch" class="btn-icon">
+                            Launch Console
+                        </a>
+
+                        <a href="#how" class="btn-secondary">
+                            System Architecture
+                            <img src="./assets/icons/angle-double-right.svg" alt="Explore" class="btn-icon">
+                        </a>
+                    </div>
+
+                    <div class="hero-stats">
+                        <div class="stat-card tilt-card">
+                            <div class="stat-value">99.9%</div>
+                            <div class="stat-label">Uptime</div>
+                        </div>
+                        <div class="stat-card tilt-card">
+                            <div class="stat-value">
+                                < 50ms</div>
+                                    <div class="stat-label">Latency</div>
+                            </div>
+                            <div class="stat-card tilt-card">
+                                <div class="stat-value">24/7</div>
+                                <div class="stat-label">AI Surveillance</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT SIDE -->
+                    <div class="hero-right">
+                        <div class="hero-map-container">
+                            <img src="./assets/images/luigi-manga-k9uDq3Pbato-unsplash.jpg"
+                                alt="India Coastal Monitoring Map" class="hero-map">
+
+                            <!-- SENSOR MARKERS -->
+                            <div class="sensor-marker marker-blue"></div>
+                            <div class="sensor-marker marker-green"></div>
+                            <div class="sensor-marker marker-yellow"></div>
+
+                            <!-- STATUS CARD -->
+                            <div class="hero-status-card">
+                                <div class="status-header">SYSTEM STATUS</div>
+                                <div class="status-title">All Systems Operational</div>
+
+                                <div class="status-metrics">
+                                    <div class="metric">
+                                        <div class="metric-label">Active Sensors</div>
+                                        <div class="metric-value metric-blue">247</div>
+                                    </div>
+                                    <div class="metric">
+                                        <div class="metric-label">Zones Monitored</div>
+                                        <div class="metric-value metric-blue">18</div>
+                                    </div>
+                                    <div class="metric">
+                                        <div class="metric-label">Health Score</div>
+                                        <div class="metric-value metric-green">87/100</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+        </section>
+
+        <!-- PROBLEM -->
+        <section id="solution" class="section light reveal-on-scroll">
+            <h2>Rivers Are Dying Quietly</h2>
+            <p class="subtitle">
+                Manual sampling is too slow. Pollution spreads before it's caught.
+            </p>
+
+            <div class="cards">
+                <div class="card tilt-card reveal-on-scroll" style="transition-delay: 100ms">
+                    <h3>Manual & Reactive</h3>
+                    <p>Current monitoring happens only once a month.</p>
+                </div>
+                <div class="card tilt-card reveal-on-scroll" style="transition-delay: 200ms">
+                    <h3>Data Fragmented</h3>
+                    <p>Paper reports hide the real-time crisis.</p>
+                </div>
+                <div class="card tilt-card reveal-on-scroll" style="transition-delay: 300ms">
+                    <h3>Toxic Seepage</h3>
+                    <p>Industrial waste detected only after fish kills.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SOLUTION -->
+        <section class="section reveal-on-scroll">
+            <h2>The River Sentinel Protocol</h2>
+
+            <div class="cards">
+                <div class="card tilt-card reveal-on-scroll">
+                    <h3>Multi-Parameter Sensing</h3>
+                    <p>Real-time pH, Turbidity, DO, and Temperature.</p>
+                </div>
+
+                <div class="card tilt-card reveal-on-scroll" style="transition-delay: 100ms">
+                    <h3>Toxic Load Analysis</h3>
+                    <p>AI estimates Ammonia, Nitrogen, and Lead levels.</p>
+                </div>
+
+                <div class="card tilt-card reveal-on-scroll" style="transition-delay: 200ms">
+                    <h3>Predictive Anomaly</h3>
+                    <p>Gemini AI forecasts pollution spikes 24h in advance.</p>
+                </div>
+
+                <div class="card tilt-card reveal-on-scroll" style="transition-delay: 300ms">
+                    <h3>Rapid Response</h3>
+                    <p>Instant alerts to Pollution Control Boards.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- HOW IT WORKS -->
+        <section id="how" class="section light reveal-on-scroll">
+            <h2>System Architecture</h2>
+
+            <div class="steps">
+                <div class="step reveal-on-scroll" style="transition-delay: 0ms">1. Acquire</div>
+                <div class="step reveal-on-scroll" style="transition-delay: 100ms">2. Synthesize</div>
+                <div class="step reveal-on-scroll" style="transition-delay: 200ms">3. Predict</div>
+                <div class="step reveal-on-scroll" style="transition-delay: 300ms">4. Notify</div>
+                <div class="step reveal-on-scroll" style="transition-delay: 400ms">5. Evolve</div>
+            </div>
+        </section>
+
+        <!-- IMPACT -->
+        <section id="impact" class="section reveal-on-scroll">
+            <h2>Restoring Freshwater Lifelines</h2>
+
+            <div class="stats">
+                <div class="stat reveal-on-scroll" style="transition-delay: 0ms">Continuous Monitoring</div>
+                <div class="stat reveal-on-scroll" style="transition-delay: 100ms">Early Warning System</div>
+                <div class="stat reveal-on-scroll" style="transition-delay: 200ms">Data-Driven Policy</div>
+                <div class="stat reveal-on-scroll" style="transition-delay: 300ms">Community Action</div>
+            </div>
+        </section>
+
+        <!-- TECHNOLOGY -->
+        <section id="technology" class="section dark reveal-on-scroll">
+            <h2>Powered By</h2>
+
+            <div class="tech">
+                <span>IoT Array</span>
+                <span>Firebase Cloud</span>
+                <span>Gemini 1.5 Pro</span>
+                <span>BlueSentinel ML</span>
+                <span>Globe.gl</span>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <div class="footer-links">
+                <a href="contact.html">Contact Us</a>
+                <a href="contact.html#team">Team</a>
+                <a href="contact.html#tech">Tech Stack</a>
+                <a href="contact.html#bibliography">Bibliography</a>
+                <a href="https://github.com/PrabhnoorSingh-IITM/BlueSentinel" target="_blank"
+                    rel="noopener noreferrer">GitHub</a>
+                <a href="contact.html#tech">Architecture</a>
+            </div>
+            <p>© 2026 BlueSentinel • Protecting Freshwater Ecosystems</p>
+        </footer>
+
+        <script src="js/index.js"></script>
+        <script src="js/landing-effects.js"></script>
+        <script src="js/visual-effects.js"></script>
+    </div>
+</body>
+
+</html>
