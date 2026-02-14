@@ -19,8 +19,8 @@
   /* Gradient accent */
 
   /* --- STATUS --- */
-  --color-success: #00FF9D;
-  --color-warning: #FFD600;
+  --color-success: #1f513e;
+  --color-warning: #75630b;
   --color-danger: #FF4D4D;
 
   /* --- TYPOGRAPHY --- */
@@ -45,12 +45,12 @@
 }
 
 [data-theme="light"] {
-  --color-void: #f0f4f8;
-  --color-abyss: #ffffff;
-  --color-surface: rgba(255, 255, 255, 0.8);
+  --color-void: #1566b8;
+  --color-abyss: #735fd6;
+  --color-surface: rgba(225, 223, 223, 0.8);
   --text-primary: #1e293b;
-  --text-secondary: #475569;
-  --text-muted: #64748b;
+  --text-secondary: #5f6c7e;
+  --text-muted: #797c80;
   --glass-border: 1px solid rgba(0, 0, 0, 0.08);
   --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
 }
@@ -73,6 +73,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
 }
+
 
 a {
   text-decoration: none;
@@ -99,13 +100,13 @@ h4,
 h5,
 h6 {
   font-family: var(--font-display);
-  color: #fff;
+  color: #02030a;
   font-weight: 700;
   letter-spacing: -0.02em;
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #fff 0%, var(--color-cyan) 100%);
+  background: linear-gradient(135deg, #bbb5d1 0%, var(--color-cyan) 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -166,10 +167,17 @@ h6 {
 }
 
 .brand-logo {
-  width: 40px;
+   width: 40px;
   height: 40px;
   filter: brightness(0) invert(1);
-  /* Force white */
+}
+
+.nav-mini-logo {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.35));
 }
 
 .brand-name {
