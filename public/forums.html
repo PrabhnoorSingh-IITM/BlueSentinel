@@ -11,8 +11,11 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="js/core/firebase-init.js" defer></script>
     <script src="js/theme-toggle.js" defer></script>
-    <script src="js/theme-toggle.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@iconscout/unicons@4.0.8/css/line.min.css">
+    <link rel="stylesheet" href="css/dock.css">
+    <script src="js/dock.js" defer></script>
+    <script src="js/forums.js" defer></script>
     <style>
         .forum-thread {
             background: rgba(255, 255, 255, 0.03);
@@ -75,30 +78,7 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('manual-entry-form');
-            if (form) {
-                form.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    // Mock Submission
-                    const btn = form.querySelector('button[type="submit"]');
-                    const originalText = btn.innerHTML;
-
-                    btn.innerHTML = '<span class="typing-dots">Submitting to Community...</span>';
-                    btn.disabled = true;
-
-                    setTimeout(() => {
-                        alert("Report Submitted to Community Feed!");
-                        btn.innerHTML = originalText;
-                        btn.disabled = false;
-                        form.reset();
-                        toggleReportForm(); // Close form
-
-                        // Ideally: prepend new thread to list
-                    }, 1500);
-                });
-            }
-        });
+        <!-- Inline script removed, logic moved to js/forums.js -->
     </script>
 </head>
 
@@ -106,29 +86,38 @@
 
     <div class="app-container">
         <!-- FLOATING NAVIGATION -->
-        <nav class="floating-nav">
-            <div class="nav-links">
-                <a href="dashboard.html" class="nav-item">
-                    <i class="bi bi-speedometer2 nav-icon"></i>
-                    <span class="label">Monitor</span>
-                </a>
-                <a href="news.html" class="nav-item">
-                    <i class="bi bi-newspaper nav-icon"></i>
-                    <span class="label">News</span>
-                </a>
-                <a href="logs.html" class="nav-item">
-                    <i class="bi bi-file-earmark-text nav-icon"></i>
-                    <span class="label">Logs</span>
-                </a>
-                <a href="archive.html" class="nav-item">
-                    <i class="bi bi-archive nav-icon"></i>
-                    <span class="label">Archives</span>
-                </a>
-                <a href="forums.html" class="nav-item active">
-                    <i class="bi bi-people nav-icon"></i>
-                    <span class="label">Forums</span>
-                </a>
-            </div>
+        <!-- FLOATING DOCK NAVIGATION -->
+        <nav class="dock-container">
+            <a href="dashboard.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-speedometer2 dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">Monitor</div>
+            </a>
+            <a href="news.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-newspaper dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">News</div>
+            </a>
+            <a href="logs.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-file-earmark-text dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">Logs</div>
+            </a>
+            <a href="archive.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-archive dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">Archives</div>
+            </a>
+            <a href="forums.html" class="dock-item active">
+                <div class="dock-icon-container">
+                    <i class="bi bi-people dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">Forums</div>
+            </a>
         </nav>
 
         <!-- MAIN CONTENT AREA -->
@@ -138,15 +127,22 @@
                 <!-- Header -->
                 <header class="dashboard-header"
                     style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                    <a href="dashboard.html" style="text-decoration: none; display: block;">
-                        <h1 class="text-gradient" style="font-size: 2rem;">Community Forums</h1>
+                    <a href="dashboard.html"
+                        style="text-decoration: none; display: flex; flex-direction: row; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <img src="./assets/images/logo.png" alt="BlueSentinel" class="brand-logo"
+                            style="width: auto; height: 48px;">
+                        <h1 class="text-gradient"
+                            style="font-family: var(--font-logo); font-size: 2.5rem; letter-spacing: 1px; margin: 0; text-transform: none;">
+                            BlueSentinel</h1>
+                    </a>
+                    <div style="text-align: center;">
+                        <h2 class="text-gradient" style="font-size: 2rem; margin-top: 0.5rem;">Community Forums</h2>
                         <p style="color: var(--text-muted);">Collaborate with researchers and report local observations
                         </p>
-                    </a>
+                    </div>
                     <div style="display: flex; gap: 1rem;">
-                        <button id="theme-toggle" class="btn-icon">
-                            <i class="bi bi-sun-fill"></i>
-                        </button>
+                        <i class="uil uil-brightness" id="theme-toggle"
+                            style="font-size: 1.5rem; cursor: pointer; display: inline-block; min-width: 24px;"></i>
                         <button id="new-report-btn" class="btn-primary" onclick="toggleReportForm()">
                             + New Field Report
                         </button>
