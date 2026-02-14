@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const theme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', theme);
     updateToggleIcon(theme);
+    updateLogoVisibility(theme);
 
     const toggleBtn = document.getElementById('theme-toggle');
     if (toggleBtn) {
@@ -12,6 +13,21 @@ document.addEventListener('DOMContentLoaded', () => {
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateToggleIcon(newTheme);
+            updateLogoVisibility(newTheme);
+        });
+    }
+
+    // Also allow logo click to toggle theme
+    const themeLogo = document.getElementById('themeLogo');
+    if (themeLogo) {
+        themeLogo.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateToggleIcon(newTheme);
+            updateLogoVisibility(newTheme);
         });
     }
 });
@@ -42,5 +58,19 @@ function updateToggleIcon(theme) {
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
         `;
+    }
+}
+function updateLogoVisibility(theme) {
+    const themeLogo = document.getElementById('themeLogo');
+    if (!themeLogo) return;
+
+    if (theme === 'dark') {
+        // Show logo in dark mode
+        themeLogo.style.opacity = '0.9';
+        themeLogo.style.filter = 'drop-shadow(0 0 6px rgba(0, 240, 255, 0.35))';
+    } else {
+        // Show logo in light mode with adjusted styling
+        themeLogo.style.opacity = '0.8';
+        themeLogo.style.filter = 'drop-shadow(0 0 4px rgba(0, 100, 150, 0.25))';
     }
 }
