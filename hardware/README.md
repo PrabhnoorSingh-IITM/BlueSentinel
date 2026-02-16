@@ -9,7 +9,7 @@ This directory contains all hardware-related files for BlueSentinel's IoT sensor
 ### Active Sensors
 
 | Sensor | Interface | Status | Pin |
-|--------|-----------|--------|-----|
+| :--- | :--- | :--- | :--- |
 | **DS18B20** | OneWire | ✅ Live | GPIO 4 |
 | **Analog pH** | Analog | ✅ Live | GPIO 32 |
 | **Turbidity** | Analog | ✅ Live | GPIO 35 |
