@@ -164,6 +164,26 @@
             font-size: 1.2rem;
             margin-top: 2px;
         }
+        }
+
+        /* TEAM SECTION OVERRIDE: 5 Columns */
+        @media (min-width: 1024px) {
+            #team .cards {
+                grid-template-columns: repeat(5, 1fr) !important;
+                gap: 1rem;
+            }
+
+            #team .card {
+                padding: 1.5rem 1rem;
+                /* Compact padding */
+            }
+
+            #team .member-avatar img {
+                width: 100px;
+                /* Slightly smaller to fit */
+                height: 100px;
+            }
+        }
     </style>
 </head>
 
@@ -274,14 +294,31 @@
                     </div>
                 </div>
 
-                <!-- Member 2: Mehak -->
+                <!-- Member 2: Digbir Singh -->
                 <div class="card tilt-card reveal-on-scroll" style="transition-delay: 100ms">
                     <div class="member-avatar">
-                        <img src="./assets/images/Mehak.jpeg" alt="Mehak Kaur">
+                        <img src="./assets/images/digbir.png" alt="Digbir Singh">
+                    </div>
+                    <h3>Digbir Singh</h3>
+                    <p style="color: #5465FF; font-weight: 600; margin-bottom: 0.5rem;">Backend Developer</p>
+                    <p>Assisted in backend logic and server-side optimizations.</p>
+                    <div class="social-links">
+                        <a href="#" target="_blank" class="social-link"><i class="bi bi-github"></i></a>
+                        <a href="https://www.linkedin.com/in/digbir-singh1?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
+                            target="_blank" class="social-link"
+                            style="color: #0077b5; border-color: rgba(0, 119, 181, 0.3)"><i
+                                class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <!-- Member 3: Mehak Kaur -->
+                <div class="card tilt-card reveal-on-scroll" style="transition-delay: 200ms">
+                    <div class="member-avatar">
+                        <img src="./assets/images/mehak.jpeg" alt="Mehak Kaur">
                     </div>
                     <h3>Mehak Kaur</h3>
-                    <p style="color: #5465FF; font-weight: 600; margin-bottom: 0.5rem;">Hardware Assistant</p>
-                    <p>Helped with sensor component sourcing and initial circuit assembly testing.</p>
+                    <p style="color: #5465FF; font-weight: 600; margin-bottom: 0.5rem;">UI/UX & Presentation</p>
+                    <p>Contributed to user interface design concepts and presentation materials.</p>
                     <div class="social-links">
                         <a href="https://github.com/MehakKaurSahdev" target="_blank" class="social-link"><i
                                 class="bi bi-github"></i></a>
@@ -291,34 +328,34 @@
                     </div>
                 </div>
 
-                <!-- Member 3: Jaisveen -->
-                <div class="card tilt-card reveal-on-scroll" style="transition-delay: 200ms">
+                <!-- Member 4: Nilabh Kalia -->
+                <div class="card tilt-card reveal-on-scroll" style="transition-delay: 300ms">
                     <div class="member-avatar">
-                        <img src="./assets/images/Jaisveen.jpg" alt="Jaisveen Kaur">
+                        <img src="./assets/images/nilabh.jpeg" alt="Nilabh Kalia">
                     </div>
-                    <h3>Jaisveen Kaur</h3>
-                    <p style="color: #5465FF; font-weight: 600; margin-bottom: 0.5rem;">Data Support</p>
-                    <p>Assisted in collecting water samples and verifying dataset entries.</p>
+                    <h3>Nilabh Kalia</h3>
+                    <p style="color: #5465FF; font-weight: 600; margin-bottom: 0.5rem;">Database Management</p>
+                    <p>Assisted with database schema structuring and data integrity.</p>
                     <div class="social-links">
-                        <a href="https://github.com/jaisveenkaur" target="_blank" class="social-link"><i
+                        <a href="https://github.com/nilabh101" target="_blank" class="social-link"><i
                                 class="bi bi-github"></i></a>
-                        <a href="#" target="_blank" class="social-link"
-                            style="color: #0077b5; border-color: rgba(0, 119, 181, 0.3)"><i
+                        <a href="https://www.linkedin.com/in/nilabh-kalia-7a3251361/" target="_blank"
+                            class="social-link" style="color: #0077b5; border-color: rgba(0, 119, 181, 0.3)"><i
                                 class="bi bi-linkedin"></i></a>
                     </div>
                 </div>
 
-                <!-- Member 4: Prabhleen -->
-                <div class="card tilt-card reveal-on-scroll" style="transition-delay: 300ms">
+                <!-- Member 5: Prabhleen Kaur -->
+                <div class="card tilt-card reveal-on-scroll" style="transition-delay: 400ms">
                     <div class="member-avatar">
-                        <img src="./assets/images/Prabhleen.jpeg" alt="Prabhleen Kaur">
+                        <img src="./assets/images/prabhleen.jpeg" alt="Prabhleen Kaur">
                     </div>
                     <h3>Prabhleen Kaur</h3>
-                    <p style="color: #5465FF; font-weight: 600; margin-bottom: 0.5rem;">Design Contributor</p>
-                    <p>Provided input on color schemes and initial layout sketches.</p>
+                    <p style="color: #5465FF; font-weight: 600; margin-bottom: 0.5rem;">Backend Developer</p>
+                    <p>Assisted with backend functional components and testing.</p>
                     <div class="social-links">
-                        <a href="https://github.com/PrabhleenKaur07" target="_blank" class="social-link"><i
-                                class="bi bi-github"></i></a>
+                        <a href="https://github.com/PrabhleenKaur07/PrabhleenKaur07" target="_blank"
+                            class="social-link"><i class="bi bi-github"></i></a>
                         <a href="#" target="_blank" class="social-link"
                             style="color: #0077b5; border-color: rgba(0, 119, 181, 0.3)"><i
                                 class="bi bi-linkedin"></i></a>
