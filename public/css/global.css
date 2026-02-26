@@ -666,3 +666,30 @@ i.btn-icon {
     transform: translateY(0);
   }
 }
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #00ff9d;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 0 0 rgba(0, 255, 157, 0.7);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 255, 157, 0.7);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(0, 255, 157, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 255, 157, 0);
+  }
+}
