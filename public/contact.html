@@ -185,7 +185,15 @@
             }
         }
     </style>
-</head>
+
+    <style>
+        @keyframes float {
+            0% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-20px) scale(1.05); }
+            100% { transform: translateY(0px) scale(1); }
+        }
+    </style>
+    \n</head>
 
 <body>
     <div class="noise-bg">
@@ -269,7 +277,68 @@
             </div>
         </section>
 
-                <!-- TEAM SECTION -->
+                
+        <!-- STORYTELLING SECTION (Inserted via Python Script) -->
+        <section id="story" class="section reveal-on-scroll" style="margin-top: 4rem; padding-bottom: 2rem;">
+            <div class="story-block" style="text-align: center; max-width: 1000px; margin: 0 auto; padding: 60px 40px; background: linear-gradient(180deg, rgba(10, 25, 47, 0.8) 0%, rgba(10, 25, 47, 0.3) 100%); border: 1px solid rgba(0, 255, 212, 0.2); border-radius: 32px; backdrop-filter: blur(24px); box-shadow: 0 32px 64px rgba(0, 0, 0, 0.5); position: relative; overflow: hidden;">
+                <div class="story-icon" style="font-size: 4rem; margin-bottom: 24px; text-shadow: 0 0 30px rgba(0, 255, 212, 0.6); animation: float 6s ease-in-out infinite;">🌊</div>
+                <h2 style="font-size: 3rem; margin-bottom: 24px; background: linear-gradient(135deg, #ffffff, #00FFD4); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px;">The Flow of Intelligence</h2>
+                <p class="story-lead" style="font-size: 1.35rem; color: #D2DDFF; line-height: 1.8; margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                    We are facing unprecedented changes in our freshwater ecosystems. Traditional monitoring is fragmented, slow, and reactive. Simply dumping raw data on analysts doesn't solve problems—it delays action. 
+                </p>
+                <div class="story-highlight" style="display: inline-block; padding: 16px 40px; background: rgba(0, 255, 212, 0.1); border: 1px solid rgba(0, 255, 212, 0.3); border-radius: 100px; color: #00FFD4; font-size: 1.5rem; font-weight: 700; margin: 20px 0 30px; box-shadow: 0 0 40px rgba(0, 255, 212, 0.15);">
+                    <span style="font-style: italic;">BlueSentinel autonomous intelligence.</span>
+                </div>
+                <p class="story-conclusion" style="font-size: 1.25rem; color: #a4b5aa; line-height: 1.8; max-width: 700px; margin: 0 auto;">
+                    By combining modular ESP32 edge sensors with an autonomous Gemini 2.0 reasoning engine, we bridge the hardware-to-cloud gap natively.
+                </p>
+            </div>
+        </section>
+
+        <!-- SWOT ANALYSIS -->
+        <section id="swot" class="section reveal-on-scroll" style="margin-top: 2rem;">
+            <h2 class="section-title" style="font-size: 2.5rem; text-align: center; margin-bottom: 40px;">Strategic Analysis (SWOT)</h2>
+            <div class="swot-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; max-width: 1000px; margin: 0 auto;">
+                
+                <div class="swot-box tilt-card reveal-on-scroll" style="transition-delay: 0ms; background: rgba(0,255,136,0.05); border: 1px solid rgba(0,255,136,0.2); padding: 32px; border-radius: 20px;">
+                    <h4 style="color: #00ff88; font-size: 1.4rem; margin-bottom: 16px;">Strengths</h4>
+                    <ul style="color: #a4b5aa; padding-left: 20px; line-height: 1.8; text-align: left;">
+                        <li>Autonomous Decision-first outputs</li>
+                        <li>Multi-sensor fusion (pH, Temp, Turbidity, DO)</li>
+                        <li>Real-time alerting & edge deployment</li>
+                    </ul>
+                </div>
+
+                <div class="swot-box tilt-card reveal-on-scroll" style="transition-delay: 100ms; background: rgba(255,187,0,0.05); border: 1px solid rgba(255,187,0,0.2); padding: 32px; border-radius: 20px;">
+                    <h4 style="color: #ffbb00; font-size: 1.4rem; margin-bottom: 16px;">Weaknesses</h4>
+                    <ul style="color: #a4b5aa; padding-left: 20px; line-height: 1.8; text-align: left;">
+                        <li>Hardware scalability in deep remote areas</li>
+                        <li>ESP32 WiFi dependency (lacks LoRa natively)</li>
+                        <li>High power consumption for continuous ML</li>
+                    </ul>
+                </div>
+
+                <div class="swot-box tilt-card reveal-on-scroll" style="transition-delay: 200ms; background: rgba(0,212,255,0.05); border: 1px solid rgba(0,212,255,0.2); padding: 32px; border-radius: 20px;">
+                    <h4 style="color: #00d4ff; font-size: 1.4rem; margin-bottom: 16px;">Opportunities</h4>
+                    <ul style="color: #a4b5aa; padding-left: 20px; line-height: 1.8; text-align: left;">
+                        <li>Integration with government municipal data</li>
+                        <li>Expand to predictive flood alerts</li>
+                        <li>Add specific biological/chemical contamination sensors</li>
+                    </ul>
+                </div>
+
+                <div class="swot-box tilt-card reveal-on-scroll" style="transition-delay: 300ms; background: rgba(255,71,87,0.05); border: 1px solid rgba(255,71,87,0.2); padding: 32px; border-radius: 20px;">
+                    <h4 style="color: #ff4757; font-size: 1.4rem; margin-bottom: 16px;">Threats</h4>
+                    <ul style="color: #a4b5aa; padding-left: 20px; line-height: 1.8; text-align: left;">
+                        <li>Sensor bio-fouling and physical damage</li>
+                        <li>Competitors with established government contracts</li>
+                        <li>Extreme weather events destroying nodes</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+\n        <!-- TEAM SECTION -->
         <section id="team" class="section reveal-on-scroll">
             <h2 class="section-title" style="font-size: 2.5rem; text-align: center; margin-bottom: 40px;">Mission Team</h2>
             <p class="subtitle" style="text-align: center; margin-bottom: 60px;">Led by Prabhnoor Singh, driving innovation in river monitoring.</p>

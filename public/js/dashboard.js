@@ -561,7 +561,12 @@ function updateAllCharts(data) {
     // Ideal: pH 7, Turbidity < 5
     let score = 100;
     score -= Math.abs((data.pH || 7) - 7) * 10; // pH penalty
-    score -= (data.turbidity || 0) * 5; // Turbidity penalty
+        let turb = data.turbidity || 0;
+    if (turb > 50) score -= 40; // Very dirty
+    else if (turb > 5) score -= 20; // Slightly muddy
+    else if (turb > 1) score -= 5; // Acceptable
+    // 0-1 is ultra clear, 0 penalty
+    
     score = Math.max(0, Math.min(100, score));
 
     chartData.projection.push(score);

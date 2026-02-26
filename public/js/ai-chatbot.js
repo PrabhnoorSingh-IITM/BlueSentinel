@@ -176,12 +176,12 @@ async function getWaterHealthAnalysis(sensorData) {
         const prompt = `
         Act as a marine biologist and data analyst. Analyze this sensor data:
         - Real Sensors: Temperature: ${sensorData.temperature}°C, pH: ${sensorData.pH}.
-        - Broken/Ignored Sensors: Turbidity (Value: ${sensorData.turbidity} NTU - DO NOT USE FOR SCORE).
+        - Active Sensors: Turbidity (Value: ${sensorData.turbidity} NTU - Include in score calculation based on NTU ranges).
         - Simulated/Estimated: Dissolved Oxygen: ${sensorData.dissolvedOxygen} mg/L, Nitrogen: ${sensorData.nitrogen || 'N/A'}, Ammonia: ${sensorData.ammonia || 'N/A'}, Lead: ${sensorData.lead || 'N/A'}, Sodium: ${sensorData.sodium || 'N/A'}.
 
         Task:
-        1. Calculate a "Water Health Score" out of 100 based on these values (potability standards), IGNORING Turbidity.
-        2. Provide a 2-sentence summary of the ecosystem health, mentioning that Turbidity data is currently unavailable/ignored.
+        1. Calculate a "Water Health Score" out of 100 based on all values (potability standards). Use these Turbidity Guidelines:\n           - 0 to 1 NTU: Ultra clear water\n           - 1 to 5 NTU: Acceptable drinking water\n           - 5 to 50 NTU: Slightly muddy / surface water\n           - > 50 NTU: Very dirty, stormwater, sewage-level chaos
+        2. Provide a 2-sentence summary of the ecosystem health.
         3. Determine a status (Excellent, Good, Warning, Critical).
         4. Provide specific chemical/physical treatment advice for any out-of-range metrics (e.g., "Add Sodium Carbonate to increase pH", "Increase aeration for low DO").
 
@@ -330,7 +330,7 @@ function calculateLocalFallback(data) {
         penalties.push('Nitrogen levels elevated');
     }
 
-    // Turbidity Ignored as per User Request
+    // Turbidity now fully active
 
     score = Math.floor(Math.max(0, Math.min(100, score)));
 
@@ -346,7 +346,7 @@ function calculateLocalFallback(data) {
     } else {
         analysis += `All monitored parameters (pH, Temp, DO) are within optimal ranges. `;
     }
-    analysis += `Turbidity sensor is currently bypassed.`;
+    analysis += `Turbidity is ${sensorData.turbidity} NTU. `;
 
     return {
         score: score,
