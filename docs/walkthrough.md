@@ -1,6 +1,6 @@
-# BlueSentinel V2.1 - Product Walkthrough
+# BlueSentinel - Product Walkthrough
 
-Welcome to the **BlueSentinel BlueSentinel Edition**. This walkthrough highlights the key features and design decisions of the platform.
+Welcome to the **BlueSentinel **. This walkthrough highlights the key features and design decisions of the platform.
 
 ---
 
@@ -68,7 +68,7 @@ More than just a contact form.
 
 ---
 
-## 6. Design System (`BlueSentinel UI`)
+## 6. Design System (`UI`)
 
 - **Palette**: Deep Ocean Blue (`#0a0a0f`), Cyan Accents (`#00f0ff`), and Glassmorphism (Frosted backgrounds).
 - **Typography**: *Space Grotesk* for headers, *Inter* for readable data.

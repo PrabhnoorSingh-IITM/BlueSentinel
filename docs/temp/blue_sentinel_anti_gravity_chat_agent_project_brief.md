@@ -9,10 +9,10 @@ The platform combines embedded sensing hardware, cloud data pipelines, machine l
 
 ## Core Mission
 
-• Enable continuous river health monitoring  
-• Detect pollution indicators early  
-• Build environmental datasets  
-• Apply AI-driven interpretation  
+• Enable continuous river health monitoring 
+• Detect pollution indicators early 
+• Build environmental datasets 
+• Apply AI-driven interpretation 
 • Support awareness and response coordination
 
 ---
@@ -21,8 +21,8 @@ The platform combines embedded sensing hardware, cloud data pipelines, machine l
 
 Deployed prototype sensing node built on ESP32 capturing:
 
-• Water Temperature  
-• Water pH  
+• Water Temperature 
+• Water pH 
 • Turbidity
 
 Data is transmitted to Firebase Realtime Database at fixed intervals.
@@ -33,11 +33,11 @@ Data is transmitted to Firebase Realtime Database at fixed intervals.
 
 Machine learning models process sensor data and simulated environmental datasets to estimate:
 
-• Dissolved Oxygen  
-• Salinity  
-• Nitrogen & Nitrates  
-• Ammonia  
-• Lead & Heavy Metals  
+• Dissolved Oxygen 
+• Salinity 
+• Nitrogen & Nitrates 
+• Ammonia 
+• Lead & Heavy Metals 
 • Sodium & Other Contaminants
 
 These indicators are displayed as ML-estimated values.
@@ -46,11 +46,11 @@ These indicators are displayed as ML-estimated values.
 
 ## Platform Interfaces
 
-• Live monitoring dashboard  
-• Historical telemetry logs  
-• Pollution alert tracking  
-• Environmental news aggregation  
-• NGO collaboration forums  
+• Live monitoring dashboard 
+• Historical telemetry logs 
+• Pollution alert tracking 
+• Environmental news aggregation 
+• NGO collaboration forums 
 • AI chatbot assistant
 
 ---

@@ -1,10 +1,10 @@
-# BlueSentinel Hardware (V2.1)
+# BlueSentinel Hardware 
 
 This directory contains all hardware-related files for BlueSentinel's IoT sensor nodes.
 
 ## ⚡️ Current Hardware Setup
 
-**Deployed Node:** "BlueSentinel One" (ESP32 Dev Module)
+**Deployed Node:** "Node One" (ESP32 Dev Module)
 
 ### Active Sensors
 
@@ -25,14 +25,14 @@ This directory contains all hardware-related files for BlueSentinel's IoT sensor
 ```text
 ESP32 Dev Module
 ┌─────────────────┐
-│                 │
-│  Pin 4  ────────┼──── DS18B20 (Temp)
-│  Pin 32 ────────┼──── pH Sensor
-│  Pin 35 ────────┼──── Turbidity Sensor
-│  3.3V   ────────┼──── Sensor VCC
-│  GND    ────────┼──── Sensor GND
-│  USB    ────────┼──── 5V Power
-│                 │
+│         │
+│ Pin 4 ────────┼──── DS18B20 (Temp)
+│ Pin 32 ────────┼──── pH Sensor
+│ Pin 35 ────────┼──── Turbidity Sensor
+│ 3.3V  ────────┼──── Sensor VCC
+│ GND  ────────┼──── Sensor GND
+│ USB  ────────┼──── 5V Power
+│         │
 └─────────────────┘
 ```
 

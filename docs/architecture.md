@@ -1,8 +1,8 @@
-# System Architecture (V2.1)
+# System Architecture 
 
 ## High-Level Overview
 
-BlueSentinel V2.1 evolves from a simple IoT logger to a **Cyber-Physical System** incorporating AI and advanced visualization.
+BlueSentinel evolves from a simple IoT logger to a **Cyber-Physical System** incorporating AI and advanced visualization.
 
 ```mermaid
 sequenceDiagram
@@ -48,7 +48,7 @@ sequenceDiagram
 ### 4. Presentation Layer (The "Face")
 
 - **Framework**: Semantic HTML5 + Vanilla JS.
-- **Design System**: BlueSentinel UI (Glassmorphism).
+- **Design System**: UI (Glassmorphism).
 - **Visualization**:
   - `Globe.gl`: Spatial context.
   - `Bento Grid`: Information density.

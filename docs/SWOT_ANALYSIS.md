@@ -3,14 +3,14 @@
 ## 🚀 Strengths (Internal)
 
 1. **Hybrid Intelligence Architecture**
-    * Combines **Real-time IoT data** (ESP32) with **Generative AI** (Gemini 1.5) for instant actionable insights, not just raw numbers.
-    * "BlueSentinel ML" model provides predictive capabilities for water quality.
+    * Combines **Real-time IoT data** (ESP32) with **Generative AI** (Gemini 3 Pro) for instant actionable insights, not just raw numbers.
+    * "Predictive ML" model provides predictive capabilities for water quality.
 
 2. **Cost-Effectiveness**
     * Built on affordable, open-source hardware (ESP32, standard sensors) compared to industrial sondes costing $5,000+.
     * Low maintenance costs due to modular design.
 
-3. **User Experience (BlueSentinel UI)**
+3. **User Experience (UI)**
     * Superior visualization using **3D Globe** and **Glassmorphism**, making complex data accessible to non-technical stakeholders.
     * Cross-platform compatibility via responsive Web Dashboard.
 
@@ -23,7 +23,7 @@
 ## ⚠️ Weaknesses (Internal)
 
 1. **Connectivity Dependence**
-    * Current V2.1 nodes rely on **WiFi Availability**. Remote river sections require a transition to LoRaWAN or GSM (planned in Phase 3).
+    * Current nodes rely on **WiFi Availability**. Remote river sections require a transition to LoRaWAN or GSM (planned in Phase 3).
 
 2. **Sensor Maintenance**
     * Optical sensors (Turbidity) and electrochemical probes (pH) are prone to **biofouling** and drift over time, requiring monthly manual calibration.

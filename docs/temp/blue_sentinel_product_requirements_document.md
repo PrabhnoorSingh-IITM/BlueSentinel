@@ -9,9 +9,9 @@ BlueSentinel is a real-time river monitoring and environmental intelligence plat
 
 River monitoring today is:
 
-• Manual  
-• Infrequent  
-• Reactive  
+• Manual 
+• Infrequent 
+• Reactive 
 • Data‑fragmented
 
 Pollution spreads before detection.
@@ -20,20 +20,20 @@ Pollution spreads before detection.
 
 ## Product Goals
 
-• Continuous water monitoring  
-• Early anomaly detection  
-• Environmental data centralization  
-• Pollution classification  
+• Continuous water monitoring 
+• Early anomaly detection 
+• Environmental data centralization 
+• Pollution classification 
 • Awareness enablement
 
 ---
 
 ## Target Users
 
-• Pollution control boards  
-• Environmental NGOs  
-• Researchers  
-• Smart city authorities  
+• Pollution control boards 
+• Environmental NGOs 
+• Researchers 
+• Smart city authorities 
 • Policy makers
 
 ---
@@ -41,15 +41,15 @@ Pollution spreads before detection.
 ## Core Features
 
 ### Monitoring
-• Live sensor telemetry  
+• Live sensor telemetry 
 • Health scoring
 
 ### Intelligence
-• ML classification  
+• ML classification 
 • Pollution risk estimation
 
 ### Awareness
-• Environmental news  
+• Environmental news 
 • NGO collaboration forums
 
 ### Support
@@ -59,28 +59,28 @@ Pollution spreads before detection.
 
 ## Functional Requirements
 
-• Realtime dashboard  
-• Historical logs  
-• Alert detection  
-• ML indicator simulation  
-• News aggregation  
+• Realtime dashboard 
+• Historical logs 
+• Alert detection 
+• ML indicator simulation 
+• News aggregation 
 • Forum discussions
 
 ---
 
 ## Non‑Functional Requirements
 
-• Mobile responsive  
-• Scalable cloud infra  
-• Secure authentication  
+• Mobile responsive 
+• Scalable cloud infra 
+• Secure authentication 
 • Low latency updates
 
 ---
 
 ## Success Metrics
 
-• Monitoring uptime  
-• Detection speed  
-• Data accuracy  
+• Monitoring uptime 
+• Detection speed 
+• Data accuracy 
 • User engagement
 

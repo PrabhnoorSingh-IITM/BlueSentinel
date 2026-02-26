@@ -32,7 +32,7 @@ def load_artifacts(model_dir='../models'):
     return model, scaler, imputer, poly
 
 def predict(args):
-    model, scaler, imputer, poly = load_artifacts()
+    model, scaler, imputer, poly = load_artifacts
     
     # Input data (must match training columns in order)
     # ph, Hardness, Solids, Chloramines, Sulfate, Conductivity, Organic_carbon, Trihalomethanes, Turbidity
@@ -81,5 +81,5 @@ if __name__ == "__main__":
                         default=[7.0, 200.0, 20000.0, 7.0, 300.0, 400.0, 10.0, 60.0, 4.0],
                         help='Input features: pH Hardness Solids Chloramines Sulfate Conductivity Carbon Trihalo Turbidity')
     
-    args = parser.parse_args()
+    args = parser.parse_args
     predict(args)

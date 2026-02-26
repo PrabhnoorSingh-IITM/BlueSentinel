@@ -1,10 +1,10 @@
-# BlueSentinel - File Analysis Report (V2.1 Cleanup)
+# BlueSentinel - File Analysis Report ( Cleanup)
 
 ## 1. Cleanup Actions Taken
 
 - **Removed**: `public/login.html`, `public/signup.html`, `public/admin.html` (Scope reduction).
 - **Removed**: `public/css/auth.css`, `public/css/admin.css` (Unused styles).
-- **Added**: `public/js/dashboard-enhanced.js` (Replaces legacy dashboard logic).
+- **Added**: `public/js/dashboard.js` (Replaces legacy dashboard logic).
 - **Added**: `docs/temp/workflow.md`, `docs/temp/walkthrough.md` (New documentation).
 
 ---
@@ -43,7 +43,7 @@
 
 | File | Role | Status |
 | :--- | :--- | :--- |
-| `dashboard-enhanced.js` | Core Logic | ✅ Handles Charts, AI, & Simulation |
+| `dashboard.js` | Core Logic | ✅ Handles Charts, AI, & Simulation |
 | `logs.js` | 3D Map | ✅ Globe.gl implementation |
 | `forums.js` | Community | ✅ Realtime listener & submission logic |
 | `visual-effects.js` | UI | ✅ Scroll animations & tilt effects |

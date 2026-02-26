@@ -1,12 +1,12 @@
-# BlueSentinel - Viva Voce Preparation (V2.1)
+# BlueSentinel - Viva Voce Preparation 
 
 ## 🎯 Core Concepts
 
-### Q1: What is "V2.1 BlueSentinel Edition"?
+### Q1: What is ?
 
 **Answer:** It's our major UI/UX and AI overhaul.
 
-- **BlueSentinel**: Refers to the lowest level of a body of water (deep ocean).
+- ****: Refers to the lowest level of a body of water (deep ocean).
 - **Features**: Glassmorphic "Dark Mode" UI, 3D Globe, and Gemini AI integration.
 
 ### Q2: Why did you choose Firebase?

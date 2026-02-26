@@ -1,4 +1,4 @@
-# BlueSentinel V2.1 - User Workflows
+# BlueSentinel - User Workflows
 
 This document outlines the primary user journeys within the BlueSentinel platform.
 

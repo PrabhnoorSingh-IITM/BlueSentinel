@@ -1,4 +1,4 @@
-# BlueSentinel - Technical Specifications (V2.1)
+# BlueSentinel - Technical Specifications 
 
 ## 🏗️ System Architecture
 
@@ -20,7 +20,7 @@ BlueSentinel implements a **Hybrid AI-IoT Architecture**:
 - **Network**: WiFi 802.11 b/g/n + Bluetooth 4.2.
 - **Power**: Solar-ready 5V input.
 
-### Sensor Array (V2.1)
+### Sensor Array 
 
 | Parameter | Sensor Model | Range | Accuracy | Status |
 | :--- | :--- | :--- | :--- | :--- |
@@ -32,7 +32,7 @@ BlueSentinel implements a **Hybrid AI-IoT Architecture**:
 
 ---
 
-## 💻 Frontend Architecture (BlueSentinel UI)
+## 💻 Frontend Architecture (UI)
 
 ### Technology Stack
 
@@ -55,7 +55,7 @@ BlueSentinel implements a **Hybrid AI-IoT Architecture**:
 
 ### Gemini Integration
 
-- **Model**: Gemini 1.5 Flash.
+- **Model**: Gemini 3 Pro.
 - **Latency**: <2s for full text analysis.
 - **Prompt Engineering**: Context-aware prompts include last 10 sensor readings to detect trends (rising/falling).
 
