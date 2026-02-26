@@ -1,4 +1,4 @@
-# BlueSentinel Machine Learning 
+# BlueSentinel Machine Learning
 
 This directory contains the AI/ML pipeline for the BlueSentinel project, focusing on Water Quality Index (WQI) prediction.
 
@@ -17,7 +17,7 @@ This directory contains the AI/ML pipeline for the BlueSentinel project, focusin
 ### Target (Output)
 
 - WQI Score (0-100)
-- Classification: *Excellent, Good, Poor, Unsafe*
+- Classification: *Excellent, Good, Poor, Unsafe (Freshwater Standards)*
 
 ---
 

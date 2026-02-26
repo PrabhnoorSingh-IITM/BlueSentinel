@@ -47,7 +47,7 @@ function loadIncidentLogs() {
             time: '8:00pm',
             type: 'Health Score',
             severity: 'normal',
-            details: 'Marine health score improved to 85/100',
+            details: 'River health score improved to 85/100',
             node: 'Port-Blair-Station',
             lat: 11.6234, lng: 92.7265 // Port Blair
         }

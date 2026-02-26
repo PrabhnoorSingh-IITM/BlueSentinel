@@ -1,4 +1,4 @@
-# BlueSentinel - Viva Voce Preparation 
+# BlueSentinel - Viva & Technical Prep Guide
 
 ## 🎯 Core Concepts
 
@@ -6,7 +6,7 @@
 
 **Answer:** It's our major UI/UX and AI overhaul.
 
-- ****: Refers to the lowest level of a body of water (deep ocean).
+- **River Intelligence**: Refers to the use of IoT and AI to monitor and predict pollution in freshwater systems (rivers, lakes, tributaries).
 - **Features**: Glassmorphic "Dark Mode" UI, 3D Globe, and Gemini AI integration.
 
 ### Q2: Why did you choose Firebase?
@@ -19,7 +19,7 @@
 
 ### Q3: How does the AI integration work?
 
-**Answer:** We send a prompt to **Google Gemini** containing the current sensor vector (e.g., pH 7.2, Temp 24C). The AI acts as a "Virtual Marine Biologist," interpreting the data and suggesting remediation (e.g., "Add crushed limestone to buffer acidity").
+**Answer:** We send a prompt to **Google Gemini** containing the current sensor vector (e.g., pH 7.2, Temp 24C). The AI acts as a "Virtual River Ecologist," interpreting the data and suggesting remediation (e.g., "Add crushed limestone to buffer acidity" or "Check for upstream industrial discharge").
 
 ### Q4: What if the AI fails?
 
@@ -31,7 +31,7 @@
 
 ### Q5: Why use a 3D Globe?
 
-**Answer:** Ocean pollution is a global problem. A 2D map doesn't convey the interconnectedness of ocean currents. `Globe.gl` allows us to visualize data clusters and "Dark Side" incidents effectively.
+**Answer:** River pollution is a massive environmental threat. A static map doesn't convey the interconnectedness of river systems. `Globe.gl` allows us to visualize data clusters and pollution "hotspots" effectively across different geographies.
 
 ### Q6: How is the Dashboard optimized?
 

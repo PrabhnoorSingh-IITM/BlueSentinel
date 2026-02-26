@@ -1,24 +1,24 @@
-# BlueSentinel - Project Pitch 
+# BlueSentinel - Project Pitch
 
 ## 🎤 The Hook
 
-"We know more about the surface of Mars than the bottom of our oceans. BlueSentinel changes that by giving the ocean a voice—powered by AI and audible in real-time."
+"Rivers are the lifelines of our planet, yet they are being choked by pollution. BlueSentinel changes that by giving rivers a voice—powered by AI and audible in real-time."
 
 ---
 
 ## 💡 The Problem
 
-- **Silent Killers**: Hypoxia (low oxygen) and Acidification are destroying coral reefs and fisheries.
+- **Silent Killers**: Industrial runoff and plastic waste are destroying river ecosystems.
 - **Reactive vs Proactive**: We currently test water *after* fish die. We need to know *before*.
 - **Complexity**: Scientific data is locked in spreadsheets, inaccessible to the public.
 
 ---
 
-## 🚀 The Solution: BlueSentinel 
+## 🚀 The Solution: BlueSentinel
 
-An end-to-end **Ocean Intelligence Platform**.
+An end-to-end **River Intelligence Platform**.
 
-### 1. ** Design System**
+### 1. **Design System**
 
 We built a dashboard that looks like it belongs in 2030.
 
@@ -42,7 +42,7 @@ We don't just show charts; we explain them.
 
 ## 🛠️ How It Works
 
-1. **Sense**: Solar-powered ESP32 nodes float in the water, reading Temp, pH, Turbidity, and DO.
+1. **Sense**: Solar-powered ESP32 nodes placed in rivers, reading Temp, pH, Turbidity, and DO.
 2. **Transmit**: Data is pushed via WiFi/LoRa to Firebase Cloud.
 3. **Analyze**: Gemini AI processes trends and flags anomalies.
 4. **Act**: Dashboard alerts local authorities and community members in seconds.
@@ -53,13 +53,13 @@ We don't just show charts; we explain them.
 
 - **Economic**: Saves fisheries millions by predicting algal blooms.
 - **Ecological**: Protects biodiversity through early warning.
-- **Educational**: Makes marine science accessible to students.
+- **Educational**: Makes freshwater science accessible to students.
 
 ---
 
 ## 🔮 Future Vision
 
-- **Autonomous Drone Integration**: BlueSentinel nodes guiding cleanup drones.
-- **Satellite Data Fusion**: Combining our local data with NASA/ESA satellite feeds.
+- **Flood & Runoff Prediction**: Integrating weather patterns to predict pollution spikes.
+- **Urban River Revitalization**: Partnering with cities to monitor smart riverfronts.
 
-**BlueSentinel**: Protecting Life Below Water. 🌊
+**BlueSentinel**: Protecting Freshwater Ecosystems. 🌊

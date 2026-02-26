@@ -3,7 +3,7 @@
 ## 🚀 Strengths (Internal)
 
 1. **Hybrid Intelligence Architecture**
-    * Combines **Real-time IoT data** (ESP32) with **Generative AI** (Gemini 3 Pro) for instant actionable insights, not just raw numbers.
+    * Combines **Real-time IoT data** (ESP32) with **Generative AI** (Gemini 3 Pro) for instant actionable insights, not just raw water quality numbers.
     * "Predictive ML" model provides predictive capabilities for water quality.
 
 2. **Cost-Effectiveness**

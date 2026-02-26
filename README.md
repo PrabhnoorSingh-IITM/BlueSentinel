@@ -1,9 +1,9 @@
 <!-- markdownlint-disable MD033 -->
-# BlueSentinel - Ocean Intelligence Platform
+# BlueSentinel - River Intelligence Platform
 
 <div align="center">
-  <h3>A Digital Nervous System for the Ocean</h3>
-  <p><strong>Real-time marine monitoring, pollution detection, and ecosystem protection</strong></p>
+  <h3>A Digital Nervous System for Rivers</h3>
+  <p><strong>Real-time freshwater monitoring, pollution detection, and AI-driven insights</strong></p>
   <p>
     <a href="https://bluesentinel1.web.app">View Live Dashboard</a>
     ·
@@ -17,9 +17,9 @@
 
 ## 🌊 Overview
 
-**BlueSentinel** addresses a critical challenge in marine conservation: the inability to detect water quality degradation in real-time. By the time conventional monitoring identifies a pollution event, ecosystems have often suffered irreversible damage. Our platform bridges this gap with continuous sensor monitoring, intelligent analysis, and immediate alerts.
+**BlueSentinel** addresses a critical challenge in freshwater conservation: the inability to detect river pollution events in real-time. By the time conventional monitoring identifies a leak or runoff, downstream ecosystems have often suffered irreversible damage. Our platform bridges this gap with continuous sensor monitoring, intelligent analysis, and immediate alerts.
 
-The system combines IoT hardware with cloud infrastructure to provide authorities and researchers with actionable intelligence about ocean health. We track five critical water quality parameters and present data through an intuitive dashboard designed for rapid decision-making.
+The system combines IoT hardware with cloud infrastructure to provide authorities and researchers with actionable intelligence about river health. We track critical water quality parameters and leverage Gemini LLMs to predict pollution trends and suggest immediate solutions.
 
 ---
 
@@ -48,7 +48,7 @@ The system combines IoT hardware with cloud infrastructure to provide authoritie
 - **Real-Time Sensors**: Tracks Temperature, pH, Turbidity, Dissolved Oxygen (DO).
 - **Predictive ML**: Integrated machine learning models project future water quality trends.
 - **Community Forums**: Submit field reports and collaborate with other researchers.
-- **News Aggregator**: Curated marine conservation updates from global sources.
+- **News Aggregator**: Curated river conservation and freshwater monitoring updates from global sources.
 
 ---
 
@@ -170,6 +170,6 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) file for 
 ---
 
 <div align="center">
-  <p><em>"Real-time visibility, proactive protection, sustainable oceans."</em></p>
-  <p><strong>BlueSentinel - Protecting Life Below Water</strong></p>
+  <p><em>"Real-time visibility, proactive protection, sustainable rivers."</em></p>
+  <p><strong>BlueSentinel - Protecting Freshwater Ecosystems</strong></p>
 </div>
