@@ -135,62 +135,52 @@ exports.generateCSV = functions.https.onCall(async (data, context) => {
 
 // 3. Fallback LLM Proxy (Using HuggingFace Free Inference API)
 exports.fallbackLLM = functions.https.onRequest(async (req, res) => {
-  // enable CORS
-  res.set('Access-Control-Allow-Origin', '*');
-  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.set('Access-Control-Allow-Headers', 'Content-Type');
+  return cors(req, res, async () => {
+    try {
+      const { prompt, max_tokens } = req.body;
 
-  if (req.method === 'OPTIONS') {
-    res.status(204).send('');
-    return;
-  }
+      if (!prompt) {
+        return res.status(400).json({ error: 'Prompt is required' });
+      }
 
-  try {
-    const { prompt, max_tokens } = req.body;
+      // Using a fast, free conversational model hosted on HuggingFace
+      const MODEL = 'TinyLlama/TinyLlama-1.1B-Chat-v1.0';
+      const HF_TOKEN = process.env.HF_TOKEN || '';
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      if (HF_TOKEN) {
+        headers['Authorization'] = `Bearer ${HF_TOKEN}`;
+      }
 
-    if (!prompt) {
-      return res.status(400).json({ error: 'Prompt is required' });
+      const hfPrompt = `<|system|>\nYou are SentinelBuddy, an expert marine biologist monitoring water quality.\n<|user|>\n${prompt}\n<|assistant|>\n`;
+
+      const response = await axios.post(
+        `https://api-inference.huggingface.co/models/${MODEL}`,
+        {
+          inputs: hfPrompt,
+          parameters: {
+            max_new_tokens: max_tokens || 100,
+            temperature: 0.7,
+            return_full_text: false
+          }
+        },
+        { headers: headers }
+      );
+
+      // HF sometimes returns an array of objects
+      let textOut = 'Fallback API error parsing response.';
+      if (Array.isArray(response.data) && response.data[0].generated_text) {
+        textOut = response.data[0].generated_text;
+      } else if (response.data.generated_text) {
+        textOut = response.data.generated_text;
+      }
+
+      res.json({ success: true, text: textOut });
+
+    } catch (error) {
+      console.error('Fallback LLM Error:', error.response ? error.response.data : error.message);
+      res.status(500).json({ error: 'Failed to generate fallback response' });
     }
-
-    // Using a fast, free conversational model hosted on HuggingFace
-    const MODEL = 'TinyLlama/TinyLlama-1.1B-Chat-v1.0';
-    // Provide a default HF token if none exists in env for demo out-of-box (Though HF tokens should be secure)
-    // NOTE: Free tier inference API does not inherently *require* a token for tiny models, but rate limits apply.
-    const HF_TOKEN = process.env.HF_TOKEN || '';
-    const headers = {
-      'Content-Type': 'application/json',
-    };
-    if (HF_TOKEN) {
-      headers['Authorization'] = `Bearer ${HF_TOKEN}`;
-    }
-
-    const hfPrompt = `<|system|>\nYou are SentinelBuddy, an expert marine biologist monitoring water quality.\n<|user|>\n${prompt}\n<|assistant|>\n`;
-
-    const response = await axios.post(
-      `https://api-inference.huggingface.co/models/${MODEL}`,
-      {
-        inputs: hfPrompt,
-        parameters: {
-          max_new_tokens: max_tokens || 100,
-          temperature: 0.7,
-          return_full_text: false
-        }
-      },
-      { headers: headers }
-    );
-
-    // HF sometimes returns an array of objects
-    let textOut = 'Fallback API error parsing response.';
-    if (Array.isArray(response.data) && response.data[0].generated_text) {
-      textOut = response.data[0].generated_text;
-    } else if (response.data.generated_text) {
-      textOut = response.data.generated_text;
-    }
-
-    res.json({ success: true, text: textOut });
-
-  } catch (error) {
-    console.error('Fallback LLM Error:', error.response ? error.response.data : error.message);
-    res.status(500).json({ error: 'Failed to generate fallback response' });
-  }
+  });
 });
