@@ -180,10 +180,15 @@ async function getWaterHealthAnalysis(sensorData) {
         - Simulated/Estimated: Dissolved Oxygen: ${sensorData.dissolvedOxygen} mg/L, Nitrogen: ${sensorData.nitrogen || 'N/A'}, Ammonia: ${sensorData.ammonia || 'N/A'}, Lead: ${sensorData.lead || 'N/A'}, Sodium: ${sensorData.sodium || 'N/A'}.
 
         Task:
-        1. Calculate a "Water Health Score" out of 100 based on all values (potability standards). Use these Turbidity Guidelines:\n           - 0 to 1 NTU: Ultra clear water\n           - 1 to 5 NTU: Acceptable drinking water\n           - 5 to 50 NTU: Slightly muddy / surface water\n           - > 50 NTU: Very dirty, stormwater, sewage-level chaos
+        1. Calculate a "Water Health Score" out of 100 based on all values (potability standards).
+           CRITICAL TURBIDITY SPECTRUM (DO NOT DEVIATE):
+           - 0 to 1 NTU: Ultra clear water (distilled-level clean)
+           - >1 to 5 NTU: Acceptable drinking water (WHO guideline is below 5)
+           - >5 to 50 NTU: Slightly muddy / surface water
+           - >50 to 1000+ NTU: Very dirty, stormwater, sewage-level chaos
         2. Provide a 2-sentence summary of the ecosystem health.
         3. Determine a status (Excellent, Good, Warning, Critical).
-        4. Provide specific chemical/physical treatment advice for any out-of-range metrics (e.g., "Add Sodium Carbonate to increase pH", "Increase aeration for low DO").
+        4. Provide specific chemical/physical treatment advice for any out-of-range metrics (e.g., "Add Sodium Carbonate to increase pH", "Deploy settlement tanks for high Turbidity").
 
         Return ONLY a JSON object in this format:
         {
@@ -330,8 +335,17 @@ function calculateLocalFallback(data) {
         penalties.push('Nitrogen levels elevated');
     }
 
-    // Turbidity now fully active
-
+    // 5. Turbidity Penalty (Spectrum)
+    let turb = parseFloat(data.turbidity) || 0;
+    if (turb > 50) {
+        score -= 40; // Very dirty
+        penalties.push('Extremely High Turbidity (>50 NTU)');
+    } else if (turb > 5) {
+        score -= 20; // Slightly muddy
+        penalties.push('High Turbidity (>5 NTU)');
+    } else if (turb > 1) {
+        score -= 5; // Acceptable but not ultra clear
+    }
     score = Math.floor(Math.max(0, Math.min(100, score)));
 
     let status = "Excellent";
@@ -375,7 +389,7 @@ const expertKnowledge = {
     },
     turbidity: {
         keywords: ['turbidity', 'clear', 'cloudy', 'ntu'],
-        response: "Turbidity is within safe limits. <strong>High Turbidity Solution:</strong> Inspect for sediment runoff or algal blooms. Consider settlement tanks if persistent."
+        response: "<b>Turbidity Spectrum:</b><br/>• 0–1 NTU: Ultra clear<br/>• <5 NTU: Acceptable<br/>• 5–50 NTU: Slightly muddy<br/>• >50 NTU: Very dirty.<br/><strong>Solution:</strong> If >5 NTU, inspect for sediment runoff or algal blooms. Deploy settlement tanks."
     },
     oxygen: {
         keywords: ['oxygen', 'do', 'breath', 'hypoxia'],
