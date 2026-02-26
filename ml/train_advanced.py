@@ -45,7 +45,7 @@ y = df['Potability']
 # 2. Imputation & Scaling
 print("Preprocessing...")
 imputer = SimpleImputer(strategy='median') # Median often better for skewed data
-scaler = StandardScaler
+scaler = StandardScaler()
 
 X_imputed = imputer.fit_transform(X)
 X_scaled = scaler.fit_transform(X_imputed)
