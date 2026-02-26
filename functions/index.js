@@ -164,14 +164,16 @@ async function fallbackLLMLogic(req, res) {
           return_full_text: false
         }
       },
-      { headers: headers }
+      { headers: headers, timeout: 10000 } // Add timeout
     );
 
-    let textOut = 'Fallback API error parsing response.';
-    if (Array.isArray(response.data) && response.data[0].generated_text) {
-      textOut = response.data[0].generated_text;
-    } else if (response.data.generated_text) {
-      textOut = response.data.generated_text;
+    let textOut = 'Fallback API error: No response text.';
+    if (response.data) {
+      if (Array.isArray(response.data) && response.data[0] && response.data[0].generated_text) {
+        textOut = response.data[0].generated_text;
+      } else if (response.data.generated_text) {
+        textOut = response.data.generated_text;
+      }
     }
 
     return res.json({ success: true, text: textOut });
