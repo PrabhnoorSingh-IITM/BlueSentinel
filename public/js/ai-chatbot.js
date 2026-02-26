@@ -102,12 +102,11 @@ async function processUserMessage(message) {
 
     // 2. Try Gemini API
     try {
-        let apiKey = localStorage.getItem('gemini_api_key');
-        if (!apiKey) {
-            apiKey = prompt("Please enter your Gemini API Key for full AI Chatbot access (it will be saved locally):");
-            if (apiKey) localStorage.setItem('gemini_api_key', apiKey);
+        let apiKey = localStorage.getItem('gemini_api_key') || 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g';
+        if (apiKey === 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g') {
+            // Ensure it's saved if the user hasn't provided their own yet
+            localStorage.setItem('gemini_api_key', apiKey);
         }
-        if (!apiKey) throw new Error('No API Key provided by user.');
 
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
             method: 'POST',
@@ -164,11 +163,7 @@ async function processUserMessage(message) {
 
 // Exposed function for Dashboard Analysis (JSON Response)
 async function getWaterHealthAnalysis(sensorData) {
-    let apiKey = localStorage.getItem('gemini_api_key');
-    if (!apiKey) {
-        apiKey = prompt("Please enter your Gemini API Key for the Dashboard AI Analysis (it will be saved locally):");
-        if (apiKey) localStorage.setItem('gemini_api_key', apiKey);
-    }
+    let apiKey = localStorage.getItem('gemini_api_key') || 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g';
     const cacheKey = 'water_health_analysis_cache';
     const cacheDuration = 15 * 60 * 1000; // 15 minutes
 
