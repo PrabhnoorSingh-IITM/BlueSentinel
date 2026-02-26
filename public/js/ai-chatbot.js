@@ -138,17 +138,10 @@ async function processUserMessage(message) {
         console.warn('Gemini API failed, attempting Fallback LLM:', error);
 
         try {
-            // Attempt to hit our Railway Fallback API
-            const fallbackResponse = await fetch('https://bluesentinel-production.up.railway.app/fallbackLLM', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt: message, max_tokens: 150 })
-            });
-            const fbData = await fallbackResponse.json();
-
-            if (fallbackResponse.ok && fbData.success) {
+            const fbText = await callRailwayLLMFallback(message);
+            if (fbText) {
                 hideTyping();
-                addAIMessage(`[Fallback Model]: ${fbData.text}`);
+                addAIMessage(`[Fallback Model]: ${fbText}`);
                 return;
             }
         } catch (fallbackError) {
@@ -159,6 +152,24 @@ async function processUserMessage(message) {
         // 3. General Offline Fallback
         addAIMessage("Both Primary and Fallback AI systems are currently unavailable. Try asking about specific sensors like 'Temperature' or 'pH' to use the offline expert system.");
     }
+}
+
+// Global Helper for Railway LLM Proxy
+async function callRailwayLLMFallback(promptText, max_tokens = 150) {
+    try {
+        const fallbackResponse = await fetch('https://bluesentinel-production.up.railway.app/fallbackLLM', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: promptText, max_tokens: max_tokens })
+        });
+        const fbData = await fallbackResponse.json();
+        if (fallbackResponse.ok && fbData.success) {
+            return fbData.text;
+        }
+    } catch (e) {
+        console.warn('Railway Fallback unreachable:', e);
+    }
+    return null;
 }
 
 // Exposed function for Dashboard Analysis (JSON Response)
@@ -251,6 +262,8 @@ async function getWaterHealthAnalysis(sensorData) {
                     // Suppress 429 error on discovery
                     if (listResp.status === 429) {
                         console.warn("AI Quota Exceeded (Discovery). Switching to Offline Mode.");
+                    } else if (listResp.status === 403) {
+                        console.error("Gemini API 403 Forbidden: Ensure 'Generative Language API' is enabled in Google Cloud Console for project projects/844615264671.");
                     } else {
                         console.warn(`Model discovery failed (${listResp.status}). Switching to Offline Mode.`);
                     }
@@ -263,7 +276,13 @@ async function getWaterHealthAnalysis(sensorData) {
 
         // Step B: Use Cached Model or Fallback
         if (window.cachedGeminiModel === 'OFFLINE') {
-            return calculateLocalFallback(sensorData);
+            const localResult = calculateLocalFallback(sensorData);
+            // Try to enhance local fallback analysis with Railway LLM if possible
+            const fbText = await callRailwayLLMFallback(`Water metrics: Temp ${sensorData.temperature}, pH ${sensorData.pH}, Turbidity ${sensorData.turbidity}. Write a 1-sentence summary of health.`);
+            if (fbText) {
+                localResult.analysis = `[Fallback AI]: ${fbText} (Manual Calc: ${localResult.analysis})`;
+            }
+            return localResult;
         }
 
         const modelToUse = window.cachedGeminiModel || 'gemini-2.0-flash'; // Updated default
