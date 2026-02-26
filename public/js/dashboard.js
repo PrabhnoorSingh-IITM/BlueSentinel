@@ -574,69 +574,70 @@ function openSolution(cardElement, value, range) {
 
 function updateAllCharts(data) {
   const timestamp = data.timestamp || Date.now();
-  const timeLabel = new Date(timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  // Include seconds to allow updates every 2s as data arrives
+  const timeLabel = new Date(timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-  if (!chartData.labels.includes(timeLabel)) {
-    chartData.labels.push(timeLabel);
-    chartData.temperature.push(parseFloat(data.temperature) || 0);
-    chartData.ph.push(parseFloat(data.pH || data.ph) || 7);
-    chartData.ph.push(parseFloat(data.pH || data.ph) || 7);
-    chartData.turbidity.push(parseFloat(data.turbidity) || 0);
-    chartData.dissolvedOxygen.push(parseFloat(data.dissolvedOxygen) || 0);
+  // If this exact second already exists, skip (debounce for near-simultaneous triggers)
+  if (chartData.labels[chartData.labels.length - 1] === timeLabel) return;
 
-    // Simulate Quality Index (0-100) based on potable ranges
-    // Ideal: pH 7, Turbidity < 5
-    let score = 100;
-    score -= Math.abs((data.pH || 7) - 7) * 10; // pH penalty
-    let turb = data.turbidity || 0;
-    if (turb >= 50) score -= 40; // Very dirty, chaos
-    else if (turb >= 5) score -= 20; // Slightly muddy
-    else if (turb >= 1) score -= 5; // Acceptable
-    // 0-1 is ultra clear, 0 penalty
+  chartData.labels.push(timeLabel);
+  chartData.temperature.push(parseFloat(data.temperature) || 0);
+  chartData.ph.push(parseFloat(data.pH || data.ph) || 7);
+  // Fixed double ph push bug found in previous code
+  chartData.turbidity.push(parseFloat(data.turbidity) || 0);
+  chartData.dissolvedOxygen.push(parseFloat(data.dissolvedOxygen) || 0);
 
-    score = Math.max(0, Math.min(100, score));
+  // Simulate Quality Index (0-100) based on potable ranges
+  // Ideal: pH 7, Turbidity < 5
+  let score = 100;
+  score -= Math.abs((data.pH || 7) - 7) * 10; // pH penalty
+  let turb = data.turbidity || 0;
+  if (turb >= 50) score -= 40; // Very dirty, chaos
+  else if (turb >= 5) score -= 20; // Slightly muddy
+  else if (turb >= 1) score -= 5; // Acceptable
+  // 0-1 is ultra clear, 0 penalty
 
-    chartData.projection.push(score);
-    chartData.trainingBaseline.push(90 + Math.random() * 5); // Randomized "Perfect" baseline from training data
+  score = Math.max(0, Math.min(100, score));
 
-    if (chartData.labels.length > maxDataPoints) {
-      chartData.labels.shift();
-      chartData.temperature.shift();
-      chartData.ph.shift();
-      chartData.ph.shift();
-      chartData.turbidity.shift();
-      chartData.dissolvedOxygen.shift();
-      chartData.projection.shift();
-      chartData.trainingBaseline.shift();
+  chartData.projection.push(score);
+  chartData.trainingBaseline.push(90 + Math.random() * 5); // Randomized "Perfect" baseline from training data
+
+  if (chartData.labels.length > maxDataPoints) {
+    chartData.labels.shift();
+    chartData.temperature.shift();
+    chartData.ph.shift();
+    chartData.turbidity.shift();
+    chartData.dissolvedOxygen.shift();
+    chartData.projection.shift();
+    chartData.trainingBaseline.shift();
+  }
+
+  if (window.tempChart) window.tempChart.update('none');
+  if (window.phChart) window.phChart.update('none');
+  if (window.turbidityChart) window.turbidityChart.update('none');
+  if (window.doChart) window.doChart.update('none');
+
+  if (window.aiChart) {
+    // Update Prediction Line (Future)
+    // Linear Regression based on history
+    const pastScores = chartData.projection;
+    const { slope, intercept } = linearRegression(pastScores);
+
+    const lastScore = pastScores[pastScores.length - 1] || 100;
+    const predictedData = [];
+    // Fill nulls for past
+    for (let i = 0; i < chartData.labels.length - 1; i++) predictedData.push(null);
+    predictedData.push(lastScore);
+
+    const startIdx = pastScores.length - 1;
+    for (let i = 1; i <= 10; i++) {
+      let p = slope * (startIdx + i) + intercept;
+      // Add a tiny bit of noise, but trend follows LR
+      predictedData.push(Math.max(0, Math.min(100, p + (Math.random() - 0.5) * 1.5)));
     }
 
-    if (window.tempChart) window.tempChart.update('none');
-    if (window.phChart) window.phChart.update('none');
-    if (window.turbidityChart) window.turbidityChart.update('none');
-    if (window.doChart) window.doChart.update('none');
-
-    if (window.aiChart) {
-      // Update Prediction Line (Future)
-      // Linear Regression based on history
-      const pastScores = chartData.projection;
-      const { slope, intercept } = linearRegression(pastScores);
-
-      const lastScore = pastScores[pastScores.length - 1] || 100;
-      const predictedData = [];
-      // Fill nulls for past
-      for (let i = 0; i < chartData.labels.length - 1; i++) predictedData.push(null);
-      predictedData.push(lastScore);
-
-      const startIdx = pastScores.length - 1;
-      for (let i = 1; i <= 10; i++) {
-        let p = slope * (startIdx + i) + intercept;
-        // Add a tiny bit of noise, but trend follows LR
-        predictedData.push(Math.max(0, Math.min(100, p + (Math.random() - 0.5) * 1.5)));
-      }
-
-      window.aiChart.data.datasets[2].data = predictedData;
-      window.aiChart.update('none');
-    }
+    window.aiChart.data.datasets[2].data = predictedData;
+    window.aiChart.update('none');
   }
 }
 
