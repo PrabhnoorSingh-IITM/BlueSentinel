@@ -346,7 +346,7 @@ function calculateLocalFallback(data) {
     } else {
         analysis += `All monitored parameters (pH, Temp, DO) are within optimal ranges. `;
     }
-    analysis += `Turbidity is ${sensorData.turbidity} NTU. `;
+    analysis += `Turbidity is ${data.turbidity} NTU. `;
 
     return {
         score: score,
