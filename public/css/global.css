@@ -55,14 +55,39 @@
 }
 
 [data-theme="light"] {
-  --color-void: #1566b8;
-  --color-abyss: #735fd6;
-  --color-surface: rgba(225, 223, 223, 0.8);
-  --text-primary: #1e293b;
-  --text-secondary: #5f6c7e;
-  --text-muted: #797c80;
-  --glass-border: 1px solid rgba(0, 0, 0, 0.08);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+  --color-void: #f8fafc;
+  /* Very light background */
+  --color-abyss: #ffffff;
+  /* pure white cards */
+  --color-surface: rgba(255, 255, 255, 0.9);
+
+  --color-cyan: #0284c7;
+  /* Darker cyan/blue for contrast */
+  --color-cyan-glow: rgba(2, 132, 199, 0.2);
+  --color-teal: #0ea5e9;
+  --color-purple: #6366f1;
+
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748B;
+
+  --glass-border: 1px solid rgba(0, 0, 0, 0.1);
+  --glass-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.05);
+
+  /* Adjust inverted icons on light mode */
+  --light-icon-invert: invert(1);
+}
+
+[data-theme="light"] body {
+  background-image: none;
+  /* simpler background for light mode */
+}
+
+/* Helper to un-invert white icons on light mode if needed */
+[data-theme="light"] .btn-icon img,
+[data-theme="light"] .chatbot-toggler img,
+[data-theme="light"] .btn-primary img {
+  filter: none;
 }
 
 /* --- RESET & BASE --- */
