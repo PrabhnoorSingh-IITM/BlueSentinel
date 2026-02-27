@@ -246,64 +246,17 @@ async function getWaterHealthAnalysis(sensorData) {
         }
         `;
 
-        // Step A: Discover Model if not cached
-        if (window.cachedGeminiModel === null) {
-            console.log("Discovering available Gemini models...");
-            try {
-                const listResp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-                if (listResp.ok) {
-                    const listData = await listResp.json();
-                    const viableModel = listData.models?.find(m =>
-                        m.name.includes('gemini') &&
-                        m.supportedGenerationMethods?.includes('generateContent')
-                    );
 
-                    if (viableModel) {
-                        const modelId = viableModel.name.replace('models/', '');
-                        window.cachedGeminiModel = modelId;
-                        console.log(`Discovered and cached valid model: ${modelId}`);
-                    } else {
-                        window.cachedGeminiModel = 'OFFLINE';
-                    }
-                } else {
-                    // Suppress 429 error on discovery
-                    if (listResp.status === 429) {
-                        console.warn("AI Quota Exceeded (Discovery). Switching to Offline Mode.");
-                    } else if (listResp.status === 403) {
-                        console.error("Gemini API 403 Forbidden: Switching to Fallback Mode.");
-                        window.cachedGeminiModel = 'OFFLINE';
-                    } else {
-                        console.warn(`Model discovery failed (${listResp.status}). Switching to Offline Mode.`);
-                    }
-                    window.cachedGeminiModel = 'OFFLINE';
-                }
-            } catch (e) {
-                console.warn("Discovery fetch failed, switching to OFFLINE:", e);
-                window.cachedGeminiModel = 'OFFLINE';
-            }
-        }
-
-        // Step B: Use Cached Model or Fallback
-        if (window.cachedGeminiModel === 'OFFLINE') {
-            const localResult = calculateLocalFallback(sensorData);
-            // Try to enhance local fallback analysis with Railway LLM if possible
-            const fbText = await callRailwayLLMFallback(`Water metrics: Temp ${sensorData.temperature}, pH ${sensorData.pH}, Turbidity ${sensorData.turbidity}. Write a 1-sentence summary of health.`);
-            if (fbText) {
-                localResult.analysis = `[Fallback AI]: ${fbText} (Manual Calc: ${localResult.analysis})`;
-            }
-            return localResult;
-        }
-
-        const modelToUse = window.cachedGeminiModel || 'gemini-2.0-flash'; // Updated default
-
+        // STEP: Use geminiProxy Firebase Function to bypass discovery 403 and hide keys
+        console.log(`Calling Gemini Proxy for analysis...`);
         try {
-            console.log(`Generating content using: ${modelToUse}`);
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelToUse}:generateContent?key=${apiKey}`, {
+            const response = await fetch(`https://us-central1-bluesentinel1.cloudfunctions.net/geminiProxy`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+                    model: 'gemini-1.5-flash',
                     contents: [{
-                        parts: [{ text: prompt }]
+                        parts: [{ text: systemPrompt + "\n\n" + prompt }]
                     }]
                 })
             });
@@ -321,20 +274,15 @@ async function getWaterHealthAnalysis(sensorData) {
                             timestamp: Date.now(),
                             data: result
                         }));
-                        console.log("SUCCESS: AI Analysis generated and cached.");
+                        console.log("SUCCESS: AI Analysis generated and cached via Proxy.");
                         return result;
                     }
                 }
             } else {
-                if (response.status === 429) {
-                    console.warn(`AI Quota Exceeded (${modelToUse}). Switching to Offline Mode.`);
-                    // Do not throw, just fallback silently
-                } else {
-                    console.warn(`Generation failed with ${modelToUse}: ${response.status}`);
-                }
+                console.warn(`Proxy Generation failed: ${response.status}`);
             }
         } catch (e) {
-            console.warn(`Error generating content with ${modelToUse}:`, e);
+            console.warn(`Error generating content via Proxy:`, e);
         }
 
         // Silent Fallback
