@@ -165,13 +165,13 @@ void loop() {
     Serial.println("Uploading to Firebase...");
 
     bool tOK = Firebase.RTDB.setFloat(
-        &fbdo, "/BlueSentinel/temperature", temperatureC);
+        &fbdo, "/sensors/latest/temperature", temperatureC);
 
     bool pHOK = Firebase.RTDB.setFloat(
-        &fbdo, "/BlueSentinel/pH", pH);
+        &fbdo, "/sensors/latest/ph", pH);
 
     bool turbOK = Firebase.RTDB.setFloat(
-        &fbdo, "/BlueSentinel/turbidity", turbidityNTU);
+        &fbdo, "/sensors/latest/turbidity", turbidityNTU);
 
     if (tOK && pHOK && turbOK) {
       Serial.println("Firebase upload SUCCESS");
