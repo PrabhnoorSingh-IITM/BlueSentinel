@@ -155,10 +155,11 @@ async function processUserMessage(message) {
     }
 }
 
-// Global Helper for Railway LLM Proxy
+// Global Helper for Firebase LLM Proxy (Replaces Railway to fix CORS)
 async function callRailwayLLMFallback(promptText, max_tokens = 150) {
     try {
-        const fallbackResponse = await fetch('https://bluesentinel-production.up.railway.app/fallbackLLM', {
+        // Updated to use Firebase Function endpoint
+        const fallbackResponse = await fetch('https://us-central1-bluesentinel1.cloudfunctions.net/fallbackLLM', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt: promptText, max_tokens: max_tokens })
@@ -168,7 +169,7 @@ async function callRailwayLLMFallback(promptText, max_tokens = 150) {
             return fbData.text;
         }
     } catch (e) {
-        console.warn('Railway Fallback unreachable:', e);
+        console.warn('Firebase Fallback unreachable:', e);
     }
     return null;
 }
