@@ -102,10 +102,10 @@ async function processUserMessage(message) {
 
     // 2. Try Gemini API
     try {
-        let apiKey = localStorage.getItem('gemini_api_key') || 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo';
-        if (apiKey === 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo' || apiKey === 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g') {
-            // Ensure it's saved if the user hasn't provided their own yet, using the more likely active key
-            apiKey = 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo';
+        let apiKey = localStorage.getItem('gemini_api_key') || 'AIzaSyDVX49VBeN3MZ5CvrrjJcFe8LrmrTJlUgg';
+        if (apiKey === 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo' || apiKey === 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g' || apiKey === 'AIzaSyDVX49VBeN3MZ5CvrrjJcFe8LrmrTJlUgg') {
+            // Updated to the user's latest key
+            apiKey = 'AIzaSyDVX49VBeN3MZ5CvrrjJcFe8LrmrTJlUgg';
             localStorage.setItem('gemini_api_key', apiKey);
         }
 
@@ -176,8 +176,8 @@ async function callRailwayLLMFallback(promptText, max_tokens = 150) {
 
 // Exposed function for Dashboard Analysis (JSON Response)
 async function getWaterHealthAnalysis(sensorData) {
-    let apiKey = localStorage.getItem('gemini_api_key') || 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo';
-    if (apiKey === 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g') apiKey = 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo';
+    let apiKey = localStorage.getItem('gemini_api_key') || 'AIzaSyDVX49VBeN3MZ5CvrrjJcFe8LrmrTJlUgg';
+    if (apiKey === 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g' || apiKey === 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo') apiKey = 'AIzaSyDVX49VBeN3MZ5CvrrjJcFe8LrmrTJlUgg';
     const cacheKey = 'water_health_analysis_cache';
     const cacheDuration = 15 * 60 * 1000; // 15 minutes
 
@@ -250,11 +250,13 @@ async function getWaterHealthAnalysis(sensorData) {
         // STEP: Use geminiProxy Firebase Function to bypass discovery 403 and hide keys
         console.log(`Calling Gemini Proxy for analysis...`);
         try {
-            const response = await fetch(`https://us-central1-bluesentinel1.cloudfunctions.net/geminiProxy`, {
+            const projectId = firebaseConfig?.projectId || 'gen-lang-client-0986945251';
+            const functionUrl = `https://us-central1-${projectId}.cloudfunctions.net/geminiProxy`;
+            const response = await fetch(functionUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    model: 'gemini-1.5-flash',
+                    model: 'gemini-2.0-flash',
                     contents: [{
                         parts: [{ text: systemPrompt + "\n\n" + prompt }]
                     }]

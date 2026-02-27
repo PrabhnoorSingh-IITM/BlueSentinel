@@ -70,6 +70,15 @@ function linearRegression(y) {
 let db = null;
 let sensorLatestRef = null;
 
+// Global data buffer for periodic updates
+let currentDisplayData = {
+  temperature: 25.0,
+  pH: 7.0,
+  turbidity: 3.5,
+  dissolvedOxygen: 7.5,
+  timestamp: Date.now()
+};
+
 // Normal ranges for highlighting
 const normalRanges = {
   temperature: { min: 20, max: 30, unit: '°C' },
@@ -312,11 +321,35 @@ function initializeDashboard() {
     sensorLatestRef = db.ref('sensors/latest');
     sensorLatestRef.on('value', handleLatestData, handleError);
     console.log('Firebase listeners initialized');
+
+    // Start the global 3-second refresh loop
+    startRefreshLoop();
+
+    // Check for initial connection
+    checkConnectionStatus();
   } catch (error) {
     console.error('Error initializing dashboard:', error);
     showError('Initialization failed. Using simulation.');
     startSimulationMode();
   }
+}
+
+function startRefreshLoop() {
+  console.log('Starting 3-second dashboard refresh loop');
+  setInterval(() => {
+    // If we're in simulation mode OR if we just want to ensure 
+    // the graph moves even with static data, we call the update here.
+
+    if (isSimulationMode) {
+      currentDisplayData = generateSimulatedData();
+    }
+
+    // Update UI elements every 3 seconds regardless of data source
+    updateSensorCards(currentDisplayData);
+    updateMLIndicators();
+    updateAllCharts(currentDisplayData);
+
+  }, 3000);
 }
 
 function handleLatestData(snapshot) {
@@ -326,12 +359,20 @@ function handleLatestData(snapshot) {
     // Determine if data has valid keys (Temp, pH, Turbidity)
     const hasRealData = data.temperature !== undefined || data.temp !== undefined || data.pH !== undefined || data.ph !== undefined || data.turbidity !== undefined || data.turb !== undefined;
 
-    let enrichedData;
     if (hasRealData) {
       console.log("Real-time data received from BlueSentinel Grid");
 
-      // Use exact DB values, fallback to last known good values
-      enrichedData = {
+      // Clear any waiting timeout
+      if (window.connectionTimeout) {
+        clearTimeout(window.connectionTimeout);
+        window.connectionTimeout = null;
+      }
+
+      if (isSimulationMode) {
+        console.log("Disabling simulation mode - Live data detected");
+        isSimulationMode = false;
+      }
+      currentDisplayData = {
         temperature: parseFloat(data.temperature || data.temp || data.t || lastSimValues.temperature).toFixed(1),
         pH: parseFloat(data.pH || data.ph || lastSimValues.pH).toFixed(2),
         turbidity: parseFloat(data.turbidity || data.turb || data.ntu || lastSimValues.turbidity).toFixed(2),
@@ -339,41 +380,38 @@ function handleLatestData(snapshot) {
         timestamp: data.timestamp || Date.now()
       };
 
-      // Update our base so it sticks to reality
-      lastSimValues.temperature = parseFloat(enrichedData.temperature);
-      lastSimValues.pH = parseFloat(enrichedData.pH);
-      lastSimValues.turbidity = parseFloat(enrichedData.turbidity);
-      lastSimValues.dissolvedOxygen = parseFloat(enrichedData.dissolvedOxygen);
+      // Sync simulation base to reality
+      lastSimValues.temperature = parseFloat(currentDisplayData.temperature);
+      lastSimValues.pH = parseFloat(currentDisplayData.pH);
+      lastSimValues.turbidity = parseFloat(currentDisplayData.turbidity);
+      lastSimValues.dissolvedOxygen = parseFloat(currentDisplayData.dissolvedOxygen);
 
-    } else {
-      console.log("No real data detected, using synthetic simulation.");
-      enrichedData = generateSimulatedData();
-
-      const connStatus = document.getElementById('connection-status');
-      if (connStatus) {
-        connStatus.innerHTML = '<span>Simulation</span>';
-        connStatus.className = 'status-pill status-warning';
-      }
-    }
-
-    if (hasRealData) {
       const connStatus = document.getElementById('connection-status');
       if (connStatus) {
         connStatus.innerHTML = '<span class="pulse-dot"></span><span>Live Grid</span>';
         connStatus.className = 'status-pill status-normal';
       }
-    }
 
-    updateSensorCards(enrichedData);
-    updateMLIndicators();
-    updateAllCharts(enrichedData);
-  } else {
-    // No data yet
-    const sim = generateSimulatedData();
-    updateSensorCards(sim);
-    updateMLIndicators();
-    updateAllCharts(sim);
+      // We don't call updateSensorCards/updateAllCharts here anymore.
+      // The refresh loop will pick up these new values within 3 seconds.
+
+    } else {
+      console.log("No real data detected in snapshot, remaining in current mode.");
+    }
   }
+}
+
+// Global variable for connection timeout
+window.connectionTimeout = null;
+
+function checkConnectionStatus() {
+  // If no data received after 5 seconds, switch to simulation to keep dashboard alive
+  window.connectionTimeout = setTimeout(() => {
+    if (!isSimulationMode) {
+      console.warn("No live data received within timeout. Switching to simulation.");
+      startSimulationMode();
+    }
+  }, 5000);
 }
 
 function updateSensorCards(data) {
@@ -588,11 +626,10 @@ function openSolution(cardElement, value, range) {
 }
 
 function updateAllCharts(data) {
-  const timestamp = data.timestamp || Date.now();
-  // Include seconds to allow updates every 2s as data arrives
+  const timestamp = Date.now(); // Always use current time to ensure graph advances
   const timeLabel = new Date(timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-  // If this exact second already exists, skip (debounce for near-simultaneous triggers)
+  // If this exact second already exists, skip (debounce)
   if (chartData.labels[chartData.labels.length - 1] === timeLabel) return;
 
   chartData.labels.push(timeLabel);
@@ -666,14 +703,13 @@ function updateMLIndicators() {
 function startSimulationMode() {
   if (isSimulationMode) return;
   isSimulationMode = true;
-  console.log('Starting simulation mode');
+  console.log('Simulation mode active - Refresh loop handles generation');
 
-  setInterval(() => {
-    const data = generateSimulatedData();
-    updateSensorCards(data);
-    updateMLIndicators();
-    updateAllCharts(data);
-  }, 3000);
+  const connStatus = document.getElementById('connection-status');
+  if (connStatus) {
+    connStatus.innerHTML = '<span>Simulation</span>';
+    connStatus.className = 'status-pill status-warning';
+  }
 }
 
 function generateSimulatedData() {

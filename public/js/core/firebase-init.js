@@ -1,13 +1,12 @@
 // Firebase Configuration and Initialization
 const firebaseConfig = {
-  apiKey: "AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo",
-  authDomain: "bluesentinel1.firebaseapp.com",
-  databaseURL: "https://bluesentinel1-default-rtdb.asia-southeast1.firebasedatabase.app/",
-  projectId: "bluesentinel1",
-  storageBucket: "bluesentinel1.appspot.com",
-  messagingSenderId: "844615264671",
-  appId: "1:844615264671:web:bdc4ef8d6ce7ec2c3c75aa",
-  measurementId: "G-1KCEZJL6JT"
+  apiKey: "AIzaSyDVX49VBeN3MZ5CvrrjJcFe8LrmrTJlUgg",
+  authDomain: "gen-lang-client-0986945251.firebaseapp.com",
+  databaseURL: "https://gen-lang-client-0986945251-default-rtdb.firebaseio.com/",
+  projectId: "gen-lang-client-0986945251",
+  storageBucket: "gen-lang-client-0986945251.appspot.com",
+  messagingSenderId: "708377878258",
+  appId: "1:708377878258:web:7233869279a6d895fa8b36"
 };
 
 // Initialize Firebase
