@@ -136,10 +136,29 @@ async function processUserMessage(message) {
         addAIMessage(aiText);
 
     } catch (error) {
-        console.warn('AI API failed, using fallback:', error);
+        console.warn('Gemini API failed, attempting Fallback LLM:', error);
+
+        try {
+            // Attempt to hit our Railway Fallback API
+            const fallbackResponse = await fetch('https://bluesentinel-production.up.railway.app/fallbackLLM', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: message, max_tokens: 150 })
+            });
+            const fbData = await fallbackResponse.json();
+
+            if (fallbackResponse.ok && fbData.success) {
+                hideTyping();
+                addAIMessage(`[Fallback Model]: ${fbData.text}`);
+                return;
+            }
+        } catch (fallbackError) {
+            console.warn('Fallback API also failed:', fallbackError);
+        }
+
         hideTyping();
-        // 3. General Fallback
-        addAIMessage("API request failed or quota exceeded. However, the system is still monitoring locally. Try asking about specific sensors like 'Temperature' or 'pH' to use the offline expert system.");
+        // 3. General Offline Fallback
+        addAIMessage("Both Primary and Fallback AI systems are currently unavailable. Try asking about specific sensors like 'Temperature' or 'pH' to use the offline expert system.");
     }
 }
 
