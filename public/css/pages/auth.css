@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #050a0f;
+    background-color: transparent;
     overflow: hidden;
     position: relative;
     font-family: var(--font-main);
@@ -84,6 +84,15 @@
 .auth-form .btn-primary {
     width: 100%;
     margin-top: 1rem;
+    padding: 1rem;
+    font-size: 1rem;
+}
+
+.auth-body {
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 1rem;
     font-size: 1rem;
 }

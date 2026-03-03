@@ -6,8 +6,8 @@
 }
 
 body {
-  background: linear-gradient(135deg, #050208 0%, #1a0f2e 50%, #0a1628 100%);
-  color: #D2DDFF;
+  background-color: transparent;
+  color: #F0F6FC;
   overflow-x: hidden;
 }
 
@@ -26,7 +26,7 @@ body {
   width: 100vw;
   height: 100vh;
   z-index: -1;
-  background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000 100%);
+  background: transparent;
   pointer-events: none;
 }
 
@@ -64,11 +64,12 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(5, 2, 8, 0.85);
+  background: rgba(1, 4, 9, 0.85);
+  /* Deep dark glass */
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(0, 255, 212, 0.2);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
   z-index: 1000;
 }
 

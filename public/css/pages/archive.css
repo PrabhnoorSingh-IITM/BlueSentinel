@@ -58,7 +58,7 @@
 }
 
 .download-btn:hover {
-    background: var(--color-cyan);
+    background: rgba(255, 255, 255, 0.03);
     color: var(--color-void);
     transform: scale(1.1);
 }
