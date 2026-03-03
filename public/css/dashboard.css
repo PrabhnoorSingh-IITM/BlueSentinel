@@ -1,0 +1,187 @@
+/* Dashboard Specific Styles for BlueSentinel V2.5 */
+
+/* Header Adjustments for Dashboard Grid */
+.dashboard-header-modern {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+    position: relative;
+    border-bottom: 1px solid rgba(0, 255, 212, 0.1);
+}
+
+.header-spacer {
+    flex: 1;
+}
+
+.header-brand-modern {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    flex: 2;
+    /* Center weight */
+    justify-content: flex-start;
+}
+
+.brand-logo-img {
+    height: 40px;
+    width: auto;
+}
+
+.brand-logo-text-modern {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.5px;
+    color: #fff;
+}
+
+.header-controls-modern {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.grid-status-pill {
+    background: rgba(0, 255, 212, 0.1);
+    color: #00FFD4;
+    border: 1px solid rgba(0, 255, 212, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pulse-dot {
+    width: 6px;
+    height: 6px;
+    background-color: #00FFD4;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+/* Specific Bento Card Overrides for Dashboard Accuracy */
+.bento-card {
+    background: #0D1117;
+    /* Deep exact dark from reference */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    /* Very subtle border */
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: none;
+    /* Removing heavy shadow for flat premium look */
+}
+
+.bento-card:hover {
+    transform: none;
+    /* Reference is stable */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.card-title {
+    font-family: 'Inter', sans-serif;
+    color: #8B949E;
+    /* Ghosted text color */
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.value-display {
+    display: flex;
+    align-items: baseline;
+    gap: 0.2rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+.value-display span:first-child {
+    font-family: 'Outfit', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: #F0F6FC;
+    line-height: 1;
+}
+
+.value-display .unit {
+    font-family: 'Inter', sans-serif;
+    color: #8B949E;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* Status Badges inside Cards */
+.status-normal {
+    background: rgba(46, 160, 67, 0.1);
+    color: #3FB950;
+    border: 1px solid rgba(46, 160, 67, 0.2);
+    padding: 0.2rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.status-warning {
+    background: rgba(210, 153, 34, 0.1);
+    color: #D29922;
+    border: 1px solid rgba(210, 153, 34, 0.2);
+}
+
+.status-critical {
+    background: rgba(248, 81, 73, 0.1);
+    color: #F85149;
+    border: 1px solid rgba(248, 81, 73, 0.2);
+}
+
+/* AI Projections Layout */
+.ai-predictions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.prediction-item {
+    background: #010409;
+    /* Darker inset */
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.prediction-item span:first-child {
+    color: #8B949E;
+    font-size: 0.8rem;
+}
+
+.prediction-item span:last-child {
+    color: #F0F6FC;
+    font-size: 1.2rem;
+    font-weight: 600;
+    font-family: 'Outfit', sans-serif;
+}
+
+/* Chart Container Overrides */
+.chart-container-sm {
+    height: 60px;
+    /* Compress the sparklines */
+    width: 100%;
+}
+
+.chart-container-md {
+    height: 200px;
+    width: 100%;
+}

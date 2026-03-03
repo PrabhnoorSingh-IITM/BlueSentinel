@@ -186,31 +186,22 @@
                             <div class="status-pill pill-beta">Beta</div>
                         </div>
 
-                        <div class="ml-insights-grid">
-                            <!-- Inner Stat Blocks -->
-                            <div class="ml-stat-block">
-                                <div class="ml-stat-label">Nitrogen</div>
-                                <div class="ml-stat-value">
-                                    <span id="ml-nitrogen">--</span> <span class="ml-stat-unit">mg/L</span>
-                                </div>
+                        <div class="ai-predictions-grid">
+                            <div class="prediction-item">
+                                <span>Nitrogen</span>
+                                <span><span id="ml-nitrogen">--</span> mg/L</span>
                             </div>
-                            <div class="ml-stat-block">
-                                <div class="ml-stat-label">Ammonia</div>
-                                <div class="ml-stat-value">
-                                    <span id="ml-ammonia">--</span> <span class="ml-stat-unit">mg/L</span>
-                                </div>
+                            <div class="prediction-item">
+                                <span>Ammonia</span>
+                                <span><span id="ml-ammonia">--</span> mg/L</span>
                             </div>
-                            <div class="ml-stat-block">
-                                <div class="ml-stat-label">Lead (Pb)</div>
-                                <div class="ml-stat-value">
-                                    <span id="ml-lead">--</span> <span class="ml-stat-unit">µg/L</span>
-                                </div>
+                            <div class="prediction-item">
+                                <span>Lead (Pb)</span>
+                                <span><span id="ml-lead">--</span> µg/L</span>
                             </div>
-                            <div class="ml-stat-block">
-                                <div class="ml-stat-label">Sodium</div>
-                                <div class="ml-stat-value">
-                                    <span id="ml-sodium">--</span> <span class="ml-stat-unit">mg/L</span>
-                                </div>
+                            <div class="prediction-item">
+                                <span>Sodium</span>
+                                <span><span id="ml-sodium">--</span> mg/L</span>
                             </div>
                         </div>
                     </div>
@@ -271,8 +262,9 @@
     </div>
 
     <!-- AI CHATBOT -->
-    <button class="chatbot-toggler">
-        <img src="./assets/icons/chat-quote.svg" alt="Chat">
+    <!-- AI CHATBOT -->
+    <button class="chatbot-toggle" id="chatbot-toggle">
+        <i class="bi bi-chat-dots-fill chatbot-icon"></i>
     </button>
 
     <div class="chatbot-window" id="chatbot-window">
@@ -284,7 +276,7 @@
                     Gemini 2.0 Reasoning
                 </div>
             </div>
-            <button class="chat-close">
+            <button class="chatbot-close" id="chatbot-close">
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
@@ -296,9 +288,9 @@
             </div>
         </div>
 
-        <div class="chat-input-area">
-            <input type="text" class="chat-input" id="chat-input" placeholder="Ask about river health...">
-            <button class="chat-send" id="chat-send">
+        <div class="chatbot-input-container">
+            <input type="text" class="chatbot-input" id="chatbot-input" placeholder="Ask about river health...">
+            <button class="chatbot-send" id="chatbot-send">
                 <i class="bi bi-send-fill"></i>
             </button>
         </div>
