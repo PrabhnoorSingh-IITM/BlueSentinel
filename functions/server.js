@@ -22,7 +22,7 @@ const wrapFunction = (fn) => (req, res) => {
 };
 
 // Map routes specifically for Railway
-app.post('/fallbackLLM', (req, res) => functions.fallbackLLM(req, res));
+app.post('/fallbackLLM', (req, res) => functions.fallbackLLMLogic(req, res));
 app.post('/processSensorData', (req, res) => functions.processSensorData(req, res));
 app.get('/calculateHealthScore', (req, res) => functions.calculateHealthScore(req, res));
 
