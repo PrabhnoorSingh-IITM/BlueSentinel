@@ -102,9 +102,10 @@ async function processUserMessage(message) {
 
     // 2. Try Gemini API
     try {
-        let apiKey = localStorage.getItem('gemini_api_key') || 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g';
-        if (apiKey === 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g') {
-            // Ensure it's saved if the user hasn't provided their own yet
+        let apiKey = localStorage.getItem('gemini_api_key') || 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo';
+        if (apiKey === 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo' || apiKey === 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g') {
+            // Ensure it's saved if the user hasn't provided their own yet, using the more likely active key
+            apiKey = 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo';
             localStorage.setItem('gemini_api_key', apiKey);
         }
 
@@ -174,7 +175,8 @@ async function callRailwayLLMFallback(promptText, max_tokens = 150) {
 
 // Exposed function for Dashboard Analysis (JSON Response)
 async function getWaterHealthAnalysis(sensorData) {
-    let apiKey = localStorage.getItem('gemini_api_key') || 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g';
+    let apiKey = localStorage.getItem('gemini_api_key') || 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo';
+    if (apiKey === 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g') apiKey = 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo';
     const cacheKey = 'water_health_analysis_cache';
     const cacheDuration = 15 * 60 * 1000; // 15 minutes
 
@@ -263,13 +265,15 @@ async function getWaterHealthAnalysis(sensorData) {
                     if (listResp.status === 429) {
                         console.warn("AI Quota Exceeded (Discovery). Switching to Offline Mode.");
                     } else if (listResp.status === 403) {
-                        console.error("Gemini API 403 Forbidden: Ensure 'Generative Language API' is enabled in Google Cloud Console for project projects/844615264671.");
+                        console.error("Gemini API 403 Forbidden: Switching to Fallback Mode.");
+                        window.cachedGeminiModel = 'OFFLINE';
                     } else {
                         console.warn(`Model discovery failed (${listResp.status}). Switching to Offline Mode.`);
                     }
                     window.cachedGeminiModel = 'OFFLINE';
                 }
             } catch (e) {
+                console.warn("Discovery fetch failed, switching to OFFLINE:", e);
                 window.cachedGeminiModel = 'OFFLINE';
             }
         }
