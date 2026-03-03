@@ -107,13 +107,9 @@ window.addEventListener('load', function () {
   initializeCharts();
   initializeDashboard();
 
-  // Fallback if no data received
+  // Fallback timeout removed to ensure we wait for real DB data
   setTimeout(() => {
-    if (lastValues.temperature === '--') {
-      console.log('No real data received yet, starting simulation mode');
-      startSimulationMode();
-    }
-    // Force Analysis Check after 4 seconds regardless of mode
+    // Force Analysis Check after 4 seconds regardless of real data presence
     if (!window.hasInitialAnalysis && window.getWaterHealthAnalysis) {
       console.log("Forcing initial analysis check...");
       refreshAnalysis(lastValues);
@@ -328,15 +324,26 @@ function handleLatestData(snapshot) {
   const data = snapshot.val();
 
   if (data) {
+    // Determine if data has valid keys (Temp, pH, Turbidity)
+    const hasRealData = data.temperature !== undefined || data.temp !== undefined || data.pH !== undefined || data.ph !== undefined || data.turbidity !== undefined || data.turb !== undefined;
+
     let enrichedData;
-    if (data.temperature !== undefined || data.ph !== undefined) {
+    if (hasRealData) {
+      // Use exact DB values, fallback to last known good sim values ONLY if a specific sensor is entirely offline
       enrichedData = {
-        temperature: data.temperature || Math.max(15, Math.min(35, lastSimValues.temperature += (Math.random() - 0.5) * 0.5)).toFixed(1),
-        pH: data.pH || data.ph || Math.max(6.0, Math.min(8.5, lastSimValues.pH += (Math.random() - 0.5) * 0.1)).toFixed(2),
-        turbidity: data.turbidity || Math.max(0.0, Math.min(10.0, lastSimValues.turbidity += (Math.random() - 0.5) * 0.5)).toFixed(2),
-        dissolvedOxygen: data.dissolvedOxygen || Math.max(4.0, Math.min(10.0, lastSimValues.dissolvedOxygen += (Math.random() - 0.5) * 0.2)).toFixed(2),
+        temperature: parseFloat(data.temperature || data.temp || data.t || lastSimValues.temperature).toFixed(1),
+        pH: parseFloat(data.pH || data.ph || lastSimValues.pH).toFixed(2),
+        turbidity: parseFloat(data.turbidity || data.turb || data.ntu || lastSimValues.turbidity).toFixed(2),
+        dissolvedOxygen: parseFloat(data.dissolvedOxygen || data.do || lastSimValues.dissolvedOxygen).toFixed(2),
         timestamp: data.timestamp || Date.now()
       };
+
+      // Update our sim base so it doesn't drift apart from reality when db drops
+      lastSimValues.temperature = parseFloat(enrichedData.temperature);
+      lastSimValues.pH = parseFloat(enrichedData.pH);
+      lastSimValues.turbidity = parseFloat(enrichedData.turbidity);
+      lastSimValues.dissolvedOxygen = parseFloat(enrichedData.dissolvedOxygen);
+
     } else {
       enrichedData = generateSimulatedData();
     }
