@@ -115,7 +115,7 @@ async function processUserMessage(message) {
             body: JSON.stringify({
                 contents: [{
                     parts: [{
-                        text: `You are SentinelBuddy, an expert marine biologist. 
+                        text: `You are SentinelBuddy, an expert river ecologist. 
                         Context: BlueSentinel monitors water quality (Temp, pH, Turbidity, DO).
                         User Question: "${message}"
                         Provide a concise, helpful response (max 2 sentences).`
@@ -155,10 +155,11 @@ async function processUserMessage(message) {
     }
 }
 
-// Global Helper for Railway LLM Proxy
+// Global Helper for Firebase LLM Proxy (Replaces Railway to fix CORS)
 async function callRailwayLLMFallback(promptText, max_tokens = 150) {
     try {
-        const fallbackResponse = await fetch('https://bluesentinel-production.up.railway.app/fallbackLLM', {
+        // Updated to use Firebase Function endpoint
+        const fallbackResponse = await fetch('https://us-central1-bluesentinel1.cloudfunctions.net/fallbackLLM', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt: promptText, max_tokens: max_tokens })
@@ -168,7 +169,7 @@ async function callRailwayLLMFallback(promptText, max_tokens = 150) {
             return fbData.text;
         }
     } catch (e) {
-        console.warn('Railway Fallback unreachable:', e);
+        console.warn('Firebase Fallback unreachable:', e);
     }
     return null;
 }
@@ -210,8 +211,12 @@ async function getWaterHealthAnalysis(sensorData) {
         }
 
         // Strict Prompt
-        const prompt = `
-        Act as a marine biologist and data analyst. Analyze this sensor data:
+        const systemPrompt = `You are SentinelBuddy, the AI assistant for BlueSentinel, a river intelligence platform.
+    Your goal is to help users monitor and analyze river pollution data (pH, Turbidity, Temperature, DO).
+    Focus specifically on freshwater ecosystems and river health.
+    If pollutants or anomalies are detected, provide actionable solutions and mitigation strategies.
+    Keep responses professional, scientific, but encouraging.`;
+        const prompt = `Analyze this sensor data:
         - Real Sensors: Temperature: ${sensorData.temperature}°C, pH: ${sensorData.pH}.
         - Active Sensors: Turbidity (Value: ${sensorData.turbidity} NTU - Include in score calculation based on NTU ranges).
         - Simulated/Estimated: Dissolved Oxygen: ${sensorData.dissolvedOxygen} mg/L, Nitrogen: ${sensorData.nitrogen || 'N/A'}, Ammonia: ${sensorData.ammonia || 'N/A'}, Lead: ${sensorData.lead || 'N/A'}, Sodium: ${sensorData.sodium || 'N/A'}.
@@ -241,64 +246,17 @@ async function getWaterHealthAnalysis(sensorData) {
         }
         `;
 
-        // Step A: Discover Model if not cached
-        if (window.cachedGeminiModel === null) {
-            console.log("Discovering available Gemini models...");
-            try {
-                const listResp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-                if (listResp.ok) {
-                    const listData = await listResp.json();
-                    const viableModel = listData.models?.find(m =>
-                        m.name.includes('gemini') &&
-                        m.supportedGenerationMethods?.includes('generateContent')
-                    );
 
-                    if (viableModel) {
-                        const modelId = viableModel.name.replace('models/', '');
-                        window.cachedGeminiModel = modelId;
-                        console.log(`Discovered and cached valid model: ${modelId}`);
-                    } else {
-                        window.cachedGeminiModel = 'OFFLINE';
-                    }
-                } else {
-                    // Suppress 429 error on discovery
-                    if (listResp.status === 429) {
-                        console.warn("AI Quota Exceeded (Discovery). Switching to Offline Mode.");
-                    } else if (listResp.status === 403) {
-                        console.error("Gemini API 403 Forbidden: Switching to Fallback Mode.");
-                        window.cachedGeminiModel = 'OFFLINE';
-                    } else {
-                        console.warn(`Model discovery failed (${listResp.status}). Switching to Offline Mode.`);
-                    }
-                    window.cachedGeminiModel = 'OFFLINE';
-                }
-            } catch (e) {
-                console.warn("Discovery fetch failed, switching to OFFLINE:", e);
-                window.cachedGeminiModel = 'OFFLINE';
-            }
-        }
-
-        // Step B: Use Cached Model or Fallback
-        if (window.cachedGeminiModel === 'OFFLINE') {
-            const localResult = calculateLocalFallback(sensorData);
-            // Try to enhance local fallback analysis with Railway LLM if possible
-            const fbText = await callRailwayLLMFallback(`Water metrics: Temp ${sensorData.temperature}, pH ${sensorData.pH}, Turbidity ${sensorData.turbidity}. Write a 1-sentence summary of health.`);
-            if (fbText) {
-                localResult.analysis = `[Fallback AI]: ${fbText} (Manual Calc: ${localResult.analysis})`;
-            }
-            return localResult;
-        }
-
-        const modelToUse = window.cachedGeminiModel || 'gemini-2.0-flash'; // Updated default
-
+        // STEP: Use geminiProxy Firebase Function to bypass discovery 403 and hide keys
+        console.log(`Calling Gemini Proxy for analysis...`);
         try {
-            console.log(`Generating content using: ${modelToUse}`);
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelToUse}:generateContent?key=${apiKey}`, {
+            const response = await fetch(`https://us-central1-bluesentinel1.cloudfunctions.net/geminiProxy`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+                    model: 'gemini-1.5-flash',
                     contents: [{
-                        parts: [{ text: prompt }]
+                        parts: [{ text: systemPrompt + "\n\n" + prompt }]
                     }]
                 })
             });
@@ -316,20 +274,15 @@ async function getWaterHealthAnalysis(sensorData) {
                             timestamp: Date.now(),
                             data: result
                         }));
-                        console.log("SUCCESS: AI Analysis generated and cached.");
+                        console.log("SUCCESS: AI Analysis generated and cached via Proxy.");
                         return result;
                     }
                 }
             } else {
-                if (response.status === 429) {
-                    console.warn(`AI Quota Exceeded (${modelToUse}). Switching to Offline Mode.`);
-                    // Do not throw, just fallback silently
-                } else {
-                    console.warn(`Generation failed with ${modelToUse}: ${response.status}`);
-                }
+                console.warn(`Proxy Generation failed: ${response.status}`);
             }
         } catch (e) {
-            console.warn(`Error generating content with ${modelToUse}:`, e);
+            console.warn(`Error generating content via Proxy:`, e);
         }
 
         // Silent Fallback
@@ -428,7 +381,7 @@ const expertKnowledge = {
     status: ['status', 'system', 'report', 'health'],
     temperature: {
         keywords: ['temp', 'heat', 'cold', 'degree'],
-        response: "Current Temperature is optimal for local marine life. <strong>If it exceeds 30°C</strong>, check cooling effluents or shallow water stagnation."
+        response: "Current Temperature is optimal for local river life. <strong>If it exceeds 30°C</strong>, check industrial cooling effluents or stagnant pools."
     },
     ph: {
         keywords: ['ph', 'acid', 'alkaline'],

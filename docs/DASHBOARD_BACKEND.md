@@ -1,11 +1,13 @@
-# Dashboard Backend Integration Guide 
+# Dashboard Backend Integration Guide
+
+# Dashboard Backend Integration Guide
 
 ## Overview
 
 The BlueSentinel dashboard uses a hybrid approach:
 
 1. **Firebase Realtime Database**: For live sensor data (5s updates).
-2. **Google Gemini API**: For on-demand ecosystem analysis and remediation advice.
+2. **Google Gemini API**: For on-demand river health analysis and remediation advice.
 3. **Globe.gl & Chart.js**: For high-performance visualization.
 
 ---
@@ -35,7 +37,9 @@ graph TD
 
 ## Backend Logic (`dashboard.js`)
 
-### 1. Real-Time Listeners
+### 1. Modern Design System
+
+### 2. Real-Time Listeners
 
 We subscribe to `BlueSentinel/sensors/latest` for instant updates.
 

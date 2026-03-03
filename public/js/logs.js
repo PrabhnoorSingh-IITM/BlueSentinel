@@ -24,7 +24,7 @@ function loadIncidentLogs() {
             type: 'Temperature',
             severity: 'warning',
             details: 'Water temperature increased to 32°C',
-            node: 'Coastal-Beta',
+            node: 'Basin-Beta-Main',
             lat: 13.0827, lng: 80.2707 // Chennai
         },
         {
@@ -47,8 +47,8 @@ function loadIncidentLogs() {
             time: '8:00pm',
             type: 'Health Score',
             severity: 'normal',
-            details: 'Marine health score improved to 85/100',
-            node: 'Port-Blair-Station',
+            details: 'River health score improved to 85/100',
+            node: 'Tributary-North-Station',
             lat: 11.6234, lng: 92.7265 // Port Blair
         }
     ];

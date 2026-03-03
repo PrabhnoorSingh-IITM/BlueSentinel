@@ -56,7 +56,7 @@ This document outlines the primary user journeys within the BlueSentinel platfor
 
 ## 4. Information Gathering Workflow (News)
 
-**Goal**: Stay updated on global marine conservation efforts.
+**Goal**: Stay updated on global river conservation efforts.
 
 1. **Entry**: User clicks the "News" icon.
 2. **Consumption**:
