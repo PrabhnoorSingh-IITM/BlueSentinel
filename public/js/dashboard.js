@@ -45,6 +45,27 @@ const mlElements = {
 
 // Simulation state
 let isSimulationMode = false;
+let lastSimValues = {
+  temperature: 25.0,
+  pH: 7.0,
+  turbidity: 3.5,
+  dissolvedOxygen: 7.5
+};
+
+function linearRegression(y) {
+  const n = y.length;
+  if (n === 0) return { slope: 0, intercept: 0 };
+  let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+  for (let i = 0; i < n; i++) {
+    sumX += i;
+    sumY += y[i];
+    sumXY += i * y[i];
+    sumXX += i * i;
+  }
+  const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+  const intercept = (sumY - slope * sumX) / n;
+  return { slope, intercept };
+}
 
 // Firebase reference
 let db = null;
@@ -310,11 +331,10 @@ function handleLatestData(snapshot) {
     let enrichedData;
     if (data.temperature !== undefined || data.ph !== undefined) {
       enrichedData = {
-        temperature: data.temperature || (20 + Math.random() * 15).toFixed(1),
-        pH: data.pH || data.ph || (6.5 + Math.random() * 2).toFixed(2),
-        turbidity: data.turbidity || (2.0 + Math.random() * 8).toFixed(2),
-        dissolvedOxygen: data.dissolvedOxygen || (6.0 + Math.random() * 6).toFixed(2),
-        dissolvedOxygen: data.dissolvedOxygen || (6.0 + Math.random() * 6).toFixed(2),
+        temperature: data.temperature || Math.max(15, Math.min(35, lastSimValues.temperature += (Math.random() - 0.5) * 0.5)).toFixed(1),
+        pH: data.pH || data.ph || Math.max(6.0, Math.min(8.5, lastSimValues.pH += (Math.random() - 0.5) * 0.1)).toFixed(2),
+        turbidity: data.turbidity || Math.max(0.0, Math.min(10.0, lastSimValues.turbidity += (Math.random() - 0.5) * 0.5)).toFixed(2),
+        dissolvedOxygen: data.dissolvedOxygen || Math.max(4.0, Math.min(10.0, lastSimValues.dissolvedOxygen += (Math.random() - 0.5) * 0.2)).toFixed(2),
         timestamp: data.timestamp || Date.now()
       };
     } else {
@@ -561,12 +581,12 @@ function updateAllCharts(data) {
     // Ideal: pH 7, Turbidity < 5
     let score = 100;
     score -= Math.abs((data.pH || 7) - 7) * 10; // pH penalty
-        let turb = data.turbidity || 0;
-    if (turb > 50) score -= 40; // Very dirty
-    else if (turb > 5) score -= 20; // Slightly muddy
-    else if (turb > 1) score -= 5; // Acceptable
+    let turb = data.turbidity || 0;
+    if (turb >= 50) score -= 40; // Very dirty, chaos
+    else if (turb >= 5) score -= 20; // Slightly muddy
+    else if (turb >= 1) score -= 5; // Acceptable
     // 0-1 is ultra clear, 0 penalty
-    
+
     score = Math.max(0, Math.min(100, score));
 
     chartData.projection.push(score);
@@ -590,15 +610,21 @@ function updateAllCharts(data) {
 
     if (window.aiChart) {
       // Update Prediction Line (Future)
-      // Simple linear regression + noise for demo
-      const lastScore = score;
+      // Linear Regression based on history
+      const pastScores = chartData.projection;
+      const { slope, intercept } = linearRegression(pastScores);
+
+      const lastScore = pastScores[pastScores.length - 1] || 100;
       const predictedData = [];
       // Fill nulls for past
       for (let i = 0; i < chartData.labels.length - 1; i++) predictedData.push(null);
       predictedData.push(lastScore);
 
+      const startIdx = pastScores.length - 1;
       for (let i = 1; i <= 10; i++) {
-        predictedData.push(lastScore + (Math.random() - 0.5) * 5);
+        let p = slope * (startIdx + i) + intercept;
+        // Add a tiny bit of noise, but trend follows LR
+        predictedData.push(Math.max(0, Math.min(100, p + (Math.random() - 0.5) * 1.5)));
       }
 
       window.aiChart.data.datasets[2].data = predictedData;
@@ -629,12 +655,10 @@ function startSimulationMode() {
 
 function generateSimulatedData() {
   return {
-    // Updated to match Kaggle Dataset Distribution
-    // Ph Mean ~7.08, Turbidity Mean ~3.9
-    temperature: (22 + Math.random() * 5).toFixed(1),
-    pH: (7.08 + (Math.random() - 0.5) * 1.5).toFixed(2), // 6.3 - 7.8 range common
-    turbidity: (3.9 + (Math.random() - 0.5) * 2).toFixed(2), // 2.9 - 4.9 common
-    dissolvedOxygen: (7.0 + Math.random() * 2).toFixed(2),
+    temperature: Math.max(15, Math.min(35, lastSimValues.temperature += (Math.random() - 0.5) * 0.5)).toFixed(1),
+    pH: Math.max(6.0, Math.min(8.5, lastSimValues.pH += (Math.random() - 0.5) * 0.1)).toFixed(2),
+    turbidity: Math.max(0.0, Math.min(10.0, lastSimValues.turbidity += (Math.random() - 0.5) * 0.5)).toFixed(2),
+    dissolvedOxygen: Math.max(4.0, Math.min(10.0, lastSimValues.dissolvedOxygen += (Math.random() - 0.5) * 0.2)).toFixed(2),
     timestamp: Date.now()
   };
 }

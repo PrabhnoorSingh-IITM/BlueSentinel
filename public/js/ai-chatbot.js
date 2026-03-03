@@ -100,10 +100,15 @@ async function processUserMessage(message) {
         return;
     }
 
-    // 2. Try Gemini API (Using stable gemini-pro)
+    // 2. Try Gemini API
     try {
-        // WARNING: API Key exposed. Moved to backend/Firebase Functions.
-        const apiKey = ''; // Removed for security
+        let apiKey = localStorage.getItem('gemini_api_key');
+        if (!apiKey) {
+            apiKey = prompt("Please enter your Gemini API Key for full AI Chatbot access (it will be saved locally):");
+            if (apiKey) localStorage.setItem('gemini_api_key', apiKey);
+        }
+        if (!apiKey) throw new Error('No API Key provided by user.');
+
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -140,8 +145,11 @@ async function processUserMessage(message) {
 
 // Exposed function for Dashboard Analysis (JSON Response)
 async function getWaterHealthAnalysis(sensorData) {
-    // WARNING: API Key exposed. Moved to backend/Firebase Functions.
-    const apiKey = ''; // Removed for security
+    let apiKey = localStorage.getItem('gemini_api_key');
+    if (!apiKey) {
+        apiKey = prompt("Please enter your Gemini API Key for the Dashboard AI Analysis (it will be saved locally):");
+        if (apiKey) localStorage.setItem('gemini_api_key', apiKey);
+    }
     const cacheKey = 'water_health_analysis_cache';
     const cacheDuration = 15 * 60 * 1000; // 15 minutes
 
@@ -185,9 +193,9 @@ async function getWaterHealthAnalysis(sensorData) {
         1. Calculate a "Water Health Score" out of 100 based on all values (potability standards).
            CRITICAL TURBIDITY SPECTRUM (DO NOT DEVIATE):
            - 0 to 1 NTU: Ultra clear water (distilled-level clean)
-           - >1 to 5 NTU: Acceptable drinking water (WHO guideline is below 5)
-           - >5 to 50 NTU: Slightly muddy / surface water
-           - >50 to 1000+ NTU: Very dirty, stormwater, sewage-level chaos
+           - 1 to <5 NTU: Acceptable drinking water (WHO guideline is below 5)
+           - 5 to 50 NTU: Slightly muddy / surface water
+           - 50 to 1000+ NTU: Very dirty, stormwater, sewage-level chaos
         2. Provide a 2-sentence summary of the ecosystem health.
         3. Determine a status (Excellent, Good, Warning, Critical).
         4. Provide specific chemical/physical treatment advice for any out-of-range metrics (e.g., "Add Sodium Carbonate to increase pH", "Deploy settlement tanks for high Turbidity").
@@ -339,13 +347,13 @@ function calculateLocalFallback(data) {
 
     // 5. Turbidity Penalty (Spectrum)
     let turb = parseFloat(data.turbidity) || 0;
-    if (turb > 50) {
+    if (turb >= 50) {
         score -= 40; // Very dirty
-        penalties.push('Extremely High Turbidity (>50 NTU)');
-    } else if (turb > 5) {
+        penalties.push('Extremely High Turbidity (>=50 NTU)');
+    } else if (turb >= 5) {
         score -= 20; // Slightly muddy
-        penalties.push('High Turbidity (>5 NTU)');
-    } else if (turb > 1) {
+        penalties.push('High Turbidity (>=5 NTU)');
+    } else if (turb >= 1) {
         score -= 5; // Acceptable but not ultra clear
     }
     score = Math.floor(Math.max(0, Math.min(100, score)));
@@ -391,7 +399,7 @@ const expertKnowledge = {
     },
     turbidity: {
         keywords: ['turbidity', 'clear', 'cloudy', 'ntu'],
-        response: "<b>Turbidity Spectrum:</b><br/>• 0–1 NTU: Ultra clear<br/>• <5 NTU: Acceptable<br/>• 5–50 NTU: Slightly muddy<br/>• >50 NTU: Very dirty.<br/><strong>Solution:</strong> If >5 NTU, inspect for sediment runoff or algal blooms. Deploy settlement tanks."
+        response: "<b>Turbidity Spectrum:</b><br/>• 0–1 NTU: Ultra clear<br/>• <5 NTU: Acceptable<br/>• 5–50 NTU: Slightly muddy<br/>• &ge;50 NTU: Very dirty.<br/><strong>Solution:</strong> If &ge;5 NTU, inspect for sediment runoff or algal blooms. Deploy settlement tanks."
     },
     oxygen: {
         keywords: ['oxygen', 'do', 'breath', 'hypoxia'],
