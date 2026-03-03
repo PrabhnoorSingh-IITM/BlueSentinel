@@ -4,11 +4,19 @@
       ".read": true,
       ".write": true,
       "latest": {
-        ".indexOn": ["timestamp"]
+        ".indexOn": [
+          "timestamp"
+        ]
       },
       "history": {
-        ".indexOn": ["timestamp"]
+        ".indexOn": [
+          "timestamp"
+        ]
       }
+    },
+    "BlueSentinel": {
+      ".read": true,
+      ".write": true
     },
     "users": {
       "$uid": {

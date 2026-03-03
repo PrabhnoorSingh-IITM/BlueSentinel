@@ -3,174 +3,72 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>BlueSentinel | News</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlueSentinel | News</title>
     <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/dashboard.css">
-    <link rel="stylesheet" href="css/news.css">
-    <link rel="stylesheet" href="css/news.css">
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-functions-compat.js"></script>
+
+    <script src="js/core/firebase-init.js" defer></script>
     <script src="js/news.js" defer></script>
-    <script src="js/theme-toggle.js" defer></script>
+
+    <style>
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
 <body>
-    <div class="container">
-        <main>
-            <!-- Logo -->
-            <nav class="navbar">
-                <a href="dashboard.html" class="logo">
-                    <div class="logo-icon">
-                        <img src="./assets/images/logo.png" alt="BlueSentinel logo">
-                    </div>
-                    <div class="logo-text">
-                        <div class="logo-title">BlueSentinel</div>
-                        <div class="logo-subtitle">Ocean Intelligence Platform</div>
-                    </div>
+    <div class="app-container">
+        <!-- SIDEBAR -->
+        <!-- FLOATING NAVIGATION -->
+        <nav class="floating-nav">
+            <div class="nav-links">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="bi bi-speedometer2 nav-icon"></i>
+                    <span class="label">Monitor</span>
                 </a>
-                <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme">
-                    <!-- Icon injected by JS -->
-                </button>
-            </nav>
-            <div class="main-title">Marine News</div>
-
-            <!-- News Cards Section -->
-            <div class="news-grid">
-                <div class="card">
-                    <h3 class="card__title">Coral Reef Recovery Initiative Shows Promise</h3>
-                    <p class="card__content">Recent monitoring data shows coral health scores improving by 15% in
-                        protected zones following new conservation measures. Early satellite analysis confirms increased
-                        biodiversity and a steady rise in dissolved oxygen levels across test sites.</p>
-                    <div class="card__date">2 hours ago</div>
-                    <div class="card__arrow">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="15" width="15">
-                            <path fill="#fff"
-                                d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z">
-                            </path>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3 class="card__title">Oil Spike Detected Near Industrial Zone</h3>
-                    <p class="card__content">Automated sensors detected unusual oil contamination levels. Authorities
-                        have been alerted and response teams deployed. Containment booms are in place and cleanup
-                        vessels are operating within the impacted corridor.</p>
-                    <div class="card__date">5 hours ago</div>
-                    <div class="card__arrow">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="15" width="15">
-                            <path fill="#fff"
-                                d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z">
-                            </path>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3 class="card__title">Marine Species Migration Patterns Change</h3>
-                    <p class="card__content">Water temperature shifts are causing changes in fish migration routes.
-                        Scientists recommend updated fishing regulations to protect breeding zones and reduce incidental
-                        catch.</p>
-                    <div class="card__date">1 day ago</div>
-                    <div class="card__arrow">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="15" width="15">
-                            <path fill="#fff"
-                                d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z">
-                            </path>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3 class="card__title">New Sensor Network Deployed</h3>
-                    <p class="card__content">Expanded monitoring coverage now includes 50 additional coastal zones,
-                        providing real-time data for previously unmonitored areas. The network also adds automated
-                        anomaly alerts with faster response routing.</p>
-                    <div class="card__date">2 days ago</div>
-                    <div class="card__arrow">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="15" width="15">
-                            <path fill="#fff"
-                                d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z">
-                            </path>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3 class="card__title">Plastic Pollution Reduction Success</h3>
-                    <p class="card__content">Recent cleanup efforts combined with monitoring have reduced plastic waste
-                        in monitored areas by 40%. Community-led initiatives and smarter waste-routing policies are
-                        showing measurable impact.</p>
-                    <div class="card__date">3 days ago</div>
-                    <div class="card__arrow">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="15" width="15">
-                            <path fill="#fff"
-                                d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z">
-                            </path>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3 class="card__title">Breakthrough in Ocean Acidification Research</h3>
-                    <p class="card__content">Scientists discover new method to track ocean acidification patterns using
-                        satellite data and AI algorithms. The approach improves early detection of rapid pH drops in
-                        coastal regions.</p>
-                    <div class="card__date">4 days ago</div>
-                    <div class="card__arrow">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="15" width="15">
-                            <path fill="#fff"
-                                d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z">
-                            </path>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3 class="card__title">Seagrass Restoration Boosts Coastal Resilience</h3>
-                    <p class="card__content">Pilot restoration sites reported stronger sediment stabilization and
-                        improved water clarity. Early results show a 12% reduction in turbidity during peak runoff
-                        events.</p>
-                    <div class="card__date">5 days ago</div>
-                    <div class="card__arrow">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="15" width="15">
-                            <path fill="#fff"
-                                d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z">
-                            </path>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3 class="card__title">Coastal Water Quality Index Updated</h3>
-                    <p class="card__content">A new index now combines temperature, pH, turbidity, and dissolved oxygen
-                        into a single score. The update helps authorities prioritize response areas within minutes.</p>
-                    <div class="card__date">1 week ago</div>
-                    <div class="card__arrow">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="15" width="15">
-                            <path fill="#fff"
-                                d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z">
-                            </path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
-            <nav class="glass-nav">
-                <a class="nav-item" href="dashboard.html">
-                    <span class="icon"><img src="./assets/icons/estate.svg" alt="Dashboard"></span>
-                    <span class="label">Dashboard</span>
-                </a>
-
-                <a class="nav-item active" href="news.html">
-                    <span class="icon"><img src="./assets/icons/newspaper.svg" alt="News"></span>
+                <a href="news.html" class="nav-item active">
+                    <i class="bi bi-newspaper nav-icon"></i>
                     <span class="label">News</span>
                 </a>
-
-                <a class="nav-item" href="logs.html">
-                    <span class="icon"><img src="./assets/icons/document-signed.svg" alt="Logs"></span>
+                <a href="logs.html" class="nav-item">
+                    <i class="bi bi-file-earmark-text nav-icon"></i>
                     <span class="label">Logs</span>
                 </a>
-            </nav>
+                <a href="archive.html" class="nav-item">
+                    <i class="bi bi-archive nav-icon"></i>
+                    <span class="label">Archives</span>
+                </a>
+                <a href="forums.html" class="nav-item">
+                    <i class="bi bi-people nav-icon"></i>
+                    <span class="label">Forums</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <header class="card-header" style="margin-bottom: 2rem;">
+                <a href="dashboard.html" style="text-decoration: none; display: block;">
+                    <h1 class="text-gradient" style="font-size: 2rem;">Ocean Intelligence</h1>
+                    <p style="color: var(--text-muted);">Latest environmental updates from across the globe</p>
+                </a>
+            </header>
+
+            <div id="news-container" class="news-grid">
+                <!-- News injected by news.js here -->
+                <div class="bento-card">
+                    <div style="padding: 2rem; text-align: center; color: var(--text-muted);">Loading global news
+                        feed...</div>
+                </div>
+            </div>
         </main>
     </div>
 </body>
