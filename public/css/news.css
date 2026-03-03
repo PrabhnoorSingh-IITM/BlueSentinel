@@ -4,9 +4,10 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    margin: 20px;
-    padding: 0 10px;
-    align-items: center;
+  margin: 20px 0;
+  padding: 0 24px;
+  align-items: stretch;
+  width: 100%;
 }
 
 /* From Uiverse.io by satyamchaudharydev */ 
@@ -14,19 +15,19 @@
 
 .card {
   --border-radius: 0.75rem;
-  --primary-color: #7257fa;
-  --secondary-color: #3c3852;
+  --primary-color: #00FFD4;
+  --secondary-color: #5465FF;
   width: 100%;
-  max-width: 600px;
+  max-width: none;
   font-family: "Arial";
   padding: 1.5rem;
   cursor: pointer;
   border-radius: var(--border-radius);
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(84, 101, 255, 0.1);
   backdrop-filter: blur(10px);
   box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 3%);
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(0, 255, 212, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -43,20 +44,20 @@
   padding: 0;
   font-size: 1.3rem;
   font-weight: bold;
-  color: white;
+  color: #D2DDFF;
   line-height: 1.3;
   margin-bottom: 0.8rem;
 }
 
 .card .card__content {
-  color: rgba(255, 255, 255, 0.9);
+  color: #D2DDFF;
   font-size: 1rem;
   line-height: 1.5;
   margin-bottom: 0.8rem;
 }
 
 .card .card__date {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(210, 221, 255, 0.7);
   font-size: 0.8rem;
   margin-top: auto;
 }
@@ -86,7 +87,7 @@
 }
 
 .card:hover .card__arrow {
-  background: #111;
+  background: #5465FF;
 }
 
 .card:hover .card__arrow svg {
@@ -96,13 +97,14 @@
 /* Responsive Design */
 @media (max-width: 768px) {
     .news-grid {
-        margin: 15px;
+    margin: 15px 0;
         gap: 15px;
+    padding: 0 16px;
     }
     
     .card {
         width: 100%;
-        max-width: 500px;
+    max-width: none;
         padding: 1.2rem;
     }
     

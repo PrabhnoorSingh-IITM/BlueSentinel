@@ -10,24 +10,24 @@
 }
 
 .placeholder-card {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(84, 101, 255, 0.1);
     backdrop-filter: blur(10px);
     border-radius: 16px;
     padding: 40px;
     text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(0, 255, 212, 0.2);
     width: 100%;
     max-width: 400px;
 }
 
 .placeholder-card h2 {
-    color: white;
+    color: #00FFD4;
     font-size: 2rem;
     margin-bottom: 20px;
 }
 
 .placeholder-card p {
-    color: rgba(255, 255, 255, 0.8);
+    color: #D2DDFF;
     font-size: 1.1rem;
     line-height: 1.6;
     margin-bottom: 15px;
