@@ -1,7 +1,6 @@
 # BlueSentinel - Ocean Intelligence Platform
 
 <div align="center">
-  <img src="public/assets/images/logo.png" alt="BlueSentinel Logo" width="120"/>
   <h3>A Digital Nervous System for the Ocean</h3>
   <p><strong>Real-time marine monitoring, early pollution detection, and rapid response</strong></p>
   <p><em>Team Project for Hackathon | Currently 10% Complete</em></p>
