@@ -103,7 +103,7 @@ async function processUserMessage(message) {
     // 2. Try Gemini API (Using stable gemini-pro)
     try {
         const apiKey = 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g';
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.0-pro:generateContent?key=${apiKey}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -133,7 +133,7 @@ async function processUserMessage(message) {
         console.warn('AI API failed, using fallback:', error);
         hideTyping();
         // 3. General Fallback
-        addAIMessage("I'm having trouble connecting to the global network, but I can tell you that all systems are currently monitoring parameters within expected ranges. Try asking about specific sensors like 'Temperature' or 'pH'.");
+        addAIMessage("API request failed or quota exceeded. However, the system is still monitoring locally. Try asking about specific sensors like 'Temperature' or 'pH' to use the offline expert system.");
     }
 }
 
@@ -237,7 +237,7 @@ async function getWaterHealthAnalysis(sensorData) {
             return calculateLocalFallback(sensorData);
         }
 
-        const modelToUse = window.cachedGeminiModel || 'gemini-3.0-pro'; // Updated default
+        const modelToUse = window.cachedGeminiModel || 'gemini-2.0-flash'; // Updated default
 
         try {
             console.log(`Generating content using: ${modelToUse}`);
