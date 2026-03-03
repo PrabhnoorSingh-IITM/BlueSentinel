@@ -309,7 +309,7 @@ function createChartOptions() {
 
 function initializeDashboard() {
   try {
-    sensorLatestRef = db.ref('BlueSentinel');
+    sensorLatestRef = db.ref('sensors/latest');
     sensorLatestRef.on('value', handleLatestData, handleError);
     console.log('Firebase listeners initialized');
   } catch (error) {
