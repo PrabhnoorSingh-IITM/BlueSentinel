@@ -6,39 +6,159 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/global.css">
         <link rel="stylesheet" href="css/dashboard.css">
-        <script src="js/dashboard.js"></script>
+        
+        <!-- Firebase SDKs -->
+        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+        
+        <!-- Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+        
+        <!-- Firebase Init -->
+        <script src="js/core/firebase-init.js" defer></script>
+        <script src="js/dashboard.js" defer></script>
     </head>
 
     <body>
-        <!-- Logo -->
-        <nav class="navbar">
-            <div class="logo">
-                <div class="logo-icon">
-                    <img src="/public/assets/images/#" alt="BlueSentinel logo">
+        <div class="container">
+        <main>
+            <!-- Logo -->
+            <nav class="navbar">
+                <a href="dashboard.html" class="logo">
+                    <div class="logo-icon">
+                        <img src="./assets/images/logo.png" alt="BlueSentinel logo">
+                    </div>
+                    <div class="logo-text">
+                        <div class="logo-title">BlueSentinel</div>
+                        <div class="logo-subtitle">Ocean Intelligence Platform</div>
+                    </div>
+                </a>
+            </nav>
+            <div class="main-title">Dashboard</div>
+            
+            <!-- Cards Container -->
+            <div class="cards-container">
+                <div class="card">
+                    <div class="tools">
+                        <div class="circle">
+                            <span class="red box"></span>
+                        </div>
+                        <div class="circle">
+                            <span class="yellow box"></span>
+                        </div>
+                        <div class="circle">
+                            <span class="green box"></span>
+                        </div>
+                    </div>
+                    <div class="card__content">
+                        <h3 class="card-title">Water Temperature</h3>
+                        <div class="card-value" id="temp-value">--</div>
+                        <div class="card-unit">°C</div>
+                    </div>
                 </div>
-                <div class="logo-text">
-                    <div class="logo-title">BlueSentinel</div>
-                    <div class="logo-subtitle">Ocean Intelligence Platform</div>
+
+                <div class="card">
+                    <div class="tools">
+                        <div class="circle">
+                            <span class="red box"></span>
+                        </div>
+                        <div class="circle">
+                            <span class="yellow box"></span>
+                        </div>
+                        <div class="circle">
+                            <span class="green box"></span>
+                        </div>
+                    </div>
+                    <div class="card__content">
+                        <h3 class="card-title">Water pH</h3>
+                        <div class="card-value" id="ph-value">--</div>
+                        <div class="card-unit">pH</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="tools">
+                        <div class="circle">
+                            <span class="red box"></span>
+                        </div>
+                        <div class="circle">
+                            <span class="yellow box"></span>
+                        </div>
+                        <div class="circle">
+                            <span class="green box"></span>
+                        </div>
+                    </div>
+                    <div class="card__content">
+                        <h3 class="card-title">Turbidity</h3>
+                        <div class="card-value" id="turbidity-value">--</div>
+                        <div class="card-unit">NTU</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="tools">
+                        <div class="circle">
+                            <span class="red box"></span>
+                        </div>
+                        <div class="circle">
+                            <span class="yellow box"></span>
+                        </div>
+                        <div class="circle">
+                            <span class="green box"></span>
+                        </div>
+                    </div>
+                    <div class="card__content">
+                        <h3 class="card-title">Dissolved O₂</h3>
+                        <div class="card-value" id="do-value">--</div>
+                        <div class="card-unit">mg/L</div>
+                    </div>
                 </div>
             </div>
+
+            <!-- Large Graph Card -->
+            <div class="graph-container">
+                <div class="card card-large">
+                    <div class="tools">
+                        <div class="circle">
+                            <span class="red box"></span>
+                        </div>
+                        <div class="circle">
+                            <span class="yellow box"></span>
+                        </div>
+                        <div class="circle">
+                            <span class="green box"></span>
+                        </div>
+                    </div>
+                    <div class="card__content">
+                        <h3 class="card-title">Live Data Graphs</h3>
+                        <div id="graph-content" class="graph-area">
+                            <canvas id="sensor-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <nav class="glass-nav">
                     <a class="nav-item active" href="dashboard.html">
-                        <span class="icon"></span>
+                        <span class="icon"><img src="./assets/icons/estate.svg" alt="Dashboard"></span>
                         <span class="label">Dashboard</span>
                     </a>
-                    
+                        
                     <a class="nav-item" href="news.html">
-                        <span class="icon">📝</span>
+                        <span class="icon"><img src="./assets/icons/newspaper.svg" alt="News"></span>
                         <span class="label">News</span>
                     </a>
-                    
+                        
                     <a class="nav-item" href="logs.html">
-                        <span class="icon">🏆</span>
+                        <span class="icon"><img src="./assets/icons/document-signed.svg" alt="Logs"></span>
                         <span class="label">Logs</span>
                     </a>
 
                     <a class="nav-item" href="profile.html">
-                        <span class="icon">👤</span>
+                        <span class="icon"><img src="./assets/icons/user.svg" alt="Profile"></span>
                         <span class="label">Profile</span>
-                    </a>
-                </nav>
+                    </a> 
+        </main>
+        </div>
+    </body>
+</html>
