@@ -1,38 +1,41 @@
+/* ARCHIVE PAGE SPECIFIC STYLES */
+
 .archive-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
+    margin-top: 2rem;
 }
 
 .file-card {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 1rem;
-    cursor: pointer;
-}
-
-.file-card:hover .file-icon {
-    transform: scale(1.1);
-    filter: drop-shadow(0 0 8px var(--color-cyan));
+    gap: 1.25rem;
+    padding: 1.25rem;
+    cursor: default;
 }
 
 .file-icon {
-    width: 48px;
-    height: 48px;
-    transition: var(--transition-fast);
-    filter: invert(1);
-    opacity: 0.8;
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.icon-cyan-no-filter {
+    color: var(--color-cyan);
 }
 
 .file-info {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
 }
 
 .file-name {
     font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.25rem;
-    display: block;
+    color: #fff;
+    font-size: 1rem;
 }
 
 .file-meta {
@@ -41,13 +44,25 @@
 }
 
 .download-btn {
-    padding: 0.5rem;
+    background: rgba(0, 240, 255, 0.1);
+    color: var(--color-cyan);
+    border: 1px solid rgba(0, 240, 255, 0.2);
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
     transition: var(--transition-fast);
 }
 
 .download-btn:hover {
     background: var(--color-cyan);
     color: var(--color-void);
+    transform: scale(1.1);
+}
+
+.archive-dl-btn {
+    /* Specific overrides if needed */
 }

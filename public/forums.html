@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="icon" type="image/png" href="assets/images/favicon.png" />
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,76 +12,13 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="js/core/firebase-init.js" defer></script>
-    <script src="js/theme-toggle.js" defer></script>
+    <script src="js/ui/theme-toggle.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@iconscout/unicons@4.0.8/css/line.min.css">
     <link rel="stylesheet" href="css/dock.css">
-    <script src="js/dock.js" defer></script>
-    <script src="js/forums.js" defer></script>
-    <style>
-        .forum-thread {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .forum-thread:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: var(--color-cyan);
-            transform: translateY(-2px);
-        }
-
-        .thread-meta {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .report-form-container {
-            border: 1px solid var(--color-cyan);
-            background: rgba(0, 240, 255, 0.05);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 3rem;
-            display: none;
-            /* Hidden by default */
-        }
-
-        .thread-tag {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-        }
-    </style>
-    <script>
-        function toggleReportForm() {
-            const form = document.querySelector('.report-form-container');
-            const btn = document.getElementById('new-report-btn');
-            if (form.style.display === 'none' || !form.style.display) {
-                form.style.display = 'block';
-                btn.innerHTML = 'Cancel Report';
-                btn.style.background = 'var(--color-void)';
-                btn.style.border = '1px solid var(--color-danger)';
-                btn.style.color = 'var(--color-danger)';
-            } else {
-                form.style.display = 'none';
-                btn.innerHTML = '+ New Field Report';
-                btn.style.background = 'var(--color-primary)';
-                btn.style.border = 'none';
-                btn.style.color = '#000';
-            }
-        }
-
-        <!-- Inline script removed, logic moved to js/forums.js -->
-    </script>
+    <script src="js/ui/dock.js" defer></script>
+    <script src="js/features/forums.js" defer></script>
+    <link rel="stylesheet" href="css/pages/forums.css">
 </head>
 
 <body>
@@ -125,58 +62,50 @@
         <!-- MAIN CONTENT AREA -->
         <main class="main-content">
 
-            <div class="page-center" style="max-width: 900px;">
+            <div class="page-center max-width-900">
                 <!-- Header -->
-                <header class="dashboard-header"
-                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                    <a href="dashboard.html"
-                        style="text-decoration: none; display: flex; flex-direction: row; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                        <img src="./assets/images/logo.png" alt="BlueSentinel" class="brand-logo"
-                            style="width: auto; height: 48px;">
-                        <h1 class="text-gradient"
-                            style="font-family: var(--font-logo); font-size: 2.5rem; letter-spacing: 1px; margin: 0; text-transform: none;">
-                            BlueSentinel</h1>
+                <header class="dashboard-header margin-b-2">
+                    <a href="dashboard.html" class="header-brand-link">
+                        <img src="./assets/images/logo.png" alt="BlueSentinel" class="brand-logo-img">
+                        <h1 class="text-gradient brand-logo-text">BlueSentinel</h1>
                     </a>
-                    <div style="text-align: center;">
-                        <h2 class="text-gradient" style="font-size: 2rem; margin-top: 0.5rem;">Community Forums</h2>
-                        <p style="color: var(--text-muted);">Collaborate with researchers and report local observations
-                        </p>
+                    <div class="text-center">
+                        <h2 class="text-gradient header-subtitle">Community Forums</h2>
+                        <p class="text-muted">Collaborate with researchers and report local observations</p>
                     </div>
-                    <div style="display: flex; gap: 1rem;">
-                        <i class="uil uil-brightness" id="theme-toggle"
-                            style="font-size: 1.5rem; cursor: pointer; display: inline-block; min-width: 24px;"></i>
-                        <button id="new-report-btn" class="btn-primary" onclick="toggleReportForm()">
+                    <div class="display-flex gap-1">
+                        <i class="uil uil-brightness" id="theme-toggle"></i>
+                        <button id="new-report-btn" class="btn-primary">
                             + New Field Report
                         </button>
                     </div>
                 </header>
 
                 <!-- Hidden Report Form -->
-                <div class="report-form-container">
-                    <h3 style="margin-bottom: 1.5rem; color: var(--color-cyan);">Submit Field Observation</h3>
-                    <form id="manual-entry-form" style="display: flex; flex-direction: column; gap: 2rem;">
+                <div id="report-form-container" class="report-form-container">
+                    <h3 class="forum-form-title">Submit Field Observation</h3>
+                    <form id="manual-entry-form" class="forum-form">
                         <!-- Simplified inputs for quick reporting -->
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div class="forum-input-grid">
                             <!-- Temp -->
-                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                <label style="color: var(--text-secondary); font-size: 0.9rem;">Temperature (°C)</label>
+                            <div class="forum-input-group">
+                                <label class="forum-label">Temperature (°C)</label>
                                 <input type="number" step="0.1" placeholder="e.g. 24.5" required
-                                    style="background: rgba(255, 77, 77, 0.05); border: 1px solid rgba(255, 77, 77, 0.3); padding: 0.8rem; border-radius: 8px; color: white; outline: none;">
+                                    class="forum-input temp-bg">
                             </div>
                             <!-- pH -->
-                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                <label style="color: var(--text-secondary); font-size: 0.9rem;">pH Level</label>
+                            <div class="forum-input-group">
+                                <label class="forum-label">pH Level</label>
                                 <input type="number" step="0.1" placeholder="e.g. 7.2" required
-                                    style="background: rgba(0, 240, 255, 0.05); border: 1px solid rgba(0, 240, 255, 0.3); padding: 0.8rem; border-radius: 8px; color: white; outline: none;">
+                                    class="forum-input ph-bg">
                             </div>
                         </div>
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                            <label style="color: var(--text-secondary); font-size: 0.9rem;">Notes</label>
+                        <div class="forum-input-group">
+                            <label class="forum-label">Notes</label>
                             <textarea rows="3" placeholder="Describe water conditions..."
-                                style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 0.8rem; border-radius: 8px; color: white; outline: none; resize: vertical;"></textarea>
+                                class="forum-textarea"></textarea>
                         </div>
-                        <button type="submit" class="btn-primary" style="justify-content: center;">Submit to
-                            Community</button>
+                        <button type="submit" class="btn-primary flex-center">Submit to Community</button>
                     </form>
                 </div>
 
@@ -184,14 +113,13 @@
                 <div class="forums-list">
 
                     <!-- Pinned Thread -->
-                    <div class="forum-thread" style="border-left: 3px solid var(--color-warning);">
+                    <div class="forum-thread pinned-thread">
                         <div class="thread-meta">
-                            <span class="thread-tag"
-                                style="background: rgba(255, 214, 0, 0.2); color: var(--color-warning);">Announcement</span>
+                            <span class="thread-tag tag-announcement">Announcement</span>
                             <span>• Admin • 2 hours ago</span>
                         </div>
-                        <h3 style="color: white; margin-bottom: 0.5rem;">System Update: Deployment of Node-Beta-2</h3>
-                        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <h3 class="thread-title">System Update: Deployment of Node-Beta-2</h3>
+                        <p class="thread-excerpt">
                             We have successfully deployed the new sensor array near the delta. Community members should
                             expect to see new data streams coming online within the next 24 hours. Please report any
                             anomalies here.
@@ -204,8 +132,8 @@
                             <span class="thread-tag">Field Report</span>
                             <span>• Dr. Sarah Chen • 5 hours ago</span>
                         </div>
-                        <h3 style="color: white; margin-bottom: 0.5rem;">Unusual Algal Bloom near Sector 4</h3>
-                        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <h3 class="thread-title">Unusual Algal Bloom near Sector 4</h3>
+                        <p class="thread-excerpt">
                             Visual observation confirms increased turbidity and greenish tint. Correlates with the
                             recent temperature spike. Suggest increasing sampling frequency in this sector.
                         </p>
@@ -217,9 +145,8 @@
                             <span class="thread-tag">Question</span>
                             <span>• Student_LabGroup • 1 day ago</span>
                         </div>
-                        <h3 style="color: white; margin-bottom: 0.5rem;">Interpreting pH fluctuations during rainfall
-                        </h3>
-                        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                        <h3 class="thread-title">Interpreting pH fluctuations during rainfall</h3>
+                        <p class="thread-excerpt">
                             Does the system automatically account for acid rain runoff in the predictive model? We are
                             seeing a dip to 6.8 after last night's storm.
                         </p>
@@ -232,7 +159,8 @@
         </main>
     </div>
 
-<script src="./js/theme-toggle.js"></script>
+    <script src="js/features/forums.js"></script>
+    <script src="./js/theme-toggle.js"></script>
 </body>
 
 </html>

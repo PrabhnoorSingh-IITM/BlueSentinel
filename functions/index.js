@@ -158,7 +158,7 @@ async function fallbackLLMLogic(req, res) {
       headers['Authorization'] = `Bearer ${HF_TOKEN}`;
     }
 
-    const hfPrompt = `<|system|>\nYou are SentinelBuddy, an expert river ecologist monitoring freshwater quality.\n<|user|>\n${prompt}\n<|assistant|>\n`;
+    const hfPrompt = `<|system|>\nYou are BlueSentinel AI, an expert river ecologist monitoring freshwater quality.\n<|user|>\n${prompt}\n<|assistant|>\n`;
 
     const response = await axios.post(
       `https://api-inference.huggingface.co/models/${MODEL}`,

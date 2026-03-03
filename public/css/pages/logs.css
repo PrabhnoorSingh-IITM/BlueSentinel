@@ -1,47 +1,66 @@
+/* LOGS PAGE SPECIFIC STYLES */
+
 .log-table {
     width: 100%;
     border-collapse: collapse;
-    color: var(--text-secondary);
+    margin-top: 1rem;
 }
 
 .log-table th {
     text-align: left;
     padding: 1rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--color-cyan);
-    font-family: var(--font-display);
-    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .log-table td {
-    padding: 1rem;
+    padding: 1.25rem 1rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.9rem;
+    color: #fff;
 }
 
-.log-row:hover {
-    background: rgba(255, 255, 255, 0.02);
-    transition: 0.2s;
-}
-
-.badge {
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
+.log-type {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 100px;
     font-size: 0.75rem;
     font-weight: 600;
-    text-transform: uppercase;
 }
 
-.badge-alert {
-    background: rgba(255, 77, 77, 0.2);
+.type-alert {
+    background: rgba(255, 77, 77, 0.15);
     color: var(--color-danger);
 }
 
-.badge-warning {
-    background: rgba(255, 214, 0, 0.2);
+.type-sys {
+    background: rgba(0, 240, 255, 0.15);
+    color: var(--color-cyan);
+}
+
+.type-maint {
+    background: rgba(255, 214, 0, 0.15);
     color: var(--color-warning);
 }
 
-.badge-info {
-    background: rgba(0, 212, 255, 0.2);
-    color: var(--color-teal);
+.log-time {
+    color: var(--text-muted);
+    font-family: var(--font-display);
+    white-space: nowrap;
+}
+
+.logs-map-container {
+    height: 350px;
+    width: 100%;
+    border-radius: 12px;
+    z-index: 1;
+}
+
+.padding-2 {
+    padding: 2rem;
 }

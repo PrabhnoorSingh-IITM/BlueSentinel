@@ -109,10 +109,11 @@ async function processUserMessage(message) {
             localStorage.setItem('gemini_api_key', apiKey);
         }
 
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+        const response = await fetch(`https://us-central1-gen-lang-client-0986945251.cloudfunctions.net/geminiProxy`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
+                model: 'gemini-2.0-flash',
                 contents: [{
                     parts: [{
                         text: `You are SentinelBuddy, an expert river ecologist. 
@@ -158,7 +159,7 @@ async function processUserMessage(message) {
 // Global Helper for Railway LLM Proxy
 async function callRailwayLLMFallback(promptText, max_tokens = 150) {
     try {
-        const fallbackResponse = await fetch('https://bluesentinel-production.up.railway.app/fallbackLLM', {
+        const fallbackResponse = await fetch('https://us-central1-gen-lang-client-0986945251.cloudfunctions.net/fallbackLLM', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt: promptText, max_tokens: max_tokens })
@@ -247,39 +248,8 @@ async function getWaterHealthAnalysis(sensorData) {
 
         // Step A: Discover Model if not cached
         if (window.cachedGeminiModel === null) {
-            console.log("Discovering available Gemini models...");
-            try {
-                const listResp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-                if (listResp.ok) {
-                    const listData = await listResp.json();
-                    const viableModel = listData.models?.find(m =>
-                        m.name.includes('gemini') &&
-                        m.supportedGenerationMethods?.includes('generateContent')
-                    );
-
-                    if (viableModel) {
-                        const modelId = viableModel.name.replace('models/', '');
-                        window.cachedGeminiModel = modelId;
-                        console.log(`Discovered and cached valid model: ${modelId}`);
-                    } else {
-                        window.cachedGeminiModel = 'OFFLINE';
-                    }
-                } else {
-                    // Suppress 429 error on discovery
-                    if (listResp.status === 429) {
-                        console.warn("AI Quota Exceeded (Discovery). Switching to Offline Mode.");
-                    } else if (listResp.status === 403) {
-                        console.error("Gemini API 403 Forbidden: Switching to Fallback Mode.");
-                        window.cachedGeminiModel = 'OFFLINE';
-                    } else {
-                        console.warn(`Model discovery failed (${listResp.status}). Switching to Offline Mode.`);
-                    }
-                    window.cachedGeminiModel = 'OFFLINE';
-                }
-            } catch (e) {
-                console.warn("Discovery fetch failed, switching to OFFLINE:", e);
-                window.cachedGeminiModel = 'OFFLINE';
-            }
+            console.log("Using default model via Firebase proxy...");
+            window.cachedGeminiModel = 'gemini-2.0-flash';
         }
 
         // Step B: Use Cached Model or Fallback
@@ -296,14 +266,13 @@ async function getWaterHealthAnalysis(sensorData) {
         const modelToUse = window.cachedGeminiModel || 'gemini-2.0-flash'; // Updated default
 
         try {
-            console.log(`Generating content using: ${modelToUse}`);
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelToUse}:generateContent?key=${apiKey}`, {
+            console.log(`Generating content using: ${modelToUse} via proxy`);
+            const response = await fetch(`https://us-central1-gen-lang-client-0986945251.cloudfunctions.net/geminiProxy`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    contents: [{
-                        parts: [{ text: prompt }]
-                    }]
+                    model: modelToUse,
+                    prompt: prompt
                 })
             });
 

@@ -132,22 +132,25 @@ firebase deploy --only hosting
 
 ```text
 BlueSentinel/
-├── public/          # Frontend application
-│  ├── css/         # Stylesheets (global, landing, dock, etc.)
-│  ├── js/          # JavaScript modules
-│  │  ├── core/       # Firebase init
-│  │  ├── dashboard.js # Main dashboard logic
-│  │  ├── forums.js     # Community forums logic
-│  │  ├── logs.js      # Incident logging & Globe
-│  │  └──...
-│  ├── assets/        # Images and icons
-│  ├── dashboard.html    # Main dashboard
-│  ├── index.html      # Landing page
-│  └──...
-├── hardware/         # ESP32 Firmware
-├── docs/           # Documentation & Implementation Plans
-├── firebase.json       # Firebase configuration
-└── README.md         # This file
+├── public/              # Production Frontend
+│  ├── css/             # Styling Modules
+│  │  ├── pages/        # Page-specific overrides
+│  │  └── global.css    # Universal design tokens
+│  ├── js/              # Logical Modules
+│  │  ├── core/         # Critical infrastructure (Firebase, AI Bridge)
+│  │  ├── features/     # Feature-specific logic (Dashboard, Chatbot)
+│  │  └── ui/           # Interface effects (Dock, Theme, Particles)
+│  ├── assets/          # High-fidelity images and icons
+│  ├── dashboard.html    # Core monitoring interface
+│  └── index.html        # Public-facing landing page
+├── functions/           # Serverless Cloud Logic
+├── hardware/            # IoT ESP32 Firmware
+├── ml/                  # Research & Intelligence
+│  ├── training/        # Model optimization scripts
+│  └── models/          # Compiled weights (.pkl)
+├── docs/                # Professional Manuals & Guides
+├── firebase.json        # Cloud manifest
+└── README.md            # Technical Overview
 ```
 
 ---

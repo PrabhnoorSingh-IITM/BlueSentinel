@@ -1,81 +1,75 @@
-# BlueSentinel | API & Integration Reference
+# BlueSentinel | API & Technical Integration Reference
 
-## 🚀 Overview
+This document provides a precise technical breakdown for developers and environmental scientists interacting with the BlueSentinel ecosystem. It covers the data schemas, real-time ingestion protocols, and AI integration bridges.
 
-This reference provides technical details for interacting with the BlueSentinel ecosystem, including the Firebase data schema, Gemini AI prompt structures, and hardware ingestion protocols.
+## 1. Real-Time Data Schema (Firebase)
 
----
+BlueSentinel utilizes the Firebase Realtime Database for state management. This ensures that every dashboard instance across the world remains synchronized with sub-second accuracy.
 
-## 1. Firebase Data Schema
+### 📡 Latest Telemetry (`sensors/latest`)
 
-### Real-Time Sensors (`BlueSentinel/sensors/latest`)
-
-The current "Source of Truth" written by the river nodes.
+This node holds the most recent "Expert Audit" from the field sensors. It is updated every time a sensor node pushes data.
 
 ```json
 {
-  "temperature": 24.5,
-  "pH": 7.8,
-  "turbidity": 2.3,
-  "dissolvedOxygen": 8.5,
+  "temperature": 24.5,      // Degrees Celsius
+  "ph": 7.8,                // 0-14 Scale
+  "turbidity": 2.3,         // NTU (Higher = more opaque)
+  "dissolvedOxygen": 8.5,   // mg/L (Vital for aquatic life)
+  "timestamp": 1738454400000 // Server-side epoch
+}
+```
+
+### 🗺️ Incident Ingestion (`incidents/{id}`)
+
+Populates the 3D Globe G.I.S. visualization. Incidents are flagged automatically by the Gemini AI or the expert fallback system.
+
+```json
+{
+  "type": "Critical",       // Status Level
+  "location": {             // GIS Coordinates
+    "lat": 12.97, 
+    "lng": 77.59 
+  },
+  "message": "Heavy Metal Anomaly Detected",
   "timestamp": 1738454400000
 }
 ```
 
-### Geographic Incident Logs (`incidents/{id}`)
+## 2. Intelligence & Reasoning (Gemini Bridge)
 
-Populates the 3D Globe visualization.
+The BlueSentinel AI Chatbot and Dashboard analysis are powered by a specialized integration of **Gemini 2.0 Flash**.
 
-```json
-{
-  "type": "Critical",
-  "location": { "lat": 12.97, "lng": 77.59 },
-  "message": "pH drop detected",
-  "timestamp": 1738454400000
-}
-```
+- **Persona Bridging**: The assistant operates under the "Sentinel Buddy" persona—a proactive river ecologist.
+- **Contextual Ingestion**: Current sensor values are injected into the LLM context to ensure responses are grounded in real-time data, not generalities.
+- **Threshold Analysis**: The AI specifically looks for breaches in the Indian Standard for Drinking Water (IS 10500) to flag health risks.
 
-### Community Reports (`forum_posts/{id}`)
+## 3. Hardware Ingestion Protocol
 
-Powers the real-time community field report feed.
+While production nodes use optimized Wi-Fi protocols, developer testing can be performed via standard REST requests.
 
----
+**Endpoint Architecture**:
+`POST https://<project-id>.firebaseio.com/sensors/history.json?auth=<access-token>`
 
-## 2. Intelligence Integration
-
-### Gemini AI Prompting
-
-The SentinelBuddy assistant uses a specific context-aware prompt structure defined in `ai-chatbot.js`.
-
-- **Context Injection**: Current sensor values are injected into a specialized "River Ecologist" persona.
-- **Persona**: SentinelBuddy acts as a proactive, scientific, yet accessible expert.
-- **Logic**: Analyzes pH, Turbidity, and DO to categorize water health (Good, Fair, Critical).
-
----
-
-## 3. Hardware Ingestion (ESP32)
-
-To push data from an unauthorized device (for development/testing), use the REST endpoint:
-
-**Endpoint**: `POST https://<firebase-project>.firebaseio.com/BlueSentinel.json?auth=<SECRET_KEY>`
-
-**Header**: `Content-Type: application/json`
-**Body**:
+**Payload Structure**:
 
 ```json
 {
-  "temperature": 25.0,
-  "pH": 7.0,
-  "turbidity": 0.0,
-  "dissolvedOxygen": 9.0,
+  "temperature": 26.5,
+  "ph": 6.8,
+  "turbidity": 1.1,
+  "dissolvedOxygen": 8.9,
   "timestamp": { ".sv": "timestamp" }
 }
 ```
 
+## 4. Environment & Tooling
+
+To maintain the project's performance, we utilize specific CDN-linked assets for core data visualization:
+
+- **Globe.gl**: High-contrast geospatial rendering.
+- **Chart.js**: Real-time telemetry streaming graphs.
+- **Bootstrap Icons**: Standardized UI iconography.
+
 ---
-
-## 4. Environment Configuration
-
-- **Firebase SDK**: Version 9 (compat mode).
-- **Gemini SDK**: Integrated via direct API fetch in `ai-chatbot.js`.
-- **Globe.gl**: CDN-linked for high-contrast topology rendering.
+**BlueSentinel Technical Team | 2026**

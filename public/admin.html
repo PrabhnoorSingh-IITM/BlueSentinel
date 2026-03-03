@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlueSentinel | Administrative Command</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/pages/admin.css">
+    <link rel="stylesheet" href="css/dock.css">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="js/core/firebase-init.js" defer></script>
+    <script src="js/ui/theme-toggle.js" defer></script>
+    <script src="js/ui/dock.js" defer></script>
+    <script src="js/pages/admin.js" defer></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Floating Navigation -->
+        <nav class="dock-container">
+            <div class="dock glass">
+                <a href="dashboard.html" class="dock-item">
+                    <img src="assets/icons/estate.svg" alt="Dashboard">
+                </a>
+                <a href="admin.html" class="dock-item active">
+                    <img src="assets/icons/user.svg" alt="Admin">
+                </a>
+            </div>
+        </nav>
+
+        <main class="admin-main">
+            <header class="admin-header glass">
+                <h1>Command Center</h1>
+                <p>System Oversight & Sentinel Node Management</p>
+            </header>
+
+            <div class="admin-grid">
+                <div class="admin-card glass">
+                    <h3>Node Status</h3>
+                    <div id="node-list" class="status-list">
+                        <!-- Injected by admin.js -->
+                        <p class="text-muted">Scanning active nodes...</p>
+                    </div>
+                </div>
+                <div class="admin-card glass">
+                    <h3>System Health</h3>
+                    <div class="health-metrics">
+                        <div class="metric">
+                            <span class="label">Uptime</span>
+                            <span class="value cyan">99.9%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="label">API Latency</span>
+                            <span class="value">42ms</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

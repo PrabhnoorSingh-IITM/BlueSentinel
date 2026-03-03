@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlueSentinel | Join the Grid</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/pages/auth.css">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="js/core/firebase-init.js" defer></script>
+    <script src="js/ui/theme-toggle.js" defer></script>
+    <script src="js/pages/auth.js" defer></script>
+</head>
+
+<body class="auth-page">
+    <div class="noise-bg"></div>
+    <div class="auth-container">
+        <div class="auth-card glass">
+            <div class="auth-header">
+                <img src="assets/images/logo.png" alt="BlueSentinel" class="auth-logo">
+                <h1>Create Account</h1>
+                <p>Join the mission to protect freshwater</p>
+            </div>
+            <form id="signup-form" class="auth-form">
+                <div class="form-group">
+                    <label for="fullname">Full Name</label>
+                    <input type="text" id="fullname" placeholder="Agent Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="name@agency.gov" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary glow-effect">Join Sentinel Grid</button>
+            </form>
+            <div class="auth-footer">
+                <p>Already a member? <a href="login.html">Sign In</a></p>
+                <a href="index.html" class="back-link">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

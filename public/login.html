@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlueSentinel | Secure Login</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/pages/auth.css">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="js/core/firebase-init.js" defer></script>
+    <script src="js/ui/theme-toggle.js" defer></script>
+    <script src="js/pages/auth.js" defer></script>
+</head>
+
+<body class="auth-page">
+    <div class="noise-bg"></div>
+    <div class="auth-container">
+        <div class="auth-card glass">
+            <div class="auth-header">
+                <img src="assets/images/logo.png" alt="BlueSentinel" class="auth-logo">
+                <h1>Welcome Back</h1>
+                <p>Access the River Intelligence Grid</p>
+            </div>
+            <form id="login-form" class="auth-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="name@agency.gov" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary glow-effect">Sign In</button>
+            </form>
+            <div class="auth-footer">
+                <p>New to BlueSentinel? <a href="signup.html">Create Account</a></p>
+                <a href="index.html" class="back-link">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
