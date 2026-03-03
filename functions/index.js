@@ -1,7 +1,7 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const axios = require('axios');
-const cors = require('cors')({ origin: true });
+const cors = require('cors')({ origin: '*' });
 
 admin.initializeApp();
 
@@ -133,18 +133,8 @@ exports.generateCSV = functions.https.onCall(async (data, context) => {
   }
 });
 
-// 3. Fallback LLM Proxy (Using HuggingFace Free Inference API)
-exports.fallbackLLM = functions.https.onRequest(async (req, res) => {
-  // enable CORS
-  res.set('Access-Control-Allow-Origin', '*');
-  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.set('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') {
-    res.status(204).send('');
-    return;
-  }
-
+// 3. Core logic function for Fallback LLM (Reusable)
+async function fallbackLLMLogic(req, res) {
   try {
     const { prompt, max_tokens } = req.body;
 
@@ -154,8 +144,6 @@ exports.fallbackLLM = functions.https.onRequest(async (req, res) => {
 
     // Using a fast, free conversational model hosted on HuggingFace
     const MODEL = 'TinyLlama/TinyLlama-1.1B-Chat-v1.0';
-    // Provide a default HF token if none exists in env for demo out-of-box (Though HF tokens should be secure)
-    // NOTE: Free tier inference API does not inherently *require* a token for tiny models, but rate limits apply.
     const HF_TOKEN = process.env.HF_TOKEN || '';
     const headers = {
       'Content-Type': 'application/json',
@@ -176,21 +164,30 @@ exports.fallbackLLM = functions.https.onRequest(async (req, res) => {
           return_full_text: false
         }
       },
-      { headers: headers }
+      { headers: headers, timeout: 10000 } // Add timeout
     );
 
-    // HF sometimes returns an array of objects
-    let textOut = 'Fallback API error parsing response.';
-    if (Array.isArray(response.data) && response.data[0].generated_text) {
-      textOut = response.data[0].generated_text;
-    } else if (response.data.generated_text) {
-      textOut = response.data.generated_text;
+    let textOut = 'Fallback API error: No response text.';
+    if (response.data) {
+      if (Array.isArray(response.data) && response.data[0] && response.data[0].generated_text) {
+        textOut = response.data[0].generated_text;
+      } else if (response.data.generated_text) {
+        textOut = response.data.generated_text;
+      }
     }
 
-    res.json({ success: true, text: textOut });
+    return res.json({ success: true, text: textOut });
 
   } catch (error) {
     console.error('Fallback LLM Error:', error.response ? error.response.data : error.message);
-    res.status(500).json({ error: 'Failed to generate fallback response' });
+    return res.status(500).json({ error: 'Failed to generate fallback response' });
   }
+}
+
+// Exported Firebase Function
+exports.fallbackLLM = functions.https.onRequest(async (req, res) => {
+  return cors(req, res, () => fallbackLLMLogic(req, res));
 });
+
+// Export logic for Railway Server
+exports.fallbackLLMLogic = fallbackLLMLogic;
