@@ -72,27 +72,22 @@
 
 /* Specific Bento Card Overrides for Dashboard Accuracy */
 .dash-card {
-    background: #0D1117;
-    /* Deep exact dark from reference */
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    /* Very subtle border */
+    background: var(--color-abyss);
+    border: var(--glass-border);
     border-radius: 16px;
     padding: 1.5rem;
     box-shadow: none;
-    /* Removing heavy shadow for flat premium look */
 }
 
 .dash-card:hover {
     transform: none;
-    /* Reference is stable */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: var(--glass-shadow);
+    border-color: var(--color-cyan);
 }
 
 .card-title {
     font-family: 'Inter', sans-serif;
-    color: #8B949E;
-    /* Ghosted text color */
+    color: var(--text-secondary);
     font-size: 0.85rem;
     font-weight: 600;
     letter-spacing: 1px;
@@ -110,13 +105,13 @@
     font-family: 'Outfit', sans-serif;
     font-size: 3rem;
     font-weight: 700;
-    color: #F0F6FC;
+    color: var(--text-primary);
     line-height: 1;
 }
 
 .value-display .unit {
     font-family: 'Inter', sans-serif;
-    color: #8B949E;
+    color: var(--text-muted);
     font-size: 1rem;
     font-weight: 500;
 }
@@ -153,8 +148,7 @@
 }
 
 .prediction-item {
-    background: #010409;
-    /* Darker inset */
+    background: var(--color-void);
     border-radius: 12px;
     padding: 1rem;
     display: flex;
@@ -163,12 +157,12 @@
 }
 
 .prediction-item span:first-child {
-    color: #8B949E;
+    color: var(--text-secondary);
     font-size: 0.8rem;
 }
 
 .prediction-item span:last-child {
-    color: #F0F6FC;
+    color: var(--text-primary);
     font-size: 1.2rem;
     font-weight: 600;
     font-family: 'Outfit', sans-serif;
@@ -184,7 +178,9 @@
 .chart-container-md {
     height: 200px;
     width: 100%;
-}/* --- ECO-SYSTEM ANALYSIS --- */
+}
+
+/* --- ECO-SYSTEM ANALYSIS --- */
 .analysis-content-modern {
     display: flex;
     flex-direction: column;
@@ -216,6 +212,7 @@
 .align-self-start {
     align-self: flex-start;
 }
+
 .margin-t-auto {
     margin-top: auto;
 }
@@ -246,7 +243,7 @@
     font-size: 2.5rem;
     font-weight: 700;
     font-family: var(--font-display);
-    color: #F0F6FC;
+    color: var(--text-primary);
     line-height: 1;
 }
 

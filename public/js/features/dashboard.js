@@ -92,17 +92,38 @@ window.addEventListener('load', function () {
   }
 
   try {
-    db = firebase.database();
-    console.log('Firebase database initialized');
+    if (window.firebaseDB) {
+      db = window.firebaseDB;
+      console.log('Firebase database initialized');
+    } else {
+      console.log('Firebase DB module inactive, skipping DB hook');
+    }
   } catch (error) {
-    console.error('Firebase initialization error:', error);
-    showError('Firebase init failed. Using simulation.');
+    console.error('Firebase DB hook error:', error);
+    showError('Firebase DB hook failed. Using simulation.');
     startSimulationMode();
     return;
   }
 
   initializeCharts();
   initializeDashboard();
+
+  // Make the Connection Status Pill clickable to toggle Simulation Mode
+  const connectionPill = document.getElementById('connection-status');
+  if (connectionPill) {
+    connectionPill.style.cursor = 'pointer';
+    connectionPill.title = "Click to Toggle Simulation Mode";
+    connectionPill.addEventListener('click', () => {
+      if (isSimulationMode) {
+        console.log("Exiting Simulation Mode... Reconnecting.");
+        window.location.reload();
+      } else {
+        console.log("Manual override: Launching Simulation Mode.");
+        if (sensorLatestRef) sensorLatestRef.off();
+        startSimulationMode();
+      }
+    });
+  }
 
   // Fallback timeout removed to ensure we wait for real DB data
   setTimeout(() => {
@@ -306,6 +327,12 @@ function createChartOptions() {
 
 
 function initializeDashboard() {
+  if (!db) {
+    console.log('No Firebase DB provisioned. Launching Simulation Mode.');
+    startSimulationMode();
+    return;
+  }
+
   try {
     sensorLatestRef = db.ref('sensors/latest');
     sensorLatestRef.on('value', handleLatestData, handleError);
@@ -675,11 +702,12 @@ function startSimulationMode() {
 }
 
 function generateSimulatedData() {
+  // Realistic River Simulation (Very slow, minor fluctuations)
   return {
-    temperature: Math.max(15, Math.min(35, lastSimValues.temperature += (Math.random() - 0.5) * 0.5)).toFixed(1),
-    pH: Math.max(6.0, Math.min(8.5, lastSimValues.pH += (Math.random() - 0.5) * 0.1)).toFixed(2),
-    turbidity: Math.max(0.0, Math.min(10.0, lastSimValues.turbidity += (Math.random() - 0.5) * 0.5)).toFixed(2),
-    dissolvedOxygen: Math.max(4.0, Math.min(10.0, lastSimValues.dissolvedOxygen += (Math.random() - 0.5) * 0.2)).toFixed(2),
+    temperature: Math.max(15, Math.min(35, lastSimValues.temperature += (Math.random() - 0.5) * 0.05)).toFixed(2),
+    pH: Math.max(6.5, Math.min(8.0, lastSimValues.pH += (Math.random() - 0.5) * 0.02)).toFixed(2),
+    turbidity: Math.max(0.0, Math.min(10.0, lastSimValues.turbidity += (Math.random() - 0.5) * 0.1)).toFixed(2),
+    dissolvedOxygen: Math.max(4.0, Math.min(10.0, lastSimValues.dissolvedOxygen += (Math.random() - 0.5) * 0.05)).toFixed(2),
     timestamp: Date.now()
   };
 }
