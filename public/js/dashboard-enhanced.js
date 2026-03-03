@@ -24,6 +24,7 @@ const lastValues = {
   temperature: '--',
   ph: '--',
   turbidity: '--',
+  dissolvedOxygen: '--',
   dissolvedOxygen: '--'
 };
 
@@ -44,40 +45,10 @@ const mlElements = {
 
 // Simulation state
 let isSimulationMode = false;
-let lastSimValues = {
-  temperature: 25.0,
-  pH: 7.0,
-  turbidity: 3.5,
-  dissolvedOxygen: 7.5
-};
-
-function linearRegression(y) {
-  const n = y.length;
-  if (n === 0) return { slope: 0, intercept: 0 };
-  let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
-  for (let i = 0; i < n; i++) {
-    sumX += i;
-    sumY += y[i];
-    sumXY += i * y[i];
-    sumXX += i * i;
-  }
-  const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-  const intercept = (sumY - slope * sumX) / n;
-  return { slope, intercept };
-}
 
 // Firebase reference
 let db = null;
 let sensorLatestRef = null;
-
-// Global data buffer for periodic updates
-let currentDisplayData = {
-  temperature: 25.0,
-  pH: 7.0,
-  turbidity: 3.5,
-  dissolvedOxygen: 7.5,
-  timestamp: Date.now()
-};
 
 // Normal ranges for highlighting
 const normalRanges = {
@@ -115,9 +86,13 @@ window.addEventListener('load', function () {
   initializeCharts();
   initializeDashboard();
 
-  // Fallback timeout removed to ensure we wait for real DB data
+  // Fallback if no data received
   setTimeout(() => {
-    // Force Analysis Check after 4 seconds regardless of real data presence
+    if (lastValues.temperature === '--') {
+      console.log('No real data received yet, starting simulation mode');
+      startSimulationMode();
+    }
+    // Force Analysis Check after 4 seconds regardless of mode
     if (!window.hasInitialAnalysis && window.getWaterHealthAnalysis) {
       console.log("Forcing initial analysis check...");
       refreshAnalysis(lastValues);
@@ -318,15 +293,9 @@ function createChartOptions() {
 
 function initializeDashboard() {
   try {
-    sensorLatestRef = db.ref('sensors/latest');
+    sensorLatestRef = db.ref('BlueSentinel');
     sensorLatestRef.on('value', handleLatestData, handleError);
     console.log('Firebase listeners initialized');
-
-    // Start the global 3-second refresh loop
-    startRefreshLoop();
-
-    // Check for initial connection
-    checkConnectionStatus();
   } catch (error) {
     console.error('Error initializing dashboard:', error);
     showError('Initialization failed. Using simulation.');
@@ -334,90 +303,41 @@ function initializeDashboard() {
   }
 }
 
-function startRefreshLoop() {
-  console.log('Starting 3-second dashboard refresh loop');
-  setInterval(() => {
-    // If we're in simulation mode OR if we just want to ensure 
-    // the graph moves even with static data, we call the update here.
-
-    if (isSimulationMode) {
-      currentDisplayData = generateSimulatedData();
-    }
-
-    // Update UI elements every 3 seconds regardless of data source
-    updateSensorCards(currentDisplayData);
-    updateMLIndicators();
-    updateAllCharts(currentDisplayData);
-
-  }, 3000);
-}
-
 function handleLatestData(snapshot) {
   const data = snapshot.val();
 
   if (data) {
-    // Determine if data has valid keys (Temp, pH, Turbidity)
-    const hasRealData = data.temperature !== undefined || data.temp !== undefined || data.pH !== undefined || data.ph !== undefined || data.turbidity !== undefined || data.turb !== undefined;
-
-    if (hasRealData) {
-      console.log("Real-time data received from BlueSentinel Grid");
-
-      // Clear any waiting timeout
-      if (window.connectionTimeout) {
-        clearTimeout(window.connectionTimeout);
-        window.connectionTimeout = null;
-      }
-
-      if (isSimulationMode) {
-        console.log("Disabling simulation mode - Live data detected");
-        isSimulationMode = false;
-      }
-      currentDisplayData = {
-        temperature: parseFloat(data.temperature || data.temp || data.t || lastSimValues.temperature).toFixed(1),
-        pH: parseFloat(data.pH || data.ph || lastSimValues.pH).toFixed(2),
-        turbidity: parseFloat(data.turbidity || data.turb || data.ntu || lastSimValues.turbidity).toFixed(2),
-        dissolvedOxygen: parseFloat(data.dissolvedOxygen || data.do || lastSimValues.dissolvedOxygen).toFixed(2),
+    let enrichedData;
+    if (data.temperature !== undefined || data.ph !== undefined) {
+      enrichedData = {
+        temperature: data.temperature || (20 + Math.random() * 15).toFixed(1),
+        pH: data.pH || data.ph || (6.5 + Math.random() * 2).toFixed(2),
+        turbidity: data.turbidity || (2.0 + Math.random() * 8).toFixed(2),
+        dissolvedOxygen: data.dissolvedOxygen || (6.0 + Math.random() * 6).toFixed(2),
+        dissolvedOxygen: data.dissolvedOxygen || (6.0 + Math.random() * 6).toFixed(2),
         timestamp: data.timestamp || Date.now()
       };
-
-      // Sync simulation base to reality
-      lastSimValues.temperature = parseFloat(currentDisplayData.temperature);
-      lastSimValues.pH = parseFloat(currentDisplayData.pH);
-      lastSimValues.turbidity = parseFloat(currentDisplayData.turbidity);
-      lastSimValues.dissolvedOxygen = parseFloat(currentDisplayData.dissolvedOxygen);
-
-      const connStatus = document.getElementById('connection-status');
-      if (connStatus) {
-        connStatus.innerHTML = '<span class="pulse-dot"></span><span>Live Grid</span>';
-        connStatus.className = 'status-pill status-normal';
-      }
-
-      // We don't call updateSensorCards/updateAllCharts here anymore.
-      // The refresh loop will pick up these new values within 3 seconds.
-
     } else {
-      console.log("No real data detected in snapshot, remaining in current mode.");
+      enrichedData = generateSimulatedData();
     }
+
+    updateSensorCards(enrichedData);
+    updateMLIndicators();
+    updateAllCharts(enrichedData);
+  } else {
+    // No data yet
+    const sim = generateSimulatedData();
+    updateSensorCards(sim);
+    updateMLIndicators();
+    updateAllCharts(sim);
   }
-}
-
-// Global variable for connection timeout
-window.connectionTimeout = null;
-
-function checkConnectionStatus() {
-  // If no data received after 5 seconds, switch to simulation to keep dashboard alive
-  window.connectionTimeout = setTimeout(() => {
-    if (!isSimulationMode) {
-      console.warn("No live data received within timeout. Switching to simulation.");
-      startSimulationMode();
-    }
-  }, 5000);
 }
 
 function updateSensorCards(data) {
   updateCard(cardElements.temperature, data.temperature, normalRanges.temperature, 'temperature', 1);
   updateCard(cardElements.ph, (data.pH || data.ph), normalRanges.ph, 'ph', 2);
   updateCard(cardElements.turbidity, data.turbidity, normalRanges.turbidity, 'turbidity', 2);
+  updateCard(cardElements.dissolvedOxygen, data.dissolvedOxygen, normalRanges.dissolvedOxygen, 'dissolvedOxygen', 2);
   updateCard(cardElements.dissolvedOxygen, data.dissolvedOxygen, normalRanges.dissolvedOxygen, 'dissolvedOxygen', 2);
 
   // Salinity card replaced by Analysis
@@ -626,70 +546,59 @@ function openSolution(cardElement, value, range) {
 }
 
 function updateAllCharts(data) {
-  const timestamp = Date.now(); // Always use current time to ensure graph advances
-  const timeLabel = new Date(timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const timestamp = data.timestamp || Date.now();
+  const timeLabel = new Date(timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
-  // If this exact second already exists, skip (debounce)
-  if (chartData.labels[chartData.labels.length - 1] === timeLabel) return;
+  if (!chartData.labels.includes(timeLabel)) {
+    chartData.labels.push(timeLabel);
+    chartData.temperature.push(parseFloat(data.temperature) || 0);
+    chartData.ph.push(parseFloat(data.pH || data.ph) || 7);
+    chartData.ph.push(parseFloat(data.pH || data.ph) || 7);
+    chartData.turbidity.push(parseFloat(data.turbidity) || 0);
+    chartData.dissolvedOxygen.push(parseFloat(data.dissolvedOxygen) || 0);
 
-  chartData.labels.push(timeLabel);
-  chartData.temperature.push(parseFloat(data.temperature) || 0);
-  chartData.ph.push(parseFloat(data.pH || data.ph) || 7);
-  // Fixed double ph push bug found in previous code
-  chartData.turbidity.push(parseFloat(data.turbidity) || 0);
-  chartData.dissolvedOxygen.push(parseFloat(data.dissolvedOxygen) || 0);
+    // Simulate Quality Index (0-100) based on potable ranges
+    // Ideal: pH 7, Turbidity < 5
+    let score = 100;
+    score -= Math.abs((data.pH || 7) - 7) * 10; // pH penalty
+    score -= (data.turbidity || 0) * 5; // Turbidity penalty
+    score = Math.max(0, Math.min(100, score));
 
-  // Simulate Quality Index (0-100) based on potable ranges
-  // Ideal: pH 7, Turbidity < 5
-  let score = 100;
-  score -= Math.abs((data.pH || 7) - 7) * 10; // pH penalty
-  let turb = data.turbidity || 0;
-  if (turb >= 50) score -= 40; // Very dirty, chaos
-  else if (turb >= 5) score -= 20; // Slightly muddy
-  else if (turb >= 1) score -= 5; // Acceptable
-  // 0-1 is ultra clear, 0 penalty
+    chartData.projection.push(score);
+    chartData.trainingBaseline.push(90 + Math.random() * 5); // Randomized "Perfect" baseline from training data
 
-  score = Math.max(0, Math.min(100, score));
-
-  chartData.projection.push(score);
-  chartData.trainingBaseline.push(90 + Math.random() * 5); // Randomized "Perfect" baseline from training data
-
-  if (chartData.labels.length > maxDataPoints) {
-    chartData.labels.shift();
-    chartData.temperature.shift();
-    chartData.ph.shift();
-    chartData.turbidity.shift();
-    chartData.dissolvedOxygen.shift();
-    chartData.projection.shift();
-    chartData.trainingBaseline.shift();
-  }
-
-  if (window.tempChart) window.tempChart.update('none');
-  if (window.phChart) window.phChart.update('none');
-  if (window.turbidityChart) window.turbidityChart.update('none');
-  if (window.doChart) window.doChart.update('none');
-
-  if (window.aiChart) {
-    // Update Prediction Line (Future)
-    // Linear Regression based on history
-    const pastScores = chartData.projection;
-    const { slope, intercept } = linearRegression(pastScores);
-
-    const lastScore = pastScores[pastScores.length - 1] || 100;
-    const predictedData = [];
-    // Fill nulls for past
-    for (let i = 0; i < chartData.labels.length - 1; i++) predictedData.push(null);
-    predictedData.push(lastScore);
-
-    const startIdx = pastScores.length - 1;
-    for (let i = 1; i <= 10; i++) {
-      let p = slope * (startIdx + i) + intercept;
-      // Add a tiny bit of noise, but trend follows LR
-      predictedData.push(Math.max(0, Math.min(100, p + (Math.random() - 0.5) * 1.5)));
+    if (chartData.labels.length > maxDataPoints) {
+      chartData.labels.shift();
+      chartData.temperature.shift();
+      chartData.ph.shift();
+      chartData.ph.shift();
+      chartData.turbidity.shift();
+      chartData.dissolvedOxygen.shift();
+      chartData.projection.shift();
+      chartData.trainingBaseline.shift();
     }
 
-    window.aiChart.data.datasets[2].data = predictedData;
-    window.aiChart.update('none');
+    if (window.tempChart) window.tempChart.update('none');
+    if (window.phChart) window.phChart.update('none');
+    if (window.turbidityChart) window.turbidityChart.update('none');
+    if (window.doChart) window.doChart.update('none');
+
+    if (window.aiChart) {
+      // Update Prediction Line (Future)
+      // Simple linear regression + noise for demo
+      const lastScore = score;
+      const predictedData = [];
+      // Fill nulls for past
+      for (let i = 0; i < chartData.labels.length - 1; i++) predictedData.push(null);
+      predictedData.push(lastScore);
+
+      for (let i = 1; i <= 10; i++) {
+        predictedData.push(lastScore + (Math.random() - 0.5) * 5);
+      }
+
+      window.aiChart.data.datasets[2].data = predictedData;
+      window.aiChart.update('none');
+    }
   }
 }
 
@@ -703,21 +612,24 @@ function updateMLIndicators() {
 function startSimulationMode() {
   if (isSimulationMode) return;
   isSimulationMode = true;
-  console.log('Simulation mode active - Refresh loop handles generation');
+  console.log('Starting simulation mode');
 
-  const connStatus = document.getElementById('connection-status');
-  if (connStatus) {
-    connStatus.innerHTML = '<span>Simulation</span>';
-    connStatus.className = 'status-pill status-warning';
-  }
+  setInterval(() => {
+    const data = generateSimulatedData();
+    updateSensorCards(data);
+    updateMLIndicators();
+    updateAllCharts(data);
+  }, 3000);
 }
 
 function generateSimulatedData() {
   return {
-    temperature: Math.max(15, Math.min(35, lastSimValues.temperature += (Math.random() - 0.5) * 0.5)).toFixed(1),
-    pH: Math.max(6.0, Math.min(8.5, lastSimValues.pH += (Math.random() - 0.5) * 0.1)).toFixed(2),
-    turbidity: Math.max(0.0, Math.min(10.0, lastSimValues.turbidity += (Math.random() - 0.5) * 0.5)).toFixed(2),
-    dissolvedOxygen: Math.max(4.0, Math.min(10.0, lastSimValues.dissolvedOxygen += (Math.random() - 0.5) * 0.2)).toFixed(2),
+    // Updated to match Kaggle Dataset Distribution
+    // Ph Mean ~7.08, Turbidity Mean ~3.9
+    temperature: (22 + Math.random() * 5).toFixed(1),
+    pH: (7.08 + (Math.random() - 0.5) * 1.5).toFixed(2), // 6.3 - 7.8 range common
+    turbidity: (3.9 + (Math.random() - 0.5) * 2).toFixed(2), // 2.9 - 4.9 common
+    dissolvedOxygen: (7.0 + Math.random() * 2).toFixed(2),
     timestamp: Date.now()
   };
 }

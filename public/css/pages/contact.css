@@ -1,0 +1,179 @@
+/* Custom Styles for Contact Form matching Landing Theme */
+.contact-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 3rem;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 255, 212, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.form-group {
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.8rem;
+    color: #00FFD4;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+    width: 100%;
+    padding: 1.2rem;
+    background: rgba(10, 25, 47, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: #D2DDFF;
+    font-family: inherit;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    border-color: #00FFD4;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+    background: rgba(10, 25, 47, 0.9);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+/* Member Card Specifics */
+.member-avatar img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid #00FFD4;
+    object-fit: cover;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+}
+
+.social-links {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.social-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 255, 212, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00FFD4;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.social-link:hover {
+    background: #00FFD4;
+    color: #050208;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+}
+
+/* Timeline / RoadMap Styles */
+.roadmap-container {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+.roadmap-item {
+    background: rgba(84, 101, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border-left: 4px solid #00FFD4;
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.roadmap-title {
+    color: #00FFD4;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.roadmap-status {
+    font-size: 0.8rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(0, 255, 212, 0.2);
+    color: #00FFD4;
+}
+
+/* Biblio Styles */
+.bib-list {
+    list-style: none;
+    text-align: left;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.bib-item {
+    background: rgba(5, 2, 8, 0.6);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.bib-icon {
+    color: #5465FF;
+    font-size: 1.2rem;
+    margin-top: 2px;
+}
+
+/* TEAM SECTION OVERRIDE: 5 Columns */
+@media (min-width: 1024px) {
+    #team .cards {
+        grid-template-columns: repeat(5, 1fr) !important;
+        gap: 1rem;
+    }
+
+    #team .card {
+        padding: 1.5rem 1rem;
+        /* Compact padding */
+    }
+
+    #team .member-avatar img {
+        width: 100px;
+        /* Slightly smaller to fit */
+        height: 100px;
+    }
+}
+@keyframes float {
+    0% {
+        transform: translateY(0px) scale(1);
+    }
+    50% {
+        transform: translateY(-20px) scale(1.05);
+    }
+    100% {
+        transform: translateY(0px) scale(1);
+    }
+}
