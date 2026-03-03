@@ -1,4 +1,4 @@
-# BlueSentinel Firmware (V2.1)
+# BlueSentinel Firmware 
 
 Firmware for the ESP32-based environmental monitoring node. All credentials are securely stored in `secrets.h`.
 

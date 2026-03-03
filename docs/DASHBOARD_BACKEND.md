@@ -1,8 +1,8 @@
-# Dashboard Backend Integration Guide (V2.1 BlueSentinel Edition)
+# Dashboard Backend Integration Guide 
 
 ## Overview
 
-The BlueSentinel dashboard (V2.1) uses a hybrid approach:
+The BlueSentinel dashboard uses a hybrid approach:
 
 1. **Firebase Realtime Database**: For live sensor data (5s updates).
 2. **Google Gemini API**: For on-demand ecosystem analysis and remediation advice.
@@ -27,13 +27,13 @@ graph TD
 | File | Purpose |
 | :--- | :--- |
 | `public/dashboard.html` | Semantically structured dashboard (Bento Grid) |
-| `public/js/dashboard-enhanced.js` | **Main Logic**: Charts, Firebase listeners, & Gemini integration |
+| `public/js/dashboard.js` | **Main Logic**: Charts, Firebase listeners, & Gemini integration |
 | `public/js/core/firebase-init.js` | Firebase configuration |
 | `public/js/ai-chatbot.js` | SentinelBuddy AI Assistant logic |
 
 ---
 
-## Backend Logic (`dashboard-enhanced.js`)
+## Backend Logic (`dashboard.js`)
 
 ### 1. Real-Time Listeners
 
@@ -108,7 +108,7 @@ Check for:
 
 - `Firebase initialized`
 - `Gemini API Key valid`
-- `Incoming data: { ... }`
+- `Incoming data: {... }`
 
 ---
 

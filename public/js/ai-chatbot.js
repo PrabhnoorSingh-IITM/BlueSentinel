@@ -100,10 +100,16 @@ async function processUserMessage(message) {
         return;
     }
 
-    // 2. Try Gemini API (Using stable gemini-pro)
+    // 2. Try Gemini API
     try {
-        const apiKey = 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g';
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
+        let apiKey = localStorage.getItem('gemini_api_key');
+        if (!apiKey) {
+            apiKey = prompt("Please enter your Gemini API Key for full AI Chatbot access (it will be saved locally):");
+            if (apiKey) localStorage.setItem('gemini_api_key', apiKey);
+        }
+        if (!apiKey) throw new Error('No API Key provided by user.');
+
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -130,16 +136,39 @@ async function processUserMessage(message) {
         addAIMessage(aiText);
 
     } catch (error) {
-        console.warn('AI API failed, using fallback:', error);
+        console.warn('Gemini API failed, attempting Fallback LLM:', error);
+
+        try {
+            // Attempt to hit our Railway Fallback API
+            const fallbackResponse = await fetch('https://bluesentinel-production.up.railway.app/fallbackLLM', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: message, max_tokens: 150 })
+            });
+            const fbData = await fallbackResponse.json();
+
+            if (fallbackResponse.ok && fbData.success) {
+                hideTyping();
+                addAIMessage(`[Fallback Model]: ${fbData.text}`);
+                return;
+            }
+        } catch (fallbackError) {
+            console.warn('Fallback API also failed:', fallbackError);
+        }
+
         hideTyping();
-        // 3. General Fallback
-        addAIMessage("I'm having trouble connecting to the global network, but I can tell you that all systems are currently monitoring parameters within expected ranges. Try asking about specific sensors like 'Temperature' or 'pH'.");
+        // 3. General Offline Fallback
+        addAIMessage("Both Primary and Fallback AI systems are currently unavailable. Try asking about specific sensors like 'Temperature' or 'pH' to use the offline expert system.");
     }
 }
 
 // Exposed function for Dashboard Analysis (JSON Response)
 async function getWaterHealthAnalysis(sensorData) {
-    const apiKey = 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g';
+    let apiKey = localStorage.getItem('gemini_api_key');
+    if (!apiKey) {
+        apiKey = prompt("Please enter your Gemini API Key for the Dashboard AI Analysis (it will be saved locally):");
+        if (apiKey) localStorage.setItem('gemini_api_key', apiKey);
+    }
     const cacheKey = 'water_health_analysis_cache';
     const cacheDuration = 15 * 60 * 1000; // 15 minutes
 
@@ -176,14 +205,19 @@ async function getWaterHealthAnalysis(sensorData) {
         const prompt = `
         Act as a marine biologist and data analyst. Analyze this sensor data:
         - Real Sensors: Temperature: ${sensorData.temperature}°C, pH: ${sensorData.pH}.
-        - Broken/Ignored Sensors: Turbidity (Value: ${sensorData.turbidity} NTU - DO NOT USE FOR SCORE).
+        - Active Sensors: Turbidity (Value: ${sensorData.turbidity} NTU - Include in score calculation based on NTU ranges).
         - Simulated/Estimated: Dissolved Oxygen: ${sensorData.dissolvedOxygen} mg/L, Nitrogen: ${sensorData.nitrogen || 'N/A'}, Ammonia: ${sensorData.ammonia || 'N/A'}, Lead: ${sensorData.lead || 'N/A'}, Sodium: ${sensorData.sodium || 'N/A'}.
 
         Task:
-        1. Calculate a "Water Health Score" out of 100 based on these values (potability standards), IGNORING Turbidity.
-        2. Provide a 2-sentence summary of the ecosystem health, mentioning that Turbidity data is currently unavailable/ignored.
+        1. Calculate a "Water Health Score" out of 100 based on all values (potability standards).
+           CRITICAL TURBIDITY SPECTRUM (DO NOT DEVIATE):
+           - 0 to 1 NTU: Ultra clear water (distilled-level clean)
+           - 1 to <5 NTU: Acceptable drinking water (WHO guideline is below 5)
+           - 5 to 50 NTU: Slightly muddy / surface water
+           - 50 to 1000+ NTU: Very dirty, stormwater, sewage-level chaos
+        2. Provide a 2-sentence summary of the ecosystem health.
         3. Determine a status (Excellent, Good, Warning, Critical).
-        4. Provide specific chemical/physical treatment advice for any out-of-range metrics (e.g., "Add Sodium Carbonate to increase pH", "Increase aeration for low DO").
+        4. Provide specific chemical/physical treatment advice for any out-of-range metrics (e.g., "Add Sodium Carbonate to increase pH", "Deploy settlement tanks for high Turbidity").
 
         Return ONLY a JSON object in this format:
         {
@@ -330,8 +364,17 @@ function calculateLocalFallback(data) {
         penalties.push('Nitrogen levels elevated');
     }
 
-    // Turbidity Ignored as per User Request
-
+    // 5. Turbidity Penalty (Spectrum)
+    let turb = parseFloat(data.turbidity) || 0;
+    if (turb >= 50) {
+        score -= 40; // Very dirty
+        penalties.push('Extremely High Turbidity (>=50 NTU)');
+    } else if (turb >= 5) {
+        score -= 20; // Slightly muddy
+        penalties.push('High Turbidity (>=5 NTU)');
+    } else if (turb >= 1) {
+        score -= 5; // Acceptable but not ultra clear
+    }
     score = Math.floor(Math.max(0, Math.min(100, score)));
 
     let status = "Excellent";
@@ -346,7 +389,7 @@ function calculateLocalFallback(data) {
     } else {
         analysis += `All monitored parameters (pH, Temp, DO) are within optimal ranges. `;
     }
-    analysis += `Turbidity sensor is currently bypassed.`;
+    analysis += `Turbidity is ${data.turbidity} NTU. `;
 
     return {
         score: score,
@@ -375,7 +418,7 @@ const expertKnowledge = {
     },
     turbidity: {
         keywords: ['turbidity', 'clear', 'cloudy', 'ntu'],
-        response: "Turbidity is within safe limits. <strong>High Turbidity Solution:</strong> Inspect for sediment runoff or algal blooms. Consider settlement tanks if persistent."
+        response: "<b>Turbidity Spectrum:</b><br/>• 0–1 NTU: Ultra clear<br/>• <5 NTU: Acceptable<br/>• 5–50 NTU: Slightly muddy<br/>• &ge;50 NTU: Very dirty.<br/><strong>Solution:</strong> If &ge;5 NTU, inspect for sediment runoff or algal blooms. Deploy settlement tanks."
     },
     oxygen: {
         keywords: ['oxygen', 'do', 'breath', 'hypoxia'],

@@ -35,7 +35,7 @@ X_imputed = imputer.fit_transform(X)
 X_poly = poly.fit_transform(X_imputed)
 print(f"New feature count: {X_poly.shape[1]}")
 
-scaler = StandardScaler()
+scaler = StandardScaler
 X_scaled = scaler.fit_transform(X_poly)
 
 # 2. SMOTE (ADASYN sometimes better for decision boundaries)

@@ -1,4 +1,4 @@
-# API Specification (V2.1)
+# API Specification 
 
 ## Overview
 

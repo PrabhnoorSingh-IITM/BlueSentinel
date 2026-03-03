@@ -24,7 +24,7 @@ X = df.drop('Potability', axis=1)
 y = df['Potability']
 
 X_imputed = imputer.fit_transform(X)
-scaler = StandardScaler()
+scaler = StandardScaler
 X_scaled = scaler.fit_transform(X_imputed)
 
 # Split
@@ -52,11 +52,11 @@ param_grids = {
 
 best_model = None
 best_accuracy = 0
-best_model_name = ""
+best_model_name = 
 
 print("Starting training...")
 
-for name, model in models.items():
+for name, model in models.items:
     print(f"Training {name}...")
     grid = GridSearchCV(model, param_grids[name], cv=5, scoring='accuracy', n_jobs=-1)
     grid.fit(X_train, y_train)

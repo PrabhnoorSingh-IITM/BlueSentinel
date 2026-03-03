@@ -2,9 +2,9 @@
 
 ## Frontend Stack
 
-• HTML (separate files for each page)  
-• CSS (modular styling architecture)  
-• JavaScript (vanilla + chart libraries)  
+• HTML (separate files for each page) 
+• CSS (modular styling architecture) 
+• JavaScript (vanilla + chart libraries) 
 • Mobile‑first responsive layouts
 
 ---
@@ -12,9 +12,9 @@
 ## Backend & Cloud Infrastructure
 
 Primary Backend:
-• Firebase Realtime Database  
-• Firebase Firestore (alerts & logs)  
-• Firebase Functions  
+• Firebase Realtime Database 
+• Firebase Firestore (alerts & logs) 
+• Firebase Functions 
 • Firebase Hosting
 
 Scalable Alternative:
@@ -24,21 +24,21 @@ Scalable Alternative:
 
 ## IoT & Embedded Systems
 
-• ESP32 Microcontroller  
-• C++ Firmware (Arduino framework)  
+• ESP32 Microcontroller 
+• C++ Firmware (Arduino framework) 
 • Sensor integrations:
-  - Temperature  
-  - pH  
+  - Temperature 
+  - pH 
   - Turbidity
 
 ---
 
 ## Machine Learning Stack
 
-• Python  
-• Pandas / NumPy  
-• Scikit‑learn  
-• Jupyter Notebooks  
+• Python 
+• Pandas / NumPy 
+• Scikit‑learn 
+• Jupyter Notebooks 
 • CSV datasets
 
 ML outputs simulated environmental indicators.
@@ -47,21 +47,21 @@ ML outputs simulated environmental indicators.
 
 ## APIs & Integrations
 
-• News API (water pollution news)  
+• News API (water pollution news) 
 • Gemini API (AI chatbot)
 
 ---
 
 ## Visualization & UI Libraries
 
-• Chart.js  
+• Chart.js 
 • Custom dashboard components
 
 ---
 
 ## DevOps & Tooling
 
-• GitHub version control  
-• Firebase CLI  
-• Node.js runtime  
+• GitHub version control 
+• Firebase CLI 
+• Node.js runtime 
 • Cloud deployment pipelines

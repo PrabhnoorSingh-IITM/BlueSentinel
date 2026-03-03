@@ -37,7 +37,7 @@ df = pd.read_csv(data_path)
 # 1. Feature Engineering (Basic interactions)
 # Add basic domain-specific ratios if possible, or just interaction terms
 # For now, we'll rely on the models to find interactions, but PolynomialFeatures can help
-# df['ph_turbidity'] = df['ph'] * df['Turbidity']  # Example
+# df['ph_turbidity'] = df['ph'] * df['Turbidity'] # Example
 
 X = df.drop('Potability', axis=1)
 y = df['Potability']

@@ -10,11 +10,11 @@ model = joblib.load("water_potability_model.pkl")
 print("Model loaded successfully")
 
 @app.route("/", methods=["GET"])
-def home():
+def home:
     return "Riventhra ML Backend is running"
 
 @app.route("/predict", methods=["POST"])
-def predict():
+def predict:
     data = request.json
 
     # IMPORTANT: order must match training data
