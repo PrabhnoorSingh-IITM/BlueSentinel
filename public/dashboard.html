@@ -38,105 +38,62 @@
             
             <!-- Cards Container -->
             <div class="cards-container">
-                <div class="card">
-                    <div class="tools">
-                        <div class="circle">
-                            <span class="red box"></span>
-                        </div>
-                        <div class="circle">
-                            <span class="yellow box"></span>
-                        </div>
-                        <div class="circle">
-                            <span class="green box"></span>
-                        </div>
-                    </div>
-                    <div class="card__content">
-                        <h3 class="card-title">Water Temperature</h3>
+                <div class="box">
+                    <span class="title">Water Temperature</span>
+                    <div>
+                        <strong>°C</strong>
                         <div class="card-value" id="temp-value">--</div>
-                        <div class="card-unit">°C</div>
+                        <div class="card-unit">Celsius</div>
                     </div>
                 </div>
 
-                <div class="card">
-                    <div class="tools">
-                        <div class="circle">
-                            <span class="red box"></span>
-                        </div>
-                        <div class="circle">
-                            <span class="yellow box"></span>
-                        </div>
-                        <div class="circle">
-                            <span class="green box"></span>
-                        </div>
-                    </div>
-                    <div class="card__content">
-                        <h3 class="card-title">Water pH</h3>
+                <div class="box">
+                    <span class="title">Water pH</span>
+                    <div>
+                        <strong>pH Level</strong>
                         <div class="card-value" id="ph-value">--</div>
                         <div class="card-unit">pH</div>
                     </div>
                 </div>
 
-                <div class="card">
-                    <div class="tools">
-                        <div class="circle">
-                            <span class="red box"></span>
-                        </div>
-                        <div class="circle">
-                            <span class="yellow box"></span>
-                        </div>
-                        <div class="circle">
-                            <span class="green box"></span>
-                        </div>
-                    </div>
-                    <div class="card__content">
-                        <h3 class="card-title">Turbidity</h3>
+                <div class="box">
+                    <span class="title">Turbidity</span>
+                    <div>
+                        <strong>NTU</strong>
                         <div class="card-value" id="turbidity-value">--</div>
-                        <div class="card-unit">NTU</div>
+                        <div class="card-unit">Clarity</div>
                     </div>
                 </div>
 
-                <div class="card">
-                    <div class="tools">
-                        <div class="circle">
-                            <span class="red box"></span>
-                        </div>
-                        <div class="circle">
-                            <span class="yellow box"></span>
-                        </div>
-                        <div class="circle">
-                            <span class="green box"></span>
-                        </div>
-                    </div>
-                    <div class="card__content">
-                        <h3 class="card-title">Dissolved O₂</h3>
+                <div class="box">
+                    <span class="title">Dissolved O₂</span>
+                    <div>
+                        <strong>mg/L</strong>
                         <div class="card-value" id="do-value">--</div>
-                        <div class="card-unit">mg/L</div>
+                        <div class="card-unit">Oxygen</div>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <span class="title">Salinity</span>
+                    <div>
+                        <strong>PSU</strong>
+                        <div class="card-value" id="salinity-value">--</div>
+                        <div class="card-unit">Salt Level</div>
                     </div>
                 </div>
             </div>
 
             <!-- Large Graph Card -->
             <div class="graph-container">
-                <div class="card card-large">
-                    <div class="tools">
-                        <div class="circle">
-                            <span class="red box"></span>
-                        </div>
-                        <div class="circle">
-                            <span class="yellow box"></span>
-                        </div>
-                        <div class="circle">
-                            <span class="green box"></span>
-                        </div>
-                    </div>
-                    <div class="card__content">
-                        <h3 class="card-title">Live Data Graphs</h3>
-                        <div id="graph-content" class="graph-area">
-                            <canvas id="sensor-chart"></canvas>
-                        </div>
+                <div class="box box-large">
+                    <span class="title">Live Data Graphs</span>
+                    <div id="graph-content" class="graph-area">
+                        <canvas id="sensor-chart"></canvas>
                     </div>
                 </div>
             </div>
+
             
             <nav class="glass-nav">
                     <a class="nav-item active" href="dashboard.html">
