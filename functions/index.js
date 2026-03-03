@@ -1,7 +1,7 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const axios = require('axios');
-const cors = require('cors')({ origin: true });
+const cors = require('cors')({ origin: '*' });
 
 admin.initializeApp();
 

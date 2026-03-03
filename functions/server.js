@@ -4,7 +4,15 @@ const admin = require('firebase-admin');
 const functions = require('./index'); // Import the functions from index.js
 
 const app = express();
-app.use(cors({ origin: true }));
+
+// Very explicit CORS to satisfy browser preflight checks
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    optionsSuccessStatus: 200 // Some legacy browsers choke on 204
+}));
+
 app.use(express.json());
 
 // Mock Firebase request/response for Railway
