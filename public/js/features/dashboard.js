@@ -481,7 +481,7 @@ function updateCard(element, value, range, key, decimals) {
   element.textContent = val;
   lastValues[key] = val; // store for reference if needed
 
-  const card = element.closest('.bento-card') || element.closest('.box');
+  const card = element.closest('.dash-card') || element.closest('.box');
   if (card) {
     highlightNormalRange(card, parseFloat(val), range);
   }

@@ -161,7 +161,7 @@ function updateNewsCards(newsData) {
 
 function createNewsCard(newsData) {
     const card = document.createElement('div');
-    card.className = 'bento-card'; // Changed from 'card' to 'bento-card'
+    card.className = 'dash-card'; // Changed from 'card' to 'dash-card'
     card.style.height = '100%'; // Ensure full height in grid
 
     card.innerHTML = `

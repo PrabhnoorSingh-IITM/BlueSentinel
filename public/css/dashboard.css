@@ -71,7 +71,7 @@
 }
 
 /* Specific Bento Card Overrides for Dashboard Accuracy */
-.bento-card {
+.dash-card {
     background: #0D1117;
     /* Deep exact dark from reference */
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -82,7 +82,7 @@
     /* Removing heavy shadow for flat premium look */
 }
 
-.bento-card:hover {
+.dash-card:hover {
     transform: none;
     /* Reference is stable */
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);

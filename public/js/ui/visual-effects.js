@@ -47,7 +47,7 @@ function initCustomCursor() {
         animateFollower();
 
         // Hover Effects
-        const interactiveElements = document.querySelectorAll('a, button, .bento-card, .nav-item, input, select');
+        const interactiveElements = document.querySelectorAll('a, button, .dash-card, .nav-item, input, select');
 
         interactiveElements.forEach(el => {
             el.addEventListener('mouseenter', () => {
@@ -91,7 +91,7 @@ function initScrollReveal() {
  * 3. Staggered Load for Dashboard Grid
  */
 function initStaggeredLoad() {
-    const cards = document.querySelectorAll('.bento-card');
+    const cards = document.querySelectorAll('.dash-card');
     cards.forEach((card, index) => {
         card.style.opacity = '0';
         card.style.animation = `fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards ${index * 0.1}s`;
