@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>BlueSentinel | Logs</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/global.css">
+        <link rel="stylesheet" href="css/dashboard.css">
+        <link rel="stylesheet" href="css/logs.css">
+        <script src="js/logs.js" defer></script>
+    </head>
+
+    <body>
+        <div class="container">
+        <main>
+            <!-- Logo -->
+            <nav class="navbar">
+                <a href="dashboard.html" class="logo">
+                    <div class="logo-icon">
+                        <img src="./assets/images/logo.png" alt="BlueSentinel logo">
+                    </div>
+                    <div class="logo-text">
+                        <div class="logo-title">BlueSentinel</div>
+                        <div class="logo-subtitle">Ocean Intelligence Platform</div>
+                    </div>
+                </a>
+            </nav>
+            <div class="main-title">Incident Logs</div>
+            
+            <!-- Maps Section -->
+            <div class="maps-section">
+                <div class="map-container">
+                    <h3>Incident Locations</h3>
+                    <div id="incident-map" class="map-placeholder">
+                        <div class="map-marker alert-marker" data-location="19.0760,72.8777">
+                            <span class="marker-label">Mumbai Bay</span>
+                        </div>
+                        <div class="map-marker warning-marker" data-location="12.9716,77.5946">
+                            <span class="marker-label">Bangalore Lake</span>
+                        </div>
+                        <div class="map-marker normal-marker" data-location="28.6139,77.2090">
+                            <span class="marker-label">Delhi River</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Log Entries -->
+            <div class="logs-container">
+                <div class="log-entry alert">
+                    <div class="log-header">
+                        <span class="log-time">12:39am</span>
+                        <span class="log-type alert">pH Alert</span>
+                        <span class="log-location">Mumbai Bay</span>
+                    </div>
+                    <div class="log-details">
+                        <p>pH level dropped to 5.2 - below safe threshold</p>
+                        <div class="log-actions">
+                            <button class="btn-acknowledge">Acknowledge</button>
+                            <button class="btn-investigate">Investigate</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="log-entry warning">
+                    <div class="log-header">
+                        <span class="log-time">11:45pm</span>
+                        <span class="log-type warning">Temperature</span>
+                        <span class="log-location">Bangalore Lake</span>
+                    </div>
+                    <div class="log-details">
+                        <p>Water temperature increased to 32°C - above optimal range</p>
+                        <div class="log-actions">
+                            <button class="btn-acknowledge">Acknowledge</button>
+                            <button class="btn-investigate">Investigate</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="log-entry normal">
+                    <div class="log-header">
+                        <span class="log-time">10:30pm</span>
+                        <span class="log-type normal">Maintenance</span>
+                        <span class="log-location">Delhi River</span>
+                    </div>
+                    <div class="log-details">
+                        <p>Sensor calibration completed successfully</p>
+                        <div class="log-actions">
+                            <button class="btn-acknowledge">Acknowledge</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="log-entry alert">
+                    <div class="log-header">
+                        <span class="log-time">9:15pm</span>
+                        <span class="log-type alert">Turbidity</span>
+                        <span class="log-location">Chennai Coast</span>
+                    </div>
+                    <div class="log-details">
+                        <p>Turbidity spike detected - possible sediment runoff</p>
+                        <div class="log-actions">
+                            <button class="btn-acknowledge">Acknowledge</button>
+                            <button class="btn-investigate">Investigate</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="log-entry normal">
+                    <div class="log-header">
+                        <span class="log-time">8:00pm</span>
+                        <span class="log-type normal">Health Score</span>
+                        <span class="log-location">Kolkata Port</span>
+                    </div>
+                    <div class="log-details">
+                        <p>Marine health score improved to 85/100</p>
+                        <div class="log-actions">
+                            <button class="btn-acknowledge">Acknowledge</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="glass-nav">
+                    <a class="nav-item" href="dashboard.html">
+                        <span class="icon"><img src="./assets/icons/estate.svg" alt="Dashboard"></span>
+                        <span class="label">Dashboard</span>
+                    </a>
+                        
+                    <a class="nav-item" href="news.html">
+                        <span class="icon"><img src="./assets/icons/newspaper.svg" alt="News"></span>
+                        <span class="label">News</span>
+                    </a>
+                        
+                    <a class="nav-item active" href="logs.html">
+                        <span class="icon"><img src="./assets/icons/document-signed.svg" alt="Logs"></span>
+                        <span class="label">Logs</span>
+                    </a>
+
+                    <a class="nav-item" href="profile.html">
+                        <span class="icon"><img src="./assets/icons/user.svg" alt="Profile"></span>
+                        <span class="label">Profile</span>
+                    </a> 
+        </main>
+        </div>
+    </body>
+</html>
