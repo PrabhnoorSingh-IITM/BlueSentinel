@@ -102,18 +102,13 @@ async function processUserMessage(message) {
 
     // 2. Try Gemini API
     try {
-        let apiKey = localStorage.getItem('gemini_api_key') || 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo';
-        if (apiKey === 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo' || apiKey === 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g') {
-            // Ensure it's saved if the user hasn't provided their own yet, using the more likely active key
-            apiKey = 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo';
-            localStorage.setItem('gemini_api_key', apiKey);
-        }
+        let apiKey = localStorage.getItem('gemini_api_key') || 'AIzaSyDVX49VBeN3MZ5CvrrjJcFe8LrmrTJlUgg';
 
-        const response = await fetch(`https://us-central1-gen-lang-client-0986945251.cloudfunctions.net/geminiProxy`, {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+        const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                model: 'gemini-2.0-flash',
                 contents: [{
                     parts: [{
                         text: `You are SentinelBuddy, an expert river ecologist. 
@@ -266,13 +261,15 @@ async function getWaterHealthAnalysis(sensorData) {
         const modelToUse = window.cachedGeminiModel || 'gemini-2.0-flash'; // Updated default
 
         try {
-            console.log(`Generating content using: ${modelToUse} via proxy`);
-            const response = await fetch(`https://us-central1-gen-lang-client-0986945251.cloudfunctions.net/geminiProxy`, {
+            console.log(`Generating content using: ${modelToUse} directly via Gemini API`);
+            const apiKey = 'AIzaSyDVX49VBeN3MZ5CvrrjJcFe8LrmrTJlUgg';
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelToUse}:generateContent?key=${apiKey}`;
+
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    model: modelToUse,
-                    prompt: prompt
+                    contents: [{ parts: [{ text: prompt }] }]
                 })
             });
 

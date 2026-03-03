@@ -8,6 +8,10 @@
 }
 
 .chatbot-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
   background: #8A2BE2;
   /* Exact purple from reference (BlueViolet) */
   color: #FFFFFF;

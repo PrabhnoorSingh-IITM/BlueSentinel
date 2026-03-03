@@ -199,7 +199,7 @@ exports.fallbackLLM = functions.https.onRequest((req, res) => {
 exports.fallbackLLMLogic = fallbackLLMLogic;
 // 4. Gemini Proxy (Hides API Key and handles discovery)
 exports.geminiProxy = functions.https.onRequest((req, res) => {
-  cors(req, res, async () => {
+  return cors(req, res, async () => {
     try {
       const { model, prompt, contents } = req.body;
       const apiKey = 'AIzaSyDVX49VBeN3MZ5CvrrjJcFe8LrmrTJlUgg';
