@@ -87,7 +87,7 @@ exports.calculateHealthScore = functions.https.onRequest(async (req, res) => {
 // 1. Get News Proxy (Hides API Key)
 exports.getNews = functions.https.onCall(async (data, context) => {
   const apiKey = '74eaee257214422fb35ff737068795a9'; // In prod, use functions.config().news.key
-  const query = 'ocean pollution OR marine conservation OR coral reef';
+  const query = 'river pollution OR freshwater monitoring OR water quality analytics';
   const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&apiKey=${apiKey}&pageSize=6&sortBy=publishedAt&language=en`;
 
   try {
@@ -152,7 +152,7 @@ async function fallbackLLMLogic(req, res) {
       headers['Authorization'] = `Bearer ${HF_TOKEN}`;
     }
 
-    const hfPrompt = `<|system|>\nYou are SentinelBuddy, an expert marine biologist monitoring water quality.\n<|user|>\n${prompt}\n<|assistant|>\n`;
+    const hfPrompt = `<|system|>\nYou are SentinelBuddy, an expert river ecologist monitoring freshwater quality.\n<|user|>\n${prompt}\n<|assistant|>\n`;
 
     const response = await axios.post(
       `https://api-inference.huggingface.co/models/${MODEL}`,

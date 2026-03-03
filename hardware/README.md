@@ -1,4 +1,4 @@
-# BlueSentinel Hardware 
+# BlueSentinel Hardware
 
 This directory contains all hardware-related files for BlueSentinel's IoT sensor nodes.
 
@@ -14,7 +14,7 @@ This directory contains all hardware-related files for BlueSentinel's IoT sensor
 | **Analog pH** | Analog | ✅ Live | GPIO 32 |
 | **Turbidity** | Analog | ✅ Live | GPIO 35 |
 | **Dissolved O₂** | Analog | ⚠️ Simulated | GPIO 34 |
-| **Salinity** | Analog | ⚠️ Simulated | GPIO 39 |
+| **Salinity** | Analog | ⚠️ Estuary/River Mode | GPIO 39 |
 
 *Note: DO and Salinity are currently simulated in firmware until physical sensors arrive.*
 

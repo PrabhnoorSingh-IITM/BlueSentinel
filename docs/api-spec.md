@@ -1,4 +1,4 @@
-# API Specification 
+# API Specification
 
 ## Overview
 
@@ -57,7 +57,7 @@ Community field reports.
 We construct prompts dynamically in `ai-chatbot.js`:
 
 **Input**:
-> "You are SentinelBuddy, an ocean expert. Current readings: pH 5.2, Temp 30C. Warning: Acidity. Advise."
+> "You are SentinelBuddy, a river ecologist. Current readings: pH 5.2, Temp 30C. Warning: Acidity. Advise."
 
 **Expected Output**:
 > "Critical Alert: pH 5.2 is lethal for most fish. Immediate liming (adding CaO) is required to neutralize acidity. Check industrial runoff upstream."

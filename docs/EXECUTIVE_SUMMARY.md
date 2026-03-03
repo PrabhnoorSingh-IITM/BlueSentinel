@@ -1,8 +1,8 @@
-# BlueSentinel - Executive Summary for Judges 
+# BlueSentinel - Executive Summary for Judges
 
 ## 🌊 One-Liner Pitch
 
-**BlueSentinel is a real-time ocean intelligence platform that combines IoT sensors, 3D geospatial visualization, and Generative AI to detect different types of marine pollution in seconds.**
+**BlueSentinel is a real-time river intelligence platform that combines IoT sensors, 3D geospatial visualization, and Generative AI to detect river pollution in seconds.**
 
 ---
 
@@ -10,7 +10,7 @@
 
 ### The Problem
 
-- **Invisible Threats**: Acidification and low oxygen zones are often invisible until fish kills occur.
+- **Invisible Threats**: Chemical runoff and low oxygen zones are often invisible until ecological damage is severe.
 - **Delayed Data**: Traditional sampling takes days.
 - **Data Overload**: Raw sensor data is hard for policymakers to interpret.
 
@@ -22,13 +22,13 @@
 
 ---
 
-## 🚀 Key Innovations 
+## 🚀 Key Innovations
 
 ### 1. **AI-Powered "SentinelBuddy"**
 
 - Uses **Google Gemini** to analyze sensor trends.
 - Provides context-aware advice (e.g., "pH dropping rapidly: potential acid runoff").
-- "Chat with your Ocean" feature allowing natural language queries.
+- "Chat with your River" feature allowing natural language queries.
 
 ### 2. **3D Geospatial Logs**
 
@@ -47,7 +47,7 @@
 
 ### Architecture
 
-- **Edge**: ESP32 with 5 sensors (Temp, pH, Turbidity, DO, Salinity).
+- **Edge**: ESP32 with 4 main sensors (Temp, pH, Turbidity, DO).
 - **Cloud**: Firebase Realtime Database (<100ms latency).
 - **AI**: Gemini 3 Pro for rapid inference.
 

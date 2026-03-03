@@ -11,10 +11,11 @@ const NEWS_API_CONFIG = {
         baseUrl: 'https://newsapi.org/v2/everything',
         apiKey: '74eaee257214422fb35ff737068795a9',
         queries: [
-            'ocean pollution',
-            'marine conservation',
-            'coral reef',
+            'river pollution',
+            'freshwater monitoring',
             'water quality',
+            'environmental runoff'
+            ,
             'environmental protection'
         ]
     }
@@ -23,7 +24,7 @@ const NEWS_API_CONFIG = {
 async function loadNewsFromAPI() {
     try {
         // Try loading from API first
-        const apiNews = await fetchMarineNews();
+        const apiNews = await fetchRiverNews();
 
         if (apiNews && apiNews.length > 0) {
             updateNewsCards(apiNews);
@@ -40,7 +41,7 @@ async function loadNewsFromAPI() {
     }
 }
 
-async function fetchMarineNews() {
+async function fetchRiverNews() {
     try {
         // Use Firebase Cloud Function to avoid exposing API key
         if (!firebase.functions) {
@@ -65,22 +66,22 @@ function loadSampleNews() {
             title: "Coral Reef Recovery Initiative Shows Promise",
             content: "Recent monitoring data shows coral health scores improving by 15% in protected zones following new conservation measures.",
             date: "2 hours ago",
-            url: "https://oceanservice.noaa.gov/facts/coral-restoration.html",
-            source: "NOAA Marine Sanctuary"
+            url: "https://www.rivernetwork.org/resources/monitoring/",
+            source: "EPA River Protection"
         },
         {
             title: "Oil Spike Detected Near Industrial Zone",
             content: "Automated sensors detected unusual oil contamination levels. Authorities have been alerted and response teams deployed.",
             date: "5 hours ago",
-            url: "https://theoceancleanup.com/updates/",
-            source: "Ocean Cleanup Project"
+            url: "https://www.epa.gov/rivers-lakes/monitoring-river-water-quality",
+            source: "River Watch Project"
         },
         {
-            title: "Marine Species Migration Patterns Change",
+            title: "Freshwater Species Migration Patterns Change",
             content: "Water temperature shifts are causing changes in fish migration routes. Scientists recommend updated fishing regulations.",
             date: "1 day ago",
             url: "https://www.sciencedaily.com/releases/2023/10/231018113456.htm",
-            source: "Marine Biology Weekly"
+            source: "Science Daily"
         },
         {
             title: "New Sensor Network Deployed",
@@ -97,14 +98,15 @@ function loadSampleNews() {
             source: "UN Environment Program"
         },
         {
-            title: "Breakthrough in Ocean Acidification Research",
-            content: "Scientists discover new method to track ocean acidification patterns using satellite data and AI algorithms.",
+            source: "River Protection Network",
+            title: "Breakthrough in Freshwater Pollution Monitoring",
+            content: "New real-time sensing technologies allow for faster detection of industrial runoff in river basins, improving response times and environmental protection efforts.",
             date: "4 days ago",
-            url: "https://www.whoi.edu/oceanus/feature/ocean-acidification-satellites/",
+            url: "https://www.example.com/river-pollution-monitoring",
             source: "Science Daily"
         },
         {
-            title: "Microplastics Found in Deepest Ocean Trench",
+            title: "Microplastics Found in Major River Tributaries",
             content: "New submersible expedition confirms presence of microplastics at 11,000 meters depth, raising concerns about deep-sea ecosystem contamination.",
             date: "5 days ago",
             url: "https://www.nationalgeographic.com/environment/article/microplastics-found-deepest-place-earth-mariana-trench",
@@ -121,11 +123,11 @@ function loadSampleNews() {
             title: "AI-Powered Drones Clean Coastal Waters",
             content: "Autonomous solar-powered drones collect 500kg of floating debris daily in pilot program off the coast of California.",
             date: "1 week ago",
-            url: "https://techcrunch.com/tag/ocean-robotics/",
+            url: "https://www.example.com/river-ai-robotics",
             source: "TechCrunch"
         },
         {
-            title: "Ocean Warming Impacts Fisheries",
+            title: "Summer Heat Impacts River Dissolved Oxygen",
             content: "Record high ocean temperatures are disrupting fish breeding cycles, leading to reduced catch yields in tropical regions.",
             date: "1 week ago",
             url: "https://www.reuters.com/business/environment/ocean-warming-puts-fisheries-risk-2023-10-10/",

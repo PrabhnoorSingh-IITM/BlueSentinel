@@ -1,4 +1,4 @@
-# BlueSentinel - Technical Specifications 
+# BlueSentinel - Technical Specifications
 
 ## 🏗️ System Architecture
 
@@ -20,7 +20,7 @@ BlueSentinel implements a **Hybrid AI-IoT Architecture**:
 - **Network**: WiFi 802.11 b/g/n + Bluetooth 4.2.
 - **Power**: Solar-ready 5V input.
 
-### Sensor Array 
+### Sensor Array
 
 | Parameter | Sensor Model | Range | Accuracy | Status |
 | :--- | :--- | :--- | :--- | :--- |
@@ -28,7 +28,7 @@ BlueSentinel implements a **Hybrid AI-IoT Architecture**:
 | pH | Analog pH | 0-14 pH | ±0.1 pH | ✅ Live |
 | Turbidity | Analog Optical | 0-3000 NTU | ±5% | ✅ Live |
 | Dissolved O₂ | Simulation | 0-20 mg/L | ±0.2 mg/L | ⚠️ Simulated |
-| Salinity | Simulation | 0-50 PSU | ±0.1 PSU | ⚠️ Simulated |
+| Salinity | Simulation | 0-10 PSU | ±0.1 PSU | ⚠️ Estuary/River Mode |
 
 ---
 
@@ -57,7 +57,7 @@ BlueSentinel implements a **Hybrid AI-IoT Architecture**:
 
 - **Model**: Gemini 3 Pro.
 - **Latency**: <2s for full text analysis.
-- **Prompt Engineering**: Context-aware prompts include last 10 sensor readings to detect trends (rising/falling).
+- **Prompt Engineering**: Context-aware prompts include last 10 sensor readings to detect river pollution trends (rising/falling).
 
 ### Local "Expert System"
 

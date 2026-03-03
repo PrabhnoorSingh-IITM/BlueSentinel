@@ -115,7 +115,7 @@ async function processUserMessage(message) {
             body: JSON.stringify({
                 contents: [{
                     parts: [{
-                        text: `You are SentinelBuddy, an expert marine biologist. 
+                        text: `You are SentinelBuddy, an expert river ecologist. 
                         Context: BlueSentinel monitors water quality (Temp, pH, Turbidity, DO).
                         User Question: "${message}"
                         Provide a concise, helpful response (max 2 sentences).`
@@ -210,8 +210,12 @@ async function getWaterHealthAnalysis(sensorData) {
         }
 
         // Strict Prompt
-        const prompt = `
-        Act as a marine biologist and data analyst. Analyze this sensor data:
+        const systemPrompt = `You are SentinelBuddy, the AI assistant for BlueSentinel, a river intelligence platform.
+    Your goal is to help users monitor and analyze river pollution data (pH, Turbidity, Temperature, DO).
+    Focus specifically on freshwater ecosystems and river health.
+    If pollutants or anomalies are detected, provide actionable solutions and mitigation strategies.
+    Keep responses professional, scientific, but encouraging.`;
+        const prompt = `Analyze this sensor data:
         - Real Sensors: Temperature: ${sensorData.temperature}°C, pH: ${sensorData.pH}.
         - Active Sensors: Turbidity (Value: ${sensorData.turbidity} NTU - Include in score calculation based on NTU ranges).
         - Simulated/Estimated: Dissolved Oxygen: ${sensorData.dissolvedOxygen} mg/L, Nitrogen: ${sensorData.nitrogen || 'N/A'}, Ammonia: ${sensorData.ammonia || 'N/A'}, Lead: ${sensorData.lead || 'N/A'}, Sodium: ${sensorData.sodium || 'N/A'}.
@@ -428,7 +432,7 @@ const expertKnowledge = {
     status: ['status', 'system', 'report', 'health'],
     temperature: {
         keywords: ['temp', 'heat', 'cold', 'degree'],
-        response: "Current Temperature is optimal for local marine life. <strong>If it exceeds 30°C</strong>, check cooling effluents or shallow water stagnation."
+        response: "Current Temperature is optimal for local river life. <strong>If it exceeds 30°C</strong>, check industrial cooling effluents or stagnant pools."
     },
     ph: {
         keywords: ['ph', 'acid', 'alkaline'],
