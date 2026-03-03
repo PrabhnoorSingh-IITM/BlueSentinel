@@ -102,7 +102,8 @@ async function processUserMessage(message) {
 
     // 2. Try Gemini API (Using stable gemini-pro)
     try {
-        const apiKey = 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g';
+        // WARNING: API Key exposed. Moved to backend/Firebase Functions.
+        const apiKey = ''; // Removed for security
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -139,7 +140,8 @@ async function processUserMessage(message) {
 
 // Exposed function for Dashboard Analysis (JSON Response)
 async function getWaterHealthAnalysis(sensorData) {
-    const apiKey = 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g';
+    // WARNING: API Key exposed. Moved to backend/Firebase Functions.
+    const apiKey = ''; // Removed for security
     const cacheKey = 'water_health_analysis_cache';
     const cacheDuration = 15 * 60 * 1000; // 15 minutes
 
