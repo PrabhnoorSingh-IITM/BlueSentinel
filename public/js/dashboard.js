@@ -24,7 +24,6 @@ const lastValues = {
   temperature: '--',
   ph: '--',
   turbidity: '--',
-  dissolvedOxygen: '--',
   dissolvedOxygen: '--'
 };
 
@@ -329,7 +328,9 @@ function handleLatestData(snapshot) {
 
     let enrichedData;
     if (hasRealData) {
-      // Use exact DB values, fallback to last known good sim values ONLY if a specific sensor is entirely offline
+      console.log("Real-time data received from BlueSentinel Grid");
+
+      // Use exact DB values, fallback to last known good values
       enrichedData = {
         temperature: parseFloat(data.temperature || data.temp || data.t || lastSimValues.temperature).toFixed(1),
         pH: parseFloat(data.pH || data.ph || lastSimValues.pH).toFixed(2),
@@ -338,14 +339,29 @@ function handleLatestData(snapshot) {
         timestamp: data.timestamp || Date.now()
       };
 
-      // Update our sim base so it doesn't drift apart from reality when db drops
+      // Update our base so it sticks to reality
       lastSimValues.temperature = parseFloat(enrichedData.temperature);
       lastSimValues.pH = parseFloat(enrichedData.pH);
       lastSimValues.turbidity = parseFloat(enrichedData.turbidity);
       lastSimValues.dissolvedOxygen = parseFloat(enrichedData.dissolvedOxygen);
 
     } else {
+      console.log("No real data detected, using synthetic simulation.");
       enrichedData = generateSimulatedData();
+
+      const connStatus = document.getElementById('connection-status');
+      if (connStatus) {
+        connStatus.innerHTML = '<span>Simulation</span>';
+        connStatus.className = 'status-pill status-warning';
+      }
+    }
+
+    if (hasRealData) {
+      const connStatus = document.getElementById('connection-status');
+      if (connStatus) {
+        connStatus.innerHTML = '<span class="pulse-dot"></span><span>Live Grid</span>';
+        connStatus.className = 'status-pill status-normal';
+      }
     }
 
     updateSensorCards(enrichedData);
@@ -364,7 +380,6 @@ function updateSensorCards(data) {
   updateCard(cardElements.temperature, data.temperature, normalRanges.temperature, 'temperature', 1);
   updateCard(cardElements.ph, (data.pH || data.ph), normalRanges.ph, 'ph', 2);
   updateCard(cardElements.turbidity, data.turbidity, normalRanges.turbidity, 'turbidity', 2);
-  updateCard(cardElements.dissolvedOxygen, data.dissolvedOxygen, normalRanges.dissolvedOxygen, 'dissolvedOxygen', 2);
   updateCard(cardElements.dissolvedOxygen, data.dissolvedOxygen, normalRanges.dissolvedOxygen, 'dissolvedOxygen', 2);
 
   // Salinity card replaced by Analysis
