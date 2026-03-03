@@ -296,10 +296,12 @@ async function getWaterHealthAnalysis(sensorData) {
                     // Do not throw, just fallback silently
                 } else {
                     console.warn(`Generation failed with ${modelToUse}: ${response.status}`);
+                    return calculateLocalFallback(sensorData);
                 }
             }
         } catch (e) {
             console.warn(`Error generating content with ${modelToUse}:`, e);
+            return calculateLocalFallback(sensorData);
         }
 
         // Silent Fallback
