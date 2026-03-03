@@ -65,83 +65,77 @@ function loadSampleNews() {
             title: "Coral Reef Recovery Initiative Shows Promise",
             content: "Recent monitoring data shows coral health scores improving by 15% in protected zones following new conservation measures.",
             date: "2 hours ago",
-            url: "#",
-            url: "#",
+            url: "https://oceanservice.noaa.gov/facts/coral-restoration.html",
             source: "NOAA Marine Sanctuary"
         },
         {
             title: "Oil Spike Detected Near Industrial Zone",
             content: "Automated sensors detected unusual oil contamination levels. Authorities have been alerted and response teams deployed.",
             date: "5 hours ago",
-            url: "#",
-            url: "#",
+            url: "https://theoceancleanup.com/updates/",
             source: "Ocean Cleanup Project"
         },
         {
             title: "Marine Species Migration Patterns Change",
             content: "Water temperature shifts are causing changes in fish migration routes. Scientists recommend updated fishing regulations.",
             date: "1 day ago",
-            url: "#",
-            url: "#",
+            url: "https://www.sciencedaily.com/releases/2023/10/231018113456.htm",
             source: "Marine Biology Weekly"
         },
         {
             title: "New Sensor Network Deployed",
             content: "Expanded monitoring coverage now includes 50 additional coastal zones, providing real-time data for previously unmonitored areas.",
             date: "2 days ago",
-            url: "#",
-            url: "#",
+            url: "https://ioos.noaa.gov/",
             source: "Coastal Watch"
         },
         {
             title: "Plastic Pollution Reduction Success",
             content: "Recent cleanup efforts combined with monitoring have reduced plastic waste in monitored areas by 40%.",
             date: "3 days ago",
-            url: "#",
-            url: "#",
+            url: "https://www.unep.org/news-and-stories/story/plastic-treaty-progress-put-test",
             source: "UN Environment Program"
         },
         {
             title: "Breakthrough in Ocean Acidification Research",
             content: "Scientists discover new method to track ocean acidification patterns using satellite data and AI algorithms.",
             date: "4 days ago",
-            url: "#",
-            url: "#",
+            url: "https://www.whoi.edu/oceanus/feature/ocean-acidification-satellites/",
             source: "Science Daily"
         },
         {
             title: "Microplastics Found in Deepest Ocean Trench",
             content: "New submersible expedition confirms presence of microplastics at 11,000 meters depth, raising concerns about deep-sea ecosystem contamination.",
             date: "5 days ago",
-            url: "#",
+            url: "https://www.nationalgeographic.com/environment/article/microplastics-found-deepest-place-earth-mariana-trench",
             source: "National Geographic"
         },
         {
             title: "Global Treaty on Plastic Pollution Advances",
             content: "UN member states agree on framework for legally binding international instrument to end plastic pollution by 2040.",
             date: "6 days ago",
-            url: "#",
+            url: "https://news.un.org/en/story/2023/06/1137357",
             source: "UN News"
         },
         {
             title: "AI-Powered Drones Clean Coastal Waters",
             content: "Autonomous solar-powered drones collect 500kg of floating debris daily in pilot program off the coast of California.",
             date: "1 week ago",
-            url: "#",
+            url: "https://techcrunch.com/tag/ocean-robotics/",
             source: "TechCrunch"
         },
         {
             title: "Ocean Warming Impacts Fisheries",
             content: "Record high ocean temperatures are disrupting fish breeding cycles, leading to reduced catch yields in tropical regions.",
             date: "1 week ago",
-            url: "#",
+            url: "https://www.reuters.com/business/environment/ocean-warming-puts-fisheries-risk-2023-10-10/",
             source: "Reuters Environment"
         },
         {
             title: "Community-Led Mangrove Restoration Success",
             content: "Local communities in Southeast Asia restore 5,000 hectares of mangrove forest, boosting coastal resilience and biodiversity.",
             date: "2 weeks ago",
-            url: "#",
+            url: "https://www.worldbank.org/en/news/feature/2023/07/26/restoring-mangroves-for-people-and-planet",
             source: "World Bank Climate"
         }
     ];
@@ -177,14 +171,18 @@ function createNewsCard(newsData) {
         <p style="color: var(--text-muted); font-size: 0.9rem; flex: 1;">${newsData.content}</p>
         
         <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
-            <div class="btn-icon" style="width: 32px; height: 32px;">
+            <a href="${newsData.url}" target="_blank" rel="noopener noreferrer" class="btn-icon" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
                 <img src="./assets/icons/arrow-right.svg" style="width: 14px; height: 14px; filter: invert(1);" alt="->">
-            </div>
+            </a>
         </div>
     `;
 
     // Add click handler
-    card.addEventListener('click', () => {
+    // Add click handler for the whole card, but ignore if clicking the specific link
+    card.addEventListener('click', (e) => {
+        // If the clicked element is part of the anchor, let the browser handle it
+        if (e.target.closest('a')) return;
+
         if (newsData.url && newsData.url !== '#') {
             window.open(newsData.url, '_blank');
         }
