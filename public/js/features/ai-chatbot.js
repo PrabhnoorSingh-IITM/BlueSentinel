@@ -1,0 +1,468 @@
+// AI Chatbot Implementation
+// V2.0 Hybrid Mode: Gemini API + Expert System Fallback
+
+document.addEventListener('DOMContentLoaded', function () {
+    initializeAIChatbot();
+});
+
+function initializeAIChatbot() {
+    setupChatbotEventListeners();
+    console.log('AI Chatbot initialized (Hybrid Mode)');
+}
+
+function setupChatbotEventListeners() {
+    const toggle = document.getElementById('chatbot-toggle');
+    const close = document.getElementById('chatbot-close');
+    const send = document.getElementById('chatbot-send');
+    const input = document.getElementById('chatbot-input');
+    const messagesContainer = document.getElementById('chatbot-messages');
+
+    if (!toggle || !close || !send || !input || !messagesContainer) return;
+
+    // Toggle
+    toggle.addEventListener('click', () => {
+        const window = document.getElementById('chatbot-window');
+        const isHidden = window.style.display === 'none';
+        window.style.display = isHidden ? 'flex' : 'none';
+        if (isHidden) input.focus();
+    });
+
+    // Close
+    close.addEventListener('click', () => {
+        document.getElementById('chatbot-window').style.display = 'none';
+    });
+
+    // Send
+    const handleSend = () => {
+        const message = input.value.trim();
+        if (message) {
+            addUserMessage(message);
+            processUserMessage(message);
+            input.value = '';
+        }
+    };
+
+    send.addEventListener('click', handleSend);
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleSend();
+    });
+}
+
+function addUserMessage(message) {
+    const container = document.getElementById('chatbot-messages');
+    const div = document.createElement('div');
+    div.className = 'user-message';
+    div.textContent = message;
+    container.appendChild(div);
+    scrollToBottom();
+}
+
+function addAIMessage(message) {
+    const container = document.getElementById('chatbot-messages');
+    const div = document.createElement('div');
+    div.className = 'ai-message';
+    // Allow basic HTML for formatting solutions
+    div.innerHTML = message;
+    container.appendChild(div);
+    scrollToBottom();
+}
+
+function scrollToBottom() {
+    const container = document.getElementById('chatbot-messages');
+    container.scrollTop = container.scrollHeight;
+}
+
+function showTyping() {
+    const container = document.getElementById('chatbot-messages');
+    const div = document.createElement('div');
+    div.className = 'ai-message typing-indicator';
+    div.textContent = 'Thinking...';
+    div.id = 'typing-indicator';
+    container.appendChild(div);
+    scrollToBottom();
+}
+
+function hideTyping() {
+    const el = document.getElementById('typing-indicator');
+    if (el) el.remove();
+}
+
+async function processUserMessage(message) {
+    showTyping();
+
+    // 1. Check for immediate "Expert System" matches (Offline priority)
+    const localResponse = getExpertResponse(message);
+    if (localResponse) {
+        setTimeout(() => {
+            hideTyping();
+            addAIMessage(localResponse);
+        }, 600); // Small fake delay for natural feel
+        return;
+    }
+
+    // 2. Try Gemini API
+    try {
+        let apiKey = localStorage.getItem('gemini_api_key') || 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo';
+        if (apiKey === 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo' || apiKey === 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g') {
+            // Ensure it's saved if the user hasn't provided their own yet, using the more likely active key
+            apiKey = 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo';
+            localStorage.setItem('gemini_api_key', apiKey);
+        }
+
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{
+                        text: `You are SentinelBuddy, an expert river ecologist. 
+                        Context: BlueSentinel monitors water quality (Temp, pH, Turbidity, DO).
+                        User Question: "${message}"
+                        Provide a concise, helpful response (max 2 sentences).`
+                    }]
+                }]
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.candidates) {
+            console.warn('Gemini API Error:', data);
+            throw new Error('API Error');
+        }
+
+        const aiText = data.candidates[0].content.parts[0].text;
+        hideTyping();
+        addAIMessage(aiText);
+
+    } catch (error) {
+        console.warn('Gemini API failed, attempting Fallback LLM:', error);
+
+        try {
+            const fbText = await callRailwayLLMFallback(message);
+            if (fbText) {
+                hideTyping();
+                addAIMessage(`[Fallback Model]: ${fbText}`);
+                return;
+            }
+        } catch (fallbackError) {
+            console.warn('Fallback API also failed:', fallbackError);
+        }
+
+        hideTyping();
+        // 3. General Offline Fallback
+        addAIMessage("Both Primary and Fallback AI systems are currently unavailable. Try asking about specific sensors like 'Temperature' or 'pH' to use the offline expert system.");
+    }
+}
+
+// Global Helper for Railway LLM Proxy
+async function callRailwayLLMFallback(promptText, max_tokens = 150) {
+    try {
+        const fallbackResponse = await fetch('https://bluesentinel-production.up.railway.app/fallbackLLM', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: promptText, max_tokens: max_tokens })
+        });
+        const fbData = await fallbackResponse.json();
+        if (fallbackResponse.ok && fbData.success) {
+            return fbData.text;
+        }
+    } catch (e) {
+        console.warn('Railway Fallback unreachable:', e);
+    }
+    return null;
+}
+
+// Exposed function for Dashboard Analysis (JSON Response)
+async function getWaterHealthAnalysis(sensorData) {
+    let apiKey = localStorage.getItem('gemini_api_key') || 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo';
+    if (apiKey === 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g') apiKey = 'AIzaSyC-ZSHCwC4yAPeksv5gleDClypMvd93_yo';
+    const cacheKey = 'water_health_analysis_cache';
+    const cacheDuration = 15 * 60 * 1000; // 15 minutes
+
+    // 1. Check Local Cache
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+        try {
+            const { timestamp, data } = JSON.parse(cached);
+            if (Date.now() - timestamp < cacheDuration) {
+                console.log("Using cached AI analysis (valid for 15 mins)");
+                return data;
+            }
+        } catch (e) {
+            localStorage.removeItem(cacheKey);
+        }
+    }
+
+    if (!apiKey || apiKey === 'YOUR_GEMINI_API_KEY') {
+        return calculateLocalFallback(sensorData);
+    }
+
+    // Global variable to cache the working model (prevents repeated failed lookups)
+    if (!window.cachedGeminiModel) {
+        window.cachedGeminiModel = null;
+    }
+
+    // Inside explicit try/catch
+    try {
+        if (!sensorData || !sensorData.temperature) {
+            throw new Error("Invalid Sensor Data");
+        }
+
+        // Strict Prompt
+        const systemPrompt = `You are SentinelBuddy, the AI assistant for BlueSentinel, a river intelligence platform.
+    Your goal is to help users monitor and analyze river pollution data (pH, Turbidity, Temperature, DO).
+    Focus specifically on freshwater ecosystems and river health.
+    If pollutants or anomalies are detected, provide actionable solutions and mitigation strategies.
+    Keep responses professional, scientific, but encouraging.`;
+        const prompt = `Analyze this sensor data:
+        - Real Sensors: Temperature: ${sensorData.temperature}°C, pH: ${sensorData.pH}.
+        - Active Sensors: Turbidity (Value: ${sensorData.turbidity} NTU - Include in score calculation based on NTU ranges).
+        - Simulated/Estimated: Dissolved Oxygen: ${sensorData.dissolvedOxygen} mg/L, Nitrogen: ${sensorData.nitrogen || 'N/A'}, Ammonia: ${sensorData.ammonia || 'N/A'}, Lead: ${sensorData.lead || 'N/A'}, Sodium: ${sensorData.sodium || 'N/A'}.
+
+        Task:
+        1. Calculate a "Water Health Score" out of 100 based on all values (potability standards).
+           CRITICAL TURBIDITY SPECTRUM (DO NOT DEVIATE):
+           - 0 to 1 NTU: Ultra clear water (distilled-level clean)
+           - 1 to <5 NTU: Acceptable drinking water (WHO guideline is below 5)
+           - 5 to 50 NTU: Slightly muddy / surface water
+           - 50 to 1000+ NTU: Very dirty, stormwater, sewage-level chaos
+        2. Provide a 2-sentence summary of the ecosystem health.
+        3. Determine a status (Excellent, Good, Warning, Critical).
+        4. Provide specific chemical/physical treatment advice for any out-of-range metrics (e.g., "Add Sodium Carbonate to increase pH", "Deploy settlement tanks for high Turbidity").
+
+        Return ONLY a JSON object in this format:
+        {
+            "score": 85,
+            "status": "Good",
+            "analysis": "Water quality is generally good...",
+            "treatments": {
+                "pH": "Advice for pH...",
+                "Temperature": "Advice for Temp...",
+                "Dissolved Oxygen": "Advice for DO...",
+                "Ammonia": "Advice for Ammonia..."
+            }
+        }
+        `;
+
+        // Step A: Discover Model if not cached
+        if (window.cachedGeminiModel === null) {
+            console.log("Discovering available Gemini models...");
+            try {
+                const listResp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+                if (listResp.ok) {
+                    const listData = await listResp.json();
+                    const viableModel = listData.models?.find(m =>
+                        m.name.includes('gemini') &&
+                        m.supportedGenerationMethods?.includes('generateContent')
+                    );
+
+                    if (viableModel) {
+                        const modelId = viableModel.name.replace('models/', '');
+                        window.cachedGeminiModel = modelId;
+                        console.log(`Discovered and cached valid model: ${modelId}`);
+                    } else {
+                        window.cachedGeminiModel = 'OFFLINE';
+                    }
+                } else {
+                    // Suppress 429 error on discovery
+                    if (listResp.status === 429) {
+                        console.warn("AI Quota Exceeded (Discovery). Switching to Offline Mode.");
+                    } else if (listResp.status === 403) {
+                        console.error("Gemini API 403 Forbidden: Switching to Fallback Mode.");
+                        window.cachedGeminiModel = 'OFFLINE';
+                    } else {
+                        console.warn(`Model discovery failed (${listResp.status}). Switching to Offline Mode.`);
+                    }
+                    window.cachedGeminiModel = 'OFFLINE';
+                }
+            } catch (e) {
+                console.warn("Discovery fetch failed, switching to OFFLINE:", e);
+                window.cachedGeminiModel = 'OFFLINE';
+            }
+        }
+
+        // Step B: Use Cached Model or Fallback
+        if (window.cachedGeminiModel === 'OFFLINE') {
+            const localResult = calculateLocalFallback(sensorData);
+            // Try to enhance local fallback analysis with Railway LLM if possible
+            const fbText = await callRailwayLLMFallback(`Water metrics: Temp ${sensorData.temperature}, pH ${sensorData.pH}, Turbidity ${sensorData.turbidity}. Write a 1-sentence summary of health.`);
+            if (fbText) {
+                localResult.analysis = `[Fallback AI]: ${fbText} (Manual Calc: ${localResult.analysis})`;
+            }
+            return localResult;
+        }
+
+        const modelToUse = window.cachedGeminiModel || 'gemini-2.0-flash'; // Updated default
+
+        try {
+            console.log(`Generating content using: ${modelToUse}`);
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelToUse}:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{ text: prompt }]
+                    }]
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.candidates && data.candidates[0].content) {
+                    const textResponse = data.candidates[0].content.parts[0].text;
+                    const jsonMatch = textResponse.match(/\{[\s\S]*\}/);
+                    if (jsonMatch) {
+                        const result = JSON.parse(jsonMatch[0]);
+
+                        // Cache Success Result
+                        localStorage.setItem(cacheKey, JSON.stringify({
+                            timestamp: Date.now(),
+                            data: result
+                        }));
+                        console.log("SUCCESS: AI Analysis generated and cached.");
+                        return result;
+                    }
+                }
+            } else {
+                if (response.status === 429) {
+                    console.warn(`AI Quota Exceeded (${modelToUse}). Switching to Offline Mode.`);
+                    // Do not throw, just fallback silently
+                } else {
+                    console.warn(`Generation failed with ${modelToUse}: ${response.status}`);
+                }
+            }
+        } catch (e) {
+            console.warn(`Error generating content with ${modelToUse}:`, e);
+        }
+
+        // Silent Fallback
+        return calculateLocalFallback(sensorData);
+
+    } catch (error) {
+        console.error("Critical Failure in AI Module:", error);
+        return calculateLocalFallback(sensorData);
+    }
+}
+window.getWaterHealthAnalysis = getWaterHealthAnalysis; // Expose global
+
+// Advanced Local Fallback Calculation (Simulates AI Analysis)
+function calculateLocalFallback(data) {
+    let score = 100;
+    const ph = parseFloat(data.pH) || 7;
+    const temp = parseFloat(data.temperature) || 20;
+    const doLevel = parseFloat(data.dissolvedOxygen) || 8;
+    const ammonia = parseFloat(data.ammonia) || 0;
+    const nitrogen = parseFloat(data.nitrogen) || 0;
+
+    const penalties = [];
+
+    // 1. pH Penalty (Ideal 6.5 - 8.5)
+    if (ph < 6.5 || ph > 8.5) {
+        const p = Math.abs(ph - 7) * 10;
+        score -= p;
+        penalties.push(`pH is ${getPhStatus(ph)}`);
+    }
+
+    // 2. Temp Penalty (Ideal 10 - 30)
+    if (temp > 30) {
+        score -= (temp - 30) * 2;
+        penalties.push('Temperature is high');
+    }
+
+    // 3. Dissolved Oxygen (Critical < 4)
+    if (doLevel < 5) {
+        score -= (5 - doLevel) * 15;
+        penalties.push('Dissolved Oxygen is low');
+    }
+
+    // 4. Chemical Contaminants (Simulated)
+    if (ammonia > 0.5) {
+        score -= ammonia * 20;
+        penalties.push('Ammonia levels detected');
+    }
+    if (nitrogen > 5) {
+        score -= (nitrogen - 5) * 5;
+        penalties.push('Nitrogen levels elevated');
+    }
+
+    // 5. Turbidity Penalty (Spectrum)
+    let turb = parseFloat(data.turbidity) || 0;
+    if (turb >= 50) {
+        score -= 40; // Very dirty
+        penalties.push('Extremely High Turbidity (>=50 NTU)');
+    } else if (turb >= 5) {
+        score -= 20; // Slightly muddy
+        penalties.push('High Turbidity (>=5 NTU)');
+    } else if (turb >= 1) {
+        score -= 5; // Acceptable but not ultra clear
+    }
+    score = Math.floor(Math.max(0, Math.min(100, score)));
+
+    let status = "Excellent";
+    if (score < 90) status = "Good";
+    if (score < 75) status = "Warning";
+    if (score < 50) status = "Critical";
+
+    // Generate Dynamic Analysis String
+    let analysis = `Water quality is designated as ${status}. `;
+    if (penalties.length > 0) {
+        analysis += `Key concerns: ${penalties.join(', ')}. `;
+    } else {
+        analysis += `All monitored parameters (pH, Temp, DO) are within optimal ranges. `;
+    }
+    analysis += `Turbidity is ${data.turbidity} NTU. `;
+
+    return {
+        score: score,
+        status: status,
+        analysis: analysis
+    };
+}
+
+function getPhStatus(ph) {
+    if (ph < 6.5) return "Acidic";
+    if (ph > 8.5) return "Alkaline";
+    return "Optimal";
+}
+
+// --- EXPERT SYSTEM LOGIC ---
+const expertKnowledge = {
+    greetings: ['hi', 'hello', 'hey', 'start', 'help'],
+    status: ['status', 'system', 'report', 'health'],
+    temperature: {
+        keywords: ['temp', 'heat', 'cold', 'degree'],
+        response: "Current Temperature is optimal for local river life. <strong>If it exceeds 30°C</strong>, check industrial cooling effluents or stagnant pools."
+    },
+    ph: {
+        keywords: ['ph', 'acid', 'alkaline'],
+        response: "pH levels are stable. <strong>Corrective Action for Low pH:</strong> Add sodium carbonate or increase aeration. For High pH, reduce aeration or add organic acid."
+    },
+    turbidity: {
+        keywords: ['turbidity', 'clear', 'cloudy', 'ntu'],
+        response: "<b>Turbidity Spectrum:</b><br/>• 0–1 NTU: Ultra clear<br/>• <5 NTU: Acceptable<br/>• 5–50 NTU: Slightly muddy<br/>• &ge;50 NTU: Very dirty.<br/><strong>Solution:</strong> If &ge;5 NTU, inspect for sediment runoff or algal blooms. Deploy settlement tanks."
+    },
+    oxygen: {
+        keywords: ['oxygen', 'do', 'breath', 'hypoxia'],
+        response: "Dissolved Oxygen is the most critical parameter. <strong>If Low (<4mg/L):</strong> Activate emergency aerators immediately and reduce feeding."
+    },
+};
+
+function getExpertResponse(input) {
+    const text = input.toLowerCase();
+
+    // Check greetings
+    if (expertKnowledge.greetings.some(k => text.includes(k))) {
+        return "Hello! I am SentinelBuddy. I monitor water quality parameters. You can ask me about <b>Temperature, pH, Turbidity, DO, or Salinity</b>.";
+    }
+
+    // Check specific sensors
+    if (expertKnowledge.temperature.keywords.some(k => text.includes(k))) return expertKnowledge.temperature.response;
+    if (expertKnowledge.ph.keywords.some(k => text.includes(k))) return expertKnowledge.ph.response;
+    if (expertKnowledge.turbidity.keywords.some(k => text.includes(k))) return expertKnowledge.turbidity.response;
+    if (expertKnowledge.oxygen.keywords.some(k => text.includes(k))) return expertKnowledge.oxygen.response;
+
+
+    return null; // No local match, try API
+}
+

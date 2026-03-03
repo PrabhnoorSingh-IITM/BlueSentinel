@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "🚀 Starting BlueSentinel V2.1 Deployment..."
+echo "🚀 Starting BlueSentinel V2.4 Deployment..."
 
 # Check if firebase CLI is available
 if ! command -v firebase &> /dev/null; then
@@ -16,6 +16,6 @@ firebase deploy --only hosting
 
 echo "✅ Done! Deployment command finished."
 echo "🌍 Site: https://bluesentinel1.web.app"
-echo "👉 CRITICAL: Please Hard Refresh your browser to see V2.1:"
+echo "👉 CRITICAL: Please Hard Refresh your browser to see BlueSentinel V2.4:"
 echo "   - Mac: Cmd + Shift + R"
 echo "   - Windows/Linux: Ctrl + F5"

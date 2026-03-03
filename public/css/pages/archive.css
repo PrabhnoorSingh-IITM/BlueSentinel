@@ -1,0 +1,53 @@
+.archive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.file-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+}
+
+.file-card:hover .file-icon {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 8px var(--color-cyan));
+}
+
+.file-icon {
+    width: 48px;
+    height: 48px;
+    transition: var(--transition-fast);
+    filter: invert(1);
+    opacity: 0.8;
+}
+
+.file-info {
+    flex: 1;
+}
+
+.file-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.file-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.download-btn {
+    padding: 0.5rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    transition: var(--transition-fast);
+}
+
+.download-btn:hover {
+    background: var(--color-cyan);
+    color: var(--color-void);
+}

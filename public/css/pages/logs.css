@@ -1,0 +1,47 @@
+.log-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--text-secondary);
+}
+
+.log-table th {
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--color-cyan);
+    font-family: var(--font-display);
+    font-weight: 600;
+}
+
+.log-table td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.log-row:hover {
+    background: rgba(255, 255, 255, 0.02);
+    transition: 0.2s;
+}
+
+.badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge-alert {
+    background: rgba(255, 77, 77, 0.2);
+    color: var(--color-danger);
+}
+
+.badge-warning {
+    background: rgba(255, 214, 0, 0.2);
+    color: var(--color-warning);
+}
+
+.badge-info {
+    background: rgba(0, 212, 255, 0.2);
+    color: var(--color-teal);
+}
