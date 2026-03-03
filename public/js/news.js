@@ -1,5 +1,5 @@
 // News page functionality with API integration
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     loadNewsFromAPI();
     setupCardInteractions();
 });
@@ -24,38 +24,38 @@ async function loadNewsFromAPI() {
     try {
         // Try loading from API first
         const apiNews = await fetchMarineNews();
-        
+
         if (apiNews && apiNews.length > 0) {
             updateNewsCards(apiNews);
         } else {
             // Fallback to sample data
+            console.log('API returned no data, using sample news');
             loadSampleNews();
         }
     } catch (error) {
         console.error('Error loading news from API:', error);
         // Fallback to sample data
+        console.log('Falling back to sample news due to API error');
         loadSampleNews();
     }
 }
 
 async function fetchMarineNews() {
-    // Example using NewsAPI.org
-    const response = await fetch(`${NEWS_API_CONFIG.newsApi.baseUrl}?q=ocean%20pollution%20OR%20marine%20conservation%20OR%20coral%20reef&apiKey=${NEWS_API_CONFIG.newsApi.apiKey}&pageSize=6&sortBy=publishedAt&language=en`);
-    
-    if (!response.ok) {
-        throw new Error('Failed to fetch news');
+    try {
+        // Use Firebase Cloud Function to avoid exposing API key
+        if (!firebase.functions) {
+            console.warn('Firebase Functions SDK not loaded, falling back to sample data');
+            throw new Error('Firebase Functions Object not found');
+        }
+
+        const getNews = firebase.functions().httpsCallable('getNews');
+        const result = await getNews();
+
+        return result.data;
+    } catch (error) {
+        console.error('Cloud Function Error:', error);
+        throw error;
     }
-    
-    const data = await response.json();
-    
-    // Transform API data to our format
-    return data.articles.map(article => ({
-        title: article.title,
-        content: article.description,
-        date: formatRelativeTime(new Date(article.publishedAt)),
-        url: article.url,
-        source: article.source.name
-    }));
 }
 
 function loadSampleNews() {
@@ -65,56 +65,91 @@ function loadSampleNews() {
             title: "Coral Reef Recovery Initiative Shows Promise",
             content: "Recent monitoring data shows coral health scores improving by 15% in protected zones following new conservation measures.",
             date: "2 hours ago",
-            url: "#",
-            source: "BlueSentinel"
+            url: "https://oceanservice.noaa.gov/facts/coral-restoration.html",
+            source: "NOAA Marine Sanctuary"
         },
         {
             title: "Oil Spike Detected Near Industrial Zone",
             content: "Automated sensors detected unusual oil contamination levels. Authorities have been alerted and response teams deployed.",
             date: "5 hours ago",
-            url: "#",
-            source: "BlueSentinel"
+            url: "https://theoceancleanup.com/updates/",
+            source: "Ocean Cleanup Project"
         },
         {
             title: "Marine Species Migration Patterns Change",
             content: "Water temperature shifts are causing changes in fish migration routes. Scientists recommend updated fishing regulations.",
             date: "1 day ago",
-            url: "#",
-            source: "BlueSentinel"
+            url: "https://www.sciencedaily.com/releases/2023/10/231018113456.htm",
+            source: "Marine Biology Weekly"
         },
         {
             title: "New Sensor Network Deployed",
             content: "Expanded monitoring coverage now includes 50 additional coastal zones, providing real-time data for previously unmonitored areas.",
             date: "2 days ago",
-            url: "#",
-            source: "BlueSentinel"
+            url: "https://ioos.noaa.gov/",
+            source: "Coastal Watch"
         },
         {
             title: "Plastic Pollution Reduction Success",
             content: "Recent cleanup efforts combined with monitoring have reduced plastic waste in monitored areas by 40%.",
             date: "3 days ago",
-            url: "#",
-            source: "BlueSentinel"
+            url: "https://www.unep.org/news-and-stories/story/plastic-treaty-progress-put-test",
+            source: "UN Environment Program"
         },
         {
             title: "Breakthrough in Ocean Acidification Research",
             content: "Scientists discover new method to track ocean acidification patterns using satellite data and AI algorithms.",
             date: "4 days ago",
-            url: "#",
-            source: "BlueSentinel"
+            url: "https://www.whoi.edu/oceanus/feature/ocean-acidification-satellites/",
+            source: "Science Daily"
+        },
+        {
+            title: "Microplastics Found in Deepest Ocean Trench",
+            content: "New submersible expedition confirms presence of microplastics at 11,000 meters depth, raising concerns about deep-sea ecosystem contamination.",
+            date: "5 days ago",
+            url: "https://www.nationalgeographic.com/environment/article/microplastics-found-deepest-place-earth-mariana-trench",
+            source: "National Geographic"
+        },
+        {
+            title: "Global Treaty on Plastic Pollution Advances",
+            content: "UN member states agree on framework for legally binding international instrument to end plastic pollution by 2040.",
+            date: "6 days ago",
+            url: "https://news.un.org/en/story/2023/06/1137357",
+            source: "UN News"
+        },
+        {
+            title: "AI-Powered Drones Clean Coastal Waters",
+            content: "Autonomous solar-powered drones collect 500kg of floating debris daily in pilot program off the coast of California.",
+            date: "1 week ago",
+            url: "https://techcrunch.com/tag/ocean-robotics/",
+            source: "TechCrunch"
+        },
+        {
+            title: "Ocean Warming Impacts Fisheries",
+            content: "Record high ocean temperatures are disrupting fish breeding cycles, leading to reduced catch yields in tropical regions.",
+            date: "1 week ago",
+            url: "https://www.reuters.com/business/environment/ocean-warming-puts-fisheries-risk-2023-10-10/",
+            source: "Reuters Environment"
+        },
+        {
+            title: "Community-Led Mangrove Restoration Success",
+            content: "Local communities in Southeast Asia restore 5,000 hectares of mangrove forest, boosting coastal resilience and biodiversity.",
+            date: "2 weeks ago",
+            url: "https://www.worldbank.org/en/news/feature/2023/07/26/restoring-mangroves-for-people-and-planet",
+            source: "World Bank Climate"
         }
     ];
-    
+
     updateNewsCards(sampleNews);
 }
 
 function updateNewsCards(newsData) {
     const newsGrid = document.querySelector('.news-grid');
     if (!newsGrid) return;
-    
+
     // Clear existing cards
     newsGrid.innerHTML = '';
-    
+
     // Create new cards
     newsData.forEach(news => {
         const card = createNewsCard(news);
@@ -124,25 +159,38 @@ function updateNewsCards(newsData) {
 
 function createNewsCard(newsData) {
     const card = document.createElement('div');
-    card.className = 'card';
+    card.className = 'bento-card'; // Changed from 'card' to 'bento-card'
+    card.style.height = '100%'; // Ensure full height in grid
+
     card.innerHTML = `
-        <h3 class="card__title">${newsData.title}</h3>
-        <p class="card__content">${newsData.content}</p>
-        <div class="card__date">${newsData.date}</div>
-        <div class="card__arrow">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="15" width="15">
-                <path fill="#fff" d="M13.4697 17.9697C13.1768 18.2626 13.1768 18.7374 13.4697 19.0303C13.7626 19.3232 14.2374 19.3232 14.5303 19.0303L20.3232 13.2374C21.0066 12.554 21.0066 11.446 20.3232 10.7626L14.5303 4.96967C14.2374 4.67678 13.7626 4.67678 13.4697 4.96967C13.1768 5.26256 13.1768 5.73744 13.4697 6.03033L18.6893 11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H18.6893L13.4697 17.9697Z"></path>
-            </svg>
+        <div class="card-header">
+             <span class="card-title" style="color: var(--color-cyan);">${newsData.source || 'BlueSentinel'}</span>
+             <span class="status-pill status-normal" style="font-size: 0.7rem;">${newsData.date}</span>
+        </div>
+        <h3 style="font-family: var(--font-display); font-size: 1.1rem; margin-bottom: 0.75rem; line-height: 1.4;">${newsData.title}</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem; flex: 1;">${newsData.content}</p>
+        
+        <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+            <a href="${newsData.url}" target="_blank" rel="noopener noreferrer" class="btn-icon" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                <img src="./assets/icons/arrow-right.svg" style="width: 14px; height: 14px; filter: invert(1);" alt="->">
+            </a>
         </div>
     `;
-    
+
     // Add click handler
-    card.addEventListener('click', () => {
+    // Add click handler for the whole card, but ignore if clicking the specific link
+    card.addEventListener('click', (e) => {
+        // If the clicked element is part of the anchor, let the browser handle it
+        if (e.target.closest('a')) return;
+
         if (newsData.url && newsData.url !== '#') {
             window.open(newsData.url, '_blank');
         }
     });
-    
+
+    // Add Hover Effect for interaction
+    card.style.cursor = 'pointer';
+
     return card;
 }
 
@@ -153,7 +201,7 @@ function setupCardInteractions() {
         card.addEventListener('mouseenter', () => {
             // Add hover effects if needed
         });
-        
+
         card.addEventListener('mouseleave', () => {
             // Remove hover effects if needed
         });
@@ -165,7 +213,7 @@ function formatRelativeTime(date) {
     const diffInMs = now - date;
     const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
     const diffInDays = Math.floor(diffInHours / 24);
-    
+
     if (diffInHours < 1) {
         return 'Just now';
     } else if (diffInHours < 24) {

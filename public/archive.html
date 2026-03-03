@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlueSentinel | Archives</title>
+    <link rel="stylesheet" href="css/global.css">
+
+    <style>
+        .archive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .file-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+        }
+
+        .file-card:hover .file-icon {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 8px var(--color-cyan));
+        }
+
+        .file-icon {
+            width: 48px;
+            height: 48px;
+            transition: var(--transition-fast);
+            filter: invert(1);
+            opacity: 0.8;
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        .file-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .download-btn {
+            padding: 0.5rem;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            transition: var(--transition-fast);
+        }
+
+        .download-btn:hover {
+            background: var(--color-cyan);
+            color: var(--color-void);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="css/dock.css">
+    <script src="js/dock.js" defer></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- SIDEBAR -->
+        <!-- FLOATING NAVIGATION -->
+        <!-- FLOATING DOCK NAVIGATION -->
+        <nav class="dock-container">
+            <a href="dashboard.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-speedometer2 dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">Monitor</div>
+            </a>
+            <a href="news.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-newspaper dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">News</div>
+            </a>
+            <a href="logs.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-file-earmark-text dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">Logs</div>
+            </a>
+            <a href="archive.html" class="dock-item active">
+                <div class="dock-icon-container">
+                    <i class="bi bi-archive dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">Archives</div>
+            </a>
+            <a href="forums.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-people dock-icon"></i>
+                </div>
+                <div class="dock-tooltip">Forums</div>
+            </a>
+        </nav>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <div class="page-center">
+                <header class="card-header" style="margin-bottom: 2rem;">
+                    <a href="dashboard.html"
+                        style="text-decoration: none; display: flex; flex-direction: row; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                        <img src="./assets/images/logo.png" alt="BlueSentinel" class="brand-logo"
+                            style="width: auto; height: 48px;">
+                        <h1 class="text-gradient"
+                            style="font-family: var(--font-logo); font-size: 2.5rem; letter-spacing: 1px; margin: 0; text-transform: none;">
+                            BlueSentinel</h1>
+                    </a>
+                    <div style="text-align: center;">
+                        <h2 class="text-gradient" style="font-size: 2rem; margin-top: 0.5rem;">Data Archives</h2>
+                        <p style="color: var(--text-muted);">Download past monthly reports</p>
+                    </div>
+                </header>
+
+                <div class="archive-grid">
+                    <!-- Sept 2024 -->
+                    <div class="bento-card file-card">
+                        <i class="bi bi-file-earmark-spreadsheet file-icon"
+                            style="font-size: 2.5rem; color: var(--color-cyan); filter: none;"></i>
+                        <div class="file-info">
+                            <span class="file-name">Report_Sept_2024.csv</span>
+                            <span class="file-meta">1.2 MB • Generated Oct 1</span>
+                        </div>
+                        <button class="download-btn" onclick="alert('Downloading mock file...')">
+                            <i class="bi bi-download"></i>
+                        </button>
+                    </div>
+
+                    <!-- Aug 2024 -->
+                    <div class="bento-card file-card">
+                        <i class="bi bi-file-earmark-spreadsheet file-icon"
+                            style="font-size: 2.5rem; color: var(--color-cyan); filter: none;"></i>
+                        <div class="file-info">
+                            <span class="file-name">Report_Aug_2024.csv</span>
+                            <span class="file-meta">1.1 MB • Generated Sept 1</span>
+                        </div>
+                        <button class="download-btn" onclick="alert('Downloading mock file...')">
+                            <i class="bi bi-download"></i>
+                        </button>
+                    </div>
+
+                    <!-- July 2024 -->
+                    <div class="bento-card file-card">
+                        <i class="bi bi-file-earmark-spreadsheet file-icon"
+                            style="font-size: 2.5rem; color: var(--color-cyan); filter: none;"></i>
+                        <div class="file-info">
+                            <span class="file-name">Report_July_2024.csv</span>
+                            <span class="file-meta">980 KB • Generated Aug 1</span>
+                        </div>
+                        <button class="download-btn" onclick="alert('Downloading mock file...')">
+                            <i class="bi bi-download"></i>
+                        </button>
+                    </div>
+
+                    <!-- June 2024 -->
+                    <div class="bento-card file-card">
+                        <i class="bi bi-file-earmark-spreadsheet file-icon"
+                            style="font-size: 2.5rem; color: var(--color-cyan); filter: none;"></i>
+                        <div class="file-info">
+                            <span class="file-name">Report_June_2024.csv</span>
+                            <span class="file-meta">1.0 MB • Generated July 1</span>
+                        </div>
+                        <button class="download-btn" onclick="alert('Downloading mock file...')">
+                            <i class="bi bi-download"></i>
+                        </button>
+                    </div>
+
+                    <!-- May 2024 -->
+                    <div class="bento-card file-card">
+                        <i class="bi bi-file-earmark-spreadsheet file-icon"
+                            style="font-size: 2.5rem; color: var(--color-cyan); filter: none;"></i>
+                        <div class="file-info">
+                            <span class="file-name">Report_May_2024.csv</span>
+                            <span class="file-meta">1.3 MB • Generated June 1</span>
+                        </div>
+                        <button class="download-btn" onclick="alert('Downloading mock file...')">
+                            <i class="bi bi-download"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

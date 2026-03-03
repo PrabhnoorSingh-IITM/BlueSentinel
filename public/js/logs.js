@@ -1,317 +1,204 @@
-// Logs page functionality
-document.addEventListener('DOMContentLoaded', function() {
-    loadIncidentLogs();
-    setupMapInteractions();
-    setupLogActions();
-    monitorSensorThresholds();
+// Logs page functionality for V2.1 BlueSentinel Design
+document.addEventListener('DOMContentLoaded', function () {
+    const logs = loadIncidentLogs();
+    try {
+        initMap(logs);
+    } catch (e) {
+        console.error("Map initialization failed:", e);
+    }
 });
 
-const thresholdConfig = {
-    temperature: { warning: { min: 10, max: 32 }, alert: { min: 5, max: 35 } },
-    pH: { warning: { min: 6.5, max: 8.5 }, alert: { min: 6.0, max: 9.0 } },
-    turbidity: { warning: { min: 0, max: 5 }, alert: { min: 0, max: 10 } },
-    dissolvedOxygen: { warning: { min: 5, max: 12 }, alert: { min: 3, max: 15 } },
-    salinity: { warning: { min: 20, max: 40 }, alert: { min: 15, max: 45 } }
-};
-
-const recentAlerts = new Map();
-
-function monitorSensorThresholds() {
-    if (!window.firebaseDB) {
-        console.warn('Firebase database not available for logs monitoring');
-        return;
-    }
-
-    window.firebaseDB.ref('BlueSentinel').on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (!data) return;
-
-        evaluateSensor('temperature', data.temperature, 'Temperature');
-        evaluateSensor('pH', data.pH, 'pH');
-        evaluateSensor('turbidity', data.turbidity, 'Turbidity');
-        evaluateSensor('dissolvedOxygen', data.dissolvedOxygen, 'Dissolved O₂');
-        evaluateSensor('salinity', data.salinity, 'Salinity');
-    });
-}
-
-function evaluateSensor(key, value, label) {
-    if (value === undefined || value === null) return;
-
-    const thresholds = thresholdConfig[key];
-    const alertKey = `${key}`;
-    const now = Date.now();
-    const lastTime = recentAlerts.get(alertKey) || 0;
-
-    let severity = null;
-    if (value < thresholds.alert.min || value > thresholds.alert.max) {
-        severity = 'alert';
-    } else if (value < thresholds.warning.min || value > thresholds.warning.max) {
-        severity = 'warning';
-    }
-
-    if (!severity) return;
-    if (now - lastTime < 120000) return;
-
-    recentAlerts.set(alertKey, now);
-    createLogEntry({
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        type: label,
-        severity,
-        location: 'Live Sensor Feed',
-        details: `${label} reading out of range: ${value}`
-    });
-}
-
-function createLogEntry(log) {
-    const logsContainer = document.querySelector('.logs-container');
-    if (!logsContainer) return;
-
-    const entry = document.createElement('div');
-    entry.className = `log-entry ${log.severity}`;
-    entry.innerHTML = `
-        <div class="log-header">
-            <span class="log-time">${log.time}</span>
-            <span class="log-type ${log.severity}">${log.type}</span>
-            <span class="log-location">${log.location}</span>
-        </div>
-        <div class="log-details">
-            <p>${log.details}</p>
-            <div class="log-actions">
-                <button class="btn-acknowledge">Acknowledge</button>
-                ${log.severity !== 'normal' ? '<button class="btn-investigate">Investigate</button>' : ''}
-            </div>
-        </div>
-    `;
-
-    logsContainer.prepend(entry);
-    setupLogActions();
-}
-
 function loadIncidentLogs() {
-    // Simulate loading logs from Firebase
+    // Simulate loading logs with LOCATION DATA
     const logsData = [
         {
-            id: 1,
             time: '12:39am',
             type: 'pH Alert',
             severity: 'alert',
-            location: 'Mumbai Bay',
             details: 'pH level dropped to 5.2 - below safe threshold',
-            timestamp: Date.now() - 3600000,
-            acknowledged: false
+            node: 'Node-Alpha-1',
+            lat: 12.9716, lng: 77.5946 // Bangalore (Example)
         },
         {
-            id: 2,
             time: '11:45pm',
             type: 'Temperature',
             severity: 'warning',
-            location: 'Bangalore Lake',
-            details: 'Water temperature increased to 32°C - above optimal range',
-            timestamp: Date.now() - 7200000,
-            acknowledged: false
+            details: 'Water temperature increased to 32°C',
+            node: 'Coastal-Beta',
+            lat: 13.0827, lng: 80.2707 // Chennai
         },
         {
-            id: 3,
             time: '10:30pm',
             type: 'Maintenance',
             severity: 'normal',
-            location: 'Delhi River',
             details: 'Sensor calibration completed successfully',
-            timestamp: Date.now() - 10800000,
-            acknowledged: true
+            node: 'Cloud-Gateway',
+            lat: 19.0760, lng: 72.8777 // Mumbai
         },
         {
-            id: 4,
             time: '9:15pm',
             type: 'Turbidity',
             severity: 'alert',
-            location: 'Chennai Coast',
-            details: 'Turbidity spike detected - possible sediment runoff',
-            timestamp: Date.now() - 14400000,
-            acknowledged: false
+            details: 'Turbidity spike detected (12 NTU)',
+            node: 'River-Delta-Z',
+            lat: 22.5726, lng: 88.3639 // Kolkata
         },
         {
-            id: 5,
             time: '8:00pm',
             type: 'Health Score',
             severity: 'normal',
-            location: 'Kolkata Port',
             details: 'Marine health score improved to 85/100',
-            timestamp: Date.now() - 18000000,
-            acknowledged: true
+            node: 'Port-Blair-Station',
+            lat: 11.6234, lng: 92.7265 // Port Blair
         }
     ];
 
-    updateLogEntries(logsData);
+    const tbody = document.getElementById('logs-body');
+    if (!tbody) return logsData;
+
+    // Clear existing
+    tbody.innerHTML = '';
+
+    logsData.forEach(log => {
+        const row = document.createElement('tr');
+        row.className = 'log-row';
+
+        // Severity Badge Styling
+        let badgeClass = 'badge-info';
+        if (log.severity === 'alert') badgeClass = 'badge-alert';
+        if (log.severity === 'warning') badgeClass = 'badge-warning';
+        if (log.severity === 'normal') badgeClass = 'badge-info';
+
+        row.innerHTML = `
+            <td style="font-family: monospace; color: var(--text-muted);">${log.time}</td>
+            <td><span class="badge ${badgeClass}">${log.type}</span></td>
+            <td>${log.details}</td>
+            <td style="color: var(--color-cyan);">${log.node}</td>
+        `;
+
+        tbody.appendChild(row);
+    });
+
+    return logsData;
 }
 
-function updateLogEntries(logsData) {
-    const logEntries = document.querySelectorAll('.log-entry');
-    
-    logEntries.forEach((entry, index) => {
-        if (logsData[index]) {
-            const log = logsData[index];
-            const timeElement = entry.querySelector('.log-time');
-            const typeElement = entry.querySelector('.log-type');
-            const locationElement = entry.querySelector('.log-location');
-            const detailsElement = entry.querySelector('.log-details p');
-            
-            if (timeElement) timeElement.textContent = log.time;
-            if (typeElement) typeElement.textContent = log.type;
-            if (locationElement) locationElement.textContent = log.location;
-            if (detailsElement) detailsElement.textContent = log.details;
-            
-            // Store log data for actions
-            entry.dataset.logId = log.id;
-            entry.dataset.acknowledged = log.acknowledged;
-            
-            // Update button states if acknowledged
-            if (log.acknowledged) {
-                const acknowledgeBtn = entry.querySelector('.btn-acknowledge');
-                if (acknowledgeBtn) {
-                    acknowledgeBtn.textContent = 'Acknowledged';
-                    acknowledgeBtn.disabled = true;
-                    acknowledgeBtn.style.opacity = '0.5';
-                }
-            }
+// --- 3D GLOBE INITIALIZATION (Replacing Leaflet) ---
+let world; // Globe instance
+
+function initMap() {
+    const mapContainer = document.getElementById('logs-map');
+    if (!mapContainer) return;
+
+    // Use Sample Markers from user request + our logs
+    const sampleMarkers = [
+        { lat: 40.7128, lng: -74.006, label: "New York", type: 'normal' },
+        { lat: 51.5074, lng: -0.1278, label: "London", type: 'warning' }, // varied types for demo
+        { lat: 35.6762, lng: 139.6503, label: "Tokyo", type: 'normal' },
+        { lat: -33.8688, lng: 151.2093, label: "Sydney", type: 'alert' },
+        { lat: 48.8566, lng: 2.3522, label: "Paris", type: 'normal' },
+        { lat: 28.6139, lng: 77.209, label: "New Delhi", type: 'warning' },
+        { lat: 55.7558, lng: 37.6173, label: "Moscow", type: 'normal' },
+        { lat: -22.9068, lng: -43.1729, label: "Rio de Janeiro", type: 'normal' },
+        { lat: 31.2304, lng: 121.4737, label: "Shanghai", type: 'alert' },
+        { lat: 25.2048, lng: 55.2708, label: "Dubai", type: 'normal' },
+        { lat: -34.6037, lng: -58.3816, label: "Buenos Aires", type: 'normal' },
+        { lat: 1.3521, lng: 103.8198, label: "Singapore", type: 'normal' },
+        { lat: 37.5665, lng: 126.978, label: "Seoul", type: 'normal' },
+    ];
+
+    // Combine with logsData if any have unique locations, or just use these for visual style
+    const allMarkers = [...sampleMarkers];
+
+    world = Globe()
+        (mapContainer)
+        .globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg')
+        .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
+        .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
+        .atmosphereColor('#4da6ff')
+        .atmosphereAltitude(0.2) // increased for visibility
+        .autoRotate(true)
+        .autoRotateSpeed(0.5)
+        .width(mapContainer.clientWidth)
+        .height(mapContainer.clientHeight || 500)
+
+        // Custom Html Markers (Rings/Dots)
+        .htmlElementsData(allMarkers)
+        .htmlLat(d => d.lat)
+        .htmlLng(d => d.lng)
+        .htmlElement(d => {
+            const el = document.createElement('div');
+            // Style based on type
+            let color = 'cyan';
+            if (d.type === 'warning') color = '#FFD600';
+            if (d.type === 'alert') color = '#FF4D4D';
+
+            el.innerHTML = `
+                <div style="
+                    width: 10px; 
+                    height: 10px; 
+                    background: ${color}; 
+                    border-radius: 50%; 
+                    box-shadow: 0 0 10px ${color}, 0 0 20px ${color};
+                    cursor: pointer;
+                "></div>
+                <div style="
+                    position: absolute;
+                    top: 100%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    color: white;
+                    font-size: 10px;
+                    white-space: nowrap;
+                    text-shadow: 0 2px 4px black;
+                    opacity: 0.8;
+                    margin-top: 4px;
+                    font-family: var(--font-main);
+                ">${d.label}</div>
+            `;
+
+            el.addEventListener('click', () => {
+                showLogDetails({
+                    type: d.type || 'Info',
+                    timestamp: Date.now(),
+                    details: `${d.label} Station Report`
+                });
+                // Rotate to view
+                world.pointOfView({ lat: d.lat, lng: d.lng, altitude: 1.5 }, 1000);
+            });
+
+            return el;
+        });
+
+    // CENTER THE GLOBE - Force initial point of view
+    // Altitude > 1.0 means zoomed out enough to see the curve
+    world.pointOfView({ lat: 45, lng: 0, altitude: 1.8 });
+
+    // Adjust on resize
+    function onResize() {
+        if (mapContainer) {
+            world.width(mapContainer.clientWidth);
+            world.height(mapContainer.clientHeight || 500);
         }
-    });
-}
-
-function setupMapInteractions() {
-    const mapMarkers = document.querySelectorAll('.map-marker');
-    
-    mapMarkers.forEach(marker => {
-        marker.addEventListener('click', function() {
-            const location = this.dataset.location;
-            const label = this.querySelector('.marker-label').textContent;
-            
-            // Show location details (could open a modal or navigate)
-            console.log(`Location clicked: ${label} at ${location}`);
-            
-            // Highlight corresponding log entries
-            highlightLocationLogs(label);
-        });
-    });
-}
-
-function highlightLocationLogs(location) {
-    const logEntries = document.querySelectorAll('.log-entry');
-    
-    logEntries.forEach(entry => {
-        const locationElement = entry.querySelector('.log-location');
-        if (locationElement && locationElement.textContent === location) {
-            entry.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            entry.style.animation = 'pulse 2s';
-            setTimeout(() => {
-                entry.style.animation = '';
-            }, 2000);
-        }
-    });
-}
-
-function setupLogActions() {
-    const acknowledgeButtons = document.querySelectorAll('.btn-acknowledge');
-    const investigateButtons = document.querySelectorAll('.btn-investigate');
-    
-    acknowledgeButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const logEntry = this.closest('.log-entry');
-            const logId = logEntry.dataset.logId;
-            
-            // Update UI
-            this.textContent = 'Acknowledged';
-            this.disabled = true;
-            this.style.opacity = '0.5';
-            logEntry.dataset.acknowledged = 'true';
-            
-            // Send to Firebase
-            acknowledgeLog(logId);
-            
-            // Show feedback
-            showNotification('Log acknowledged successfully', 'success');
-        });
-    });
-    
-    investigateButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const logEntry = this.closest('.log-entry');
-            const logId = logEntry.dataset.logId;
-            const location = logEntry.querySelector('.log-location').textContent;
-            
-            // Navigate to investigation page or show details
-            investigateIncident(logId, location);
-        });
-    });
-}
-
-function acknowledgeLog(logId) {
-    // Send acknowledgment to Firebase
-    if (window.firebaseDB) {
-        window.firebaseDB.ref(`logs/${logId}`).update({
-            acknowledged: true,
-            acknowledgedAt: Date.now(),
-            acknowledgedBy: 'current_user' // Replace with actual user ID
-        }).catch(error => {
-            console.error('Error acknowledging log:', error);
-        });
     }
-}
+    window.addEventListener('resize', onResize);
 
-function investigateIncident(logId, location) {
-    // Navigate to investigation details or show modal
-    showNotification(`Investigating incident at ${location}`, 'info');
-    
-    // Could navigate to a detailed investigation page
-    // window.location.href = `investigate.html?id=${logId}`;
-}
-
-function showNotification(message, type = 'info') {
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 12px 20px;
-        border-radius: 8px;
-        color: white;
-        font-weight: 600;
-        z-index: 10000;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-        background: ${type === 'success' ? '#44ff44' : type === 'error' ? '#ff4444' : '#ffaa00'};
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Animate in
+    // Correction for initial render if container size changes
     setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 100);
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            document.body.removeChild(notification);
-        }, 300);
-    }, 3000);
+        onResize();
+        world.pointOfView({ lat: 45, lng: 0, altitude: 1.8 });
+    }, 500);
 }
 
-// Auto-refresh logs every 30 seconds
-setInterval(() => {
-    loadIncidentLogs();
-}, 30000);
+// Placeholder for showLogDetails function, as it's called in the new initMap
+function showLogDetails(log) {
+    console.log("Log details clicked:", log);
+    // Implement actual display logic here, e.g., open a modal or update a sidebar
+    alert(`Log Type: ${log.type}\nDetails: ${log.details}`);
+}
 
-// Add pulse animation
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.02); }
-    }
-`;
-document.head.appendChild(style);
+// Function to refresh markers (Not needed as much for static demo points, but kept for compatibility)
+function refreshMapMarkers() {
+    // If we were adding dynamic markers via API, we would update world.htmlElementsData() here.
+    // tailored to keep the visual "Cool" factor of fixed major cities + dynamic logs.
+    console.log("Refreshing 3D Globe data...");
+}

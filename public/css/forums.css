@@ -1,0 +1,284 @@
+/* Forums Page Styles */
+
+/* ============ HERO SECTION ============ */
+.hero-forums {
+  padding: 6rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(0, 255, 212, 0.1), rgba(84, 101, 255, 0.05));
+  border-radius: 20px;
+  margin: 2rem;
+}
+
+.hero-forums h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #00FFD4, #5465FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.hero-forums p {
+  font-size: 1.2rem;
+  color: #D2DDFF;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ============ INITIATIVES SECTION ============ */
+.initiatives-section {
+  padding: 4rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.initiatives-section h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #00FFD4;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  font-size: 1.2rem;
+  color: #D2DDFF;
+  opacity: 0.8;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.initiatives-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 3rem;
+  margin-bottom: 4rem;
+}
+
+.initiative-category {
+  background: rgba(84, 101, 255, 0.05);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(0, 255, 212, 0.2);
+}
+
+.initiative-category h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #00FFD4;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* ============ INITIATIVE CARDS ============ */
+.initiative-card {
+  background: rgba(5, 2, 8, 0.8);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(0, 255, 212, 0.2);
+  transition: all 0.3s ease;
+}
+
+.initiative-card:hover {
+  transform: translateY(-4px);
+  border-color: #00FFD4;
+  box-shadow: 0 12px 40px rgba(0, 255, 212, 0.15);
+}
+
+.initiative-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 255, 212, 0.1);
+}
+
+.initiative-header h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #D2DDFF;
+  margin: 0;
+}
+
+.initiative-status {
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.initiative-status.active {
+  background: linear-gradient(135deg, #00FFD4, #5465FF);
+  color: #050208;
+}
+
+.initiative-status.planning {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+
+.initiative-status.completed {
+  background: rgba(40, 167, 69, 0.2);
+  color: #28a745;
+}
+
+.initiative-content {
+  margin-bottom: 1.5rem;
+}
+
+.initiative-desc {
+  color: #D2DDFF;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.initiative-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.initiative-org {
+  color: #00FFD4;
+  font-weight: 600;
+}
+
+.initiative-date {
+  color: #D2DDFF;
+  opacity: 0.7;
+}
+
+.initiative-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-small {
+  background: linear-gradient(135deg, #5465FF, #00FFD4);
+  color: #050208;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: none;
+  font-weight: 500;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-small:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 255, 212, 0.3);
+}
+
+/* ============ SUBMIT SECTION ============ */
+.submit-section {
+  padding: 4rem 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(5, 2, 8, 0.5);
+  border-radius: 16px;
+  border: 1px solid rgba(0, 255, 212, 0.2);
+}
+
+.submit-section h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #00FFD4;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.initiative-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  color: #D2DDFF;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: rgba(210, 221, 255, 0.1);
+  border: 1px solid rgba(0, 255, 212, 0.3);
+  border-radius: 8px;
+  padding: 0.8rem;
+  color: #D2DDFF;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #00FFD4;
+  box-shadow: 0 0 0 3px rgba(0, 255, 212, 0.2);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+  .initiatives-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .initiative-category {
+    padding: 1.5rem;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .initiative-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .btn-small {
+    text-align: center;
+    padding: 0.8rem 1rem;
+  }
+}

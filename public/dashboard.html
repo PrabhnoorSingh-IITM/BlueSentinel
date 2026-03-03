@@ -1,147 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>BlueSentinel | Dashboard</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/global.css">
-        <link rel="stylesheet" href="css/dashboard.css">
-        
-        <!-- Firebase SDKs -->
-        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-        
-        <!-- Chart.js -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-        
-        <!-- Firebase Init -->
-        <script src="js/core/firebase-init.js" defer></script>
-        <script src="js/dashboard.js" defer></script>
-    </head>
 
-    <body>
-        <div class="container">
-        <main>
-            <!-- Logo -->
-            <nav class="navbar">
-                <a href="dashboard.html" class="logo">
-                    <div class="logo-icon">
-                        <img src="./assets/images/logo.png" alt="BlueSentinel logo">
-                    </div>
-                    <div class="logo-text">
-                        <div class="logo-title">BlueSentinel</div>
-                        <div class="logo-subtitle">Ocean Intelligence Platform</div>
-                    </div>
-                </a>
-            </nav>
-            <div class="main-title">Dashboard</div>
-            
-            <!-- Cards Container -->
-            <div class="cards-container">
-                <div class="box">
-                    <span class="title">Water Temperature</span>
-                    <div>
-                        <strong>°C</strong>
-                        <div class="card-value" id="temp-value">--</div>
-                        <div class="card-unit">Celsius</div>
-                    </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlueSentinel | Ocean Intelligence</title>
+    <link rel="stylesheet" href="css/global.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-functions-compat.js"></script>
+    <script src="js/core/firebase-init.js?v=2.6" defer></script>
+    <script src="js/ai-chatbot.js?v=2.6" defer></script>
+    <script src="js/dashboard-enhanced.js?v=2.6" defer></script>
+    <script src="js/visual-effects.js?v=1.0" defer></script>
+    <script src="js/theme-toggle.js?v=2.6" defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@iconscout/unicons@4.0.8/css/line.min.css">
+    <link rel="stylesheet" href="css/dock.css">
+    <script src="js/dock.js" defer></script>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- SIDEBAR NAVIGATION -->
+        <!-- FLOATING DOCK NAVIGATION -->
+        <nav class="dock-container">
+            <a href="dashboard.html" class="dock-item active">
+                <div class="dock-icon-container">
+                    <i class="bi bi-speedometer2 dock-icon"></i>
                 </div>
-
-                <div class="box">
-                    <span class="title">Water pH</span>
-                    <div>
-                        <strong>pH Level</strong>
-                        <div class="card-value" id="ph-value">--</div>
-                        <div class="card-unit">pH</div>
-                    </div>
+                <div class="dock-tooltip">Monitor</div>
+            </a>
+            <a href="news.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-newspaper dock-icon"></i>
                 </div>
-
-                <div class="box">
-                    <span class="title">Turbidity</span>
-                    <div>
-                        <strong>NTU</strong>
-                        <div class="card-value" id="turbidity-value">--</div>
-                        <div class="card-unit">Clarity</div>
-                    </div>
+                <div class="dock-tooltip">News</div>
+            </a>
+            <a href="logs.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-file-earmark-text dock-icon"></i>
                 </div>
-
-                <div class="box">
-                    <span class="title">Dissolved O₂</span>
-                    <div>
-                        <strong>mg/L</strong>
-                        <div class="card-value" id="do-value">--</div>
-                        <div class="card-unit">Oxygen</div>
-                    </div>
+                <div class="dock-tooltip">Logs</div>
+            </a>
+            <a href="archive.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-archive dock-icon"></i>
                 </div>
-
-                <div class="box">
-                    <span class="title">Salinity</span>
-                    <div>
-                        <strong>PSU</strong>
-                        <div class="card-value" id="salinity-value">--</div>
-                        <div class="card-unit">Salt Level</div>
-                    </div>
+                <div class="dock-tooltip">Archives</div>
+            </a>
+            <a href="forums.html" class="dock-item">
+                <div class="dock-icon-container">
+                    <i class="bi bi-people dock-icon"></i>
                 </div>
-            </div>
+                <div class="dock-tooltip">Forums</div>
+            </a>
+        </nav>
 
-            <!-- Large Graph Card -->
-            <div class="graph-container">
-                <div class="box box-large">
-                    <span class="title">Live Data Graphs</span>
-                    <div id="graph-content" class="graph-area">
-                        <canvas id="sensor-chart"></canvas>
-                    </div>
-                </div>
-            </div>
+        <!-- MAIN CONTENT AREA -->
+        <main class="main-content">
 
-            <div class="insights-container">
-                <div class="box box-small">
-                    <span class="title">Active Alerts</span>
-                    <div>
-                        <strong>Open</strong>
-                        <div class="card-value">3</div>
-                        <div class="card-unit">Needs review</div>
-                    </div>
-                </div>
+            <!-- Centered Wrapper -->
+            <div class="page-center">
+                <!-- Header -->
+                <header class="dashboard-header reveal-on-scroll"
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; position: relative;">
+                    <!-- Left Spacer for centering -->
+                    <div style="width: 120px;"></div>
 
-                <div class="box box-small">
-                    <span class="title">Last Update</span>
-                    <div>
-                        <strong>Updated</strong>
-                        <div class="card-value">Live</div>
-                        <div class="card-unit">Now</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="activity-container">
-                <div class="box box-wide">
-                    <span class="title">Recent Activity</span>
-                    <div class="activity-list">
-                        <div class="activity-item">Turbidity stabilized in Mumbai Bay</div>
-                        <div class="activity-item">Health score improved in Kochi Backwaters</div>
-                        <div class="activity-item">Alert routed to response team</div>
-                    </div>
-                </div>
-            </div>
-
-            
-            <nav class="glass-nav">
-                    <a class="nav-item active" href="dashboard.html">
-                        <span class="icon"><img src="./assets/icons/estate.svg" alt="Dashboard"></span>
-                        <span class="label">Dashboard</span>
+                    <!-- Centered Brand -->
+                    <a href="index.html"
+                        style="display: flex; flex-direction: row; align-items: center; gap: 1rem; text-decoration: none;">
+                        <img src="./assets/images/logo.png" alt="BlueSentinel" class="brand-logo"
+                            style="width: auto; height: 48px;">
+                        <h1 class="text-gradient"
+                            style="font-family: var(--font-logo); font-size: 2.5rem; letter-spacing: 1px; margin: 0; text-transform: none;">
+                            BlueSentinel</h1>
                     </a>
-                        
-                    <a class="nav-item" href="news.html">
-                        <span class="icon"><img src="./assets/icons/newspaper.svg" alt="News"></span>
-                        <span class="label">News</span>
-                    </a>
-                        
-                    <a class="nav-item" href="logs.html">
-                        <span class="icon"><img src="./assets/icons/document-signed.svg" alt="Logs"></span>
-                        <span class="label">Logs</span>
-                    </a>
+
+                    <!-- Right Controls -->
+                    <div
+                        style="display: flex; gap: 0.8rem; align-items: center; width: 160px; justify-content: flex-end;">
+
+                        <!-- Theme Toggle -->
+                        <i class="uil uil-brightness" id="theme-toggle"
+                            style="font-size: 1.5rem; cursor: pointer; display: inline-block; min-width: 24px;"></i>
+
+                        <!-- Export -->
+                        <button id="export-csv-btn" class="btn-primary"
+                            style="padding: 0.5rem 1rem; font-size: 0.8rem;">
+                            Export
+                        </button>
+                    </div>
+                </header>
+
+                <!-- BENTO GRID LAYOUT -->
+                <div class="bento-grid reveal-on-scroll">
+
+                    <!-- ROW 1: SENSORS (Top Priority - 4 Cards) -->
+
+                    <!-- Temperature -->
+                    <div class="bento-card span-3">
+                        <div class="card-header">
+                            <span class="card-title">Temperature</span>
+                            <div class="status-pill status-normal" id="temp-status">Normal</div>
+                        </div>
+                        <div class="value-display">
+                            <span id="temp-value">--</span><span class="unit">°C</span>
+                        </div>
+                        <div style="height: 100px; margin-top: auto; width: 100%;">
+                            <canvas id="temp-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- pH Level -->
+                    <div class="bento-card span-3">
+                        <div class="card-header">
+                            <span class="card-title">pH Level</span>
+                            <div class="status-pill status-normal" id="ph-status">Optimal</div>
+                        </div>
+                        <div class="value-display">
+                            <span id="ph-value">--</span><span class="unit">pH</span>
+                        </div>
+                        <div style="height: 100px; margin-top: auto; width: 100%;">
+                            <canvas id="ph-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Turbidity -->
+                    <div class="bento-card span-3">
+                        <div class="card-header">
+                            <span class="card-title">Turbidity</span>
+                            <div class="status-pill status-normal" id="turbidity-status">Clear</div>
+                        </div>
+                        <div class="value-display">
+                            <span id="turbidity-value">--</span><span class="unit">NTU</span>
+                        </div>
+                        <div style="height: 100px; margin-top: auto; width: 100%;">
+                            <canvas id="turbidity-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Dissolved Oxygen -->
+                    <div class="bento-card span-3">
+                        <div class="card-header">
+                            <span class="card-title">Dissolved Oxygen</span>
+                            <div class="status-pill status-warning" id="do-status">Low</div>
+                        </div>
+                        <div class="value-display">
+                            <span id="do-value">--</span><span class="unit">mg/L</span>
+                        </div>
+                        <div style="height: 100px; margin-top: auto; width: 100%;">
+                            <canvas id="do-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- ROW 2: AI & ML (Large Context) -->
+
+                    <!-- AI Prediction & ML Context -->
+                    <div class="bento-card span-8">
+                        <div class="card-header">
+                            <span class="card-title">
+                                <i class="bi bi-cpu nav-icon"></i>
+                                ML Projections & Training Context
+                            </span>
+                            <div class="status-pill status-normal">Potable (98%)</div>
+                        </div>
+                        <div style="height: 250px; width: 100%;">
+                            <canvas id="ai-projection-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- ML Insights (Stacked) -->
+                    <div class="bento-card span-4">
+                        <div class="card-header">
+                            <span class="card-title">AI Projections</span>
+                            <div class="status-pill" style="background: var(--color-purple); color: #fff;">Beta</div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; height: 100%;">
+                            <!-- Inner Stat Blocks -->
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 12px;">
+                                <div style="color: var(--text-muted); font-size: 0.8rem;">Nitrogen</div>
+                                <div style="font-size: 1.5rem; font-weight: 700;">
+                                    <span id="ml-nitrogen">--</span> <span style="font-size: 0.8rem;">mg/L</span>
+                                </div>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 12px;">
+                                <div style="color: var(--text-muted); font-size: 0.8rem;">Ammonia</div>
+                                <div style="font-size: 1.5rem; font-weight: 700;">
+                                    <span id="ml-ammonia">--</span> <span style="font-size: 0.8rem;">mg/L</span>
+                                </div>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 12px;">
+                                <div style="color: var(--text-muted); font-size: 0.8rem;">Lead (Pb)</div>
+                                <div style="font-size: 1.5rem; font-weight: 700;">
+                                    <span id="ml-lead">--</span> <span style="font-size: 0.8rem;">µg/L</span>
+                                </div>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 12px;">
+                                <div style="color: var(--text-muted); font-size: 0.8rem;">Sodium</div>
+                                <div style="font-size: 1.5rem; font-weight: 700;">
+                                    <span id="ml-sodium">--</span> <span style="font-size: 0.8rem;">mg/L</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ROW 3: Secondary Metrics & Analysis -->
+
+                    <!-- Eco-System Analysis (Replaces Salinity) -->
+                    <div class="bento-card span-6">
+                        <div class="card-header">
+                            <span class="card-title">Eco-System Analysis</span>
+                            <button id="refresh-analysis-btn" class="btn-primary"
+                                style="padding: 0.2rem 0.5rem; font-size: 0.7rem; height: auto;">
+                                <i class="bi bi-arrow-clockwise btn-icon" style="font-size: 1rem;"></i>
+                                Refresh
+                            </button>
+                        </div>
+                        <div class="analysis-content"
+                            style="overflow-y: auto; max-height: 180px; font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
+                            <p id="analysis-text">Gathering sensor data for AI analysis...</p>
+                            <div id="analysis-loading"
+                                style="display: none; color: var(--color-cyan); margin-top: 1rem;">
+                                <span class="typing-dots">Analyzing ecosystem health...</span>
+                            </div>
+                        </div>
+                        <div class="status-pill status-normal" id="analysis-status"
+                            style="margin-top:auto; align-self: flex-start;">System Active</div>
+                    </div>
+
+                    <!-- Water Health Index -->
+                    <div class="bento-card span-6">
+                        <div class="card-header">
+                            <span class="card-title">Water Health Index</span>
+                            <span class="status-pill status-success" id="water-health-status">Excellent</span>
+                        </div>
+                        <div
+                            style="display: flex; align-items: center; justify-content: center; height: 100%; flex-direction: column;">
+                            <h2 style="font-size: 4rem; color: var(--color-success); margin: 0;"
+                                id="water-health-score">--/100</h2>
+                            <p style="color: var(--text-muted);">Composite Score</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div> <!-- End Centered Wrapper -->
+
         </main>
+
+        <!-- CHATBOT INTERFACE -->
+        <button class="chatbot-toggler" id="chatbot-toggle">
+            <i class="bi bi-chat-dots-fill" style="font-size: 1.5rem; color: white;"></i>
+        </button>
+
+        <div class="chatbot-window" id="chatbot-window" style="display: none;">
+            <div class="chat-header">
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                    <img src="./assets/images/logo.png" style="width:24px; height:24px;">
+                    <span style="font-weight:600; color:white;">SentinelBuddy</span>
+                </div>
+                <button id="chatbot-close" style="color:var(--text-muted); font-size:1.2rem;">&times;</button>
+            </div>
+
+            <div class="chat-messages" id="chatbot-messages">
+                <div class="ai-message">
+                    Hello! I'm BlueSentinel AI. How can I assist you with the ocean data today?
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chatbot-input" placeholder="Ask about water quality...">
+                <button class="chat-send" id="chatbot-send">
+                    <i class="bi bi-send-fill"></i>
+                </button>
+            </div>
         </div>
-    </body>
+
+    </div>
+
+</body>
+
 </html>
