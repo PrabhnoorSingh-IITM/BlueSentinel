@@ -20,7 +20,7 @@ y = df['Potability']
 # Preprocessing
 print("Preprocessing (Full Dataset)...")
 imputer = SimpleImputer(strategy='median')
-scaler = StandardScaler()
+scaler = StandardScaler
 
 X_imputed = imputer.fit_transform(X)
 X_scaled = scaler.fit_transform(X_imputed)

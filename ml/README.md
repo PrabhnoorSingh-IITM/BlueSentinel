@@ -1,4 +1,4 @@
-# BlueSentinel Machine Learning (V2.1)
+# BlueSentinel Machine Learning 
 
 This directory contains the AI/ML pipeline for the BlueSentinel project, focusing on Water Quality Index (WQI) prediction.
 
@@ -26,16 +26,16 @@ This directory contains the AI/ML pipeline for the BlueSentinel project, focusin
 ```text
 ml/
 ├── data/
-│   ├── raw/              # Original datasets
-│   └── processed/        # Cleaned CSVs ready for training
+│  ├── raw/       # Original datasets
+│  └── processed/    # Cleaned CSVs ready for training
 ├── models/
-│   └── wqi_model.pkl     # Serialized trained model
+│  └── wqi_model.pkl   # Serialized trained model
 ├── notebooks/
-│   └── exploratory.ipynb # Data analysis and experiments
+│  └── exploratory.ipynb # Data analysis and experiments
 ├── src/
-│   ├── train_model.py    # Training script
-│   └── inference.py      # Prediction script for the backend
-└── requirements.txt      # Python dependencies
+│  ├── train_model.py  # Training script
+│  └── inference.py   # Prediction script for the backend
+└── requirements.txt   # Python dependencies
 ```
 
 ---

@@ -1,4 +1,4 @@
-# BlueSentinel - Executive Summary for Judges (V2.1 BlueSentinel)
+# BlueSentinel - Executive Summary for Judges 
 
 ## 🌊 One-Liner Pitch
 
@@ -16,13 +16,13 @@
 
 ### Our Solution
 
-- **Real-Time BlueSentinel Dashboard**: A "Glassmorphic" command center for instant visibility.
+- **Real-Time Dashboard**: A "Glassmorphic" command center for instant visibility.
 - **Gemini AI Integration**: Translates complex sensor data into plain-English health reports and remediation advice.
 - **3D Global View**: Visualizes incidents on an interactive 3D globe for geographic context.
 
 ---
 
-## 🚀 Key Innovations (V2.1)
+## 🚀 Key Innovations 
 
 ### 1. **AI-Powered "SentinelBuddy"**
 
@@ -49,7 +49,7 @@
 
 - **Edge**: ESP32 with 5 sensors (Temp, pH, Turbidity, DO, Salinity).
 - **Cloud**: Firebase Realtime Database (<100ms latency).
-- **AI**: Gemini 1.5 Flash for rapid inference.
+- **AI**: Gemini 3 Pro for rapid inference.
 
 ### Impact
 

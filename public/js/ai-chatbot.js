@@ -103,7 +103,7 @@ async function processUserMessage(message) {
     // 2. Try Gemini API (Using stable gemini-pro)
     try {
         const apiKey = 'AIzaSyDpNUJezxx7m9RyRbpZujImldyblcfDw2g';
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.0-pro:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -237,7 +237,7 @@ async function getWaterHealthAnalysis(sensorData) {
             return calculateLocalFallback(sensorData);
         }
 
-        const modelToUse = window.cachedGeminiModel || 'gemini-2.0-flash'; // Updated default
+        const modelToUse = window.cachedGeminiModel || 'gemini-3.0-pro'; // Updated default
 
         try {
             console.log(`Generating content using: ${modelToUse}`);

@@ -23,13 +23,13 @@ The system combines IoT hardware with cloud infrastructure to provide authoritie
 
 ---
 
-## 🚀 Key Features (V2.1 "BlueSentinel" Update)
+## 🚀 Key Features (Update)
 
 ### 🖥️ Next-Gen Dashboard
 
 - **Bento Grid Layout**: Modular, responsive card system for optimal data density.
 - **Mac-Style Dock**: Sleek, icon-only floating navigation with magnification effects.
-- **Glassmorphism UI**: Premium "BlueSentinel Modern" aesthetic with frosted glass elements and neon accents.
+- **Glassmorphism UI**: Premium " Modern" aesthetic with frosted glass elements and neon accents.
 - **Dark Mode Native**: Optimized for low-light monitoring environments.
 
 ### 🤖 AI-Powered Intelligence
@@ -132,22 +132,22 @@ firebase deploy --only hosting
 
 ```text
 BlueSentinel/
-├── public/                    # Frontend application
-│   ├── css/                  # Stylesheets (global, landing, dock, etc.)
-│   ├── js/                   # JavaScript modules
-│   │   ├── core/             # Firebase init
-│   │   ├── dashboard-enhanced.js # Main dashboard logic
-│   │   ├── forums.js         # Community forums logic
-│   │   ├── logs.js           # Incident logging & Globe
-│   │   └── ...
-│   ├── assets/               # Images and icons
-│   ├── dashboard.html        # Main dashboard
-│   ├── index.html            # Landing page
-│   └── ...
-├── hardware/                 # ESP32 Firmware
-├── docs/                     # Documentation & Implementation Plans
-├── firebase.json             # Firebase configuration
-└── README.md                 # This file
+├── public/          # Frontend application
+│  ├── css/         # Stylesheets (global, landing, dock, etc.)
+│  ├── js/          # JavaScript modules
+│  │  ├── core/       # Firebase init
+│  │  ├── dashboard.js # Main dashboard logic
+│  │  ├── forums.js     # Community forums logic
+│  │  ├── logs.js      # Incident logging & Globe
+│  │  └──...
+│  ├── assets/        # Images and icons
+│  ├── dashboard.html    # Main dashboard
+│  ├── index.html      # Landing page
+│  └──...
+├── hardware/         # ESP32 Firmware
+├── docs/           # Documentation & Implementation Plans
+├── firebase.json       # Firebase configuration
+└── README.md         # This file
 ```
 
 ---

@@ -1,4 +1,4 @@
-# BlueSentinel - Project Pitch (V2.1 BlueSentinel Edition)
+# BlueSentinel - Project Pitch 
 
 ## 🎤 The Hook
 
@@ -14,11 +14,11 @@
 
 ---
 
-## 🚀 The Solution: BlueSentinel V2.1
+## 🚀 The Solution: BlueSentinel 
 
 An end-to-end **Ocean Intelligence Platform**.
 
-### 1. **"BlueSentinel" Design System**
+### 1. ** Design System**
 
 We built a dashboard that looks like it belongs in 2030.
 
@@ -26,7 +26,7 @@ We built a dashboard that looks like it belongs in 2030.
 - **Spatial Interface**: 3D Globe visualization of data points.
 - **Mac-style Dock**: Seamless navigation.
 
-### 2. **Generative AI Integration** (New in V2.1)
+### 2. **Generative AI Integration** (New in)
 
 We don't just show charts; we explain them.
 
