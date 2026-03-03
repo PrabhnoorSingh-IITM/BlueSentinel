@@ -6,80 +6,86 @@ const cors = require('cors')({ origin: '*' });
 admin.initializeApp();
 
 // Exported functions
-exports.helloWorld = functions.https.onRequest((request, response) => {
-  response.send('Hello from BlueSentinel Firebase Functions!');
+exports.helloWorld = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {
+    res.send('Hello from BlueSentinel Firebase Functions!');
+  });
 });
 
 // Process sensor data
-exports.processSensorData = functions.https.onRequest(async (req, res) => {
-  try {
-    const sensorData = req.body;
+exports.processSensorData = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    try {
+      const sensorData = req.body;
 
-    // Validate data
-    if (!sensorData.temperature || !sensorData.ph) {
-      return res.status(400).json({ error: 'Missing required sensor data' });
+      // Validate data
+      if (!sensorData.temperature || !sensorData.ph) {
+        return res.status(400).json({ error: 'Missing required sensor data' });
+      }
+
+      // Add timestamp
+      sensorData.timestamp = admin.database.ServerValue.TIMESTAMP;
+
+      // Save to database
+      await admin.database().ref('sensors/latest').set(sensorData);
+      await admin.database().ref('sensors/history').push(sensorData);
+
+      res.json({ success: true, message: 'Sensor data processed successfully' });
+    } catch (error) {
+      console.error('Error processing sensor data:', error);
+      res.status(500).json({ error: 'Internal server error' });
     }
-
-    // Add timestamp
-    sensorData.timestamp = admin.database.ServerValue.TIMESTAMP;
-
-    // Save to database
-    await admin.database().ref('sensors/latest').set(sensorData);
-    await admin.database().ref('sensors/history').push(sensorData);
-
-    res.json({ success: true, message: 'Sensor data processed successfully' });
-  } catch (error) {
-    console.error('Error processing sensor data:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  });
 });
 
 // Calculate health score
-exports.calculateHealthScore = functions.https.onRequest(async (req, res) => {
-  try {
-    const snapshot = await admin.database().ref('sensors/latest').once('value');
-    const data = snapshot.val();
+exports.calculateHealthScore = functions.https.onRequest((req, res) => {
+  return cors(req, res, async () => {
+    try {
+      const snapshot = await admin.database().ref('sensors/latest').once('value');
+      const data = snapshot.val();
 
-    if (!data) {
-      return res.status(404).json({ error: 'No sensor data available' });
+      if (!data) {
+        return res.status(404).json({ error: 'No sensor data available' });
+      }
+
+      // Simple health score calculation (0-100)
+      let score = 100;
+
+      // Temperature penalty (optimal: 20-30°C)
+      if (data.temperature < 20 || data.temperature > 30) {
+        score -= Math.abs(data.temperature - 25) * 2;
+      }
+
+      // pH penalty (optimal: 6.5-8.5)
+      if (data.ph < 6.5 || data.ph > 8.5) {
+        score -= Math.abs(data.ph - 7.5) * 10;
+      }
+
+      // Turbidity penalty (optimal: <5 NTU)
+      if (data.turbidity > 5) {
+        score -= (data.turbidity - 5) * 3;
+      }
+
+      // Dissolved oxygen penalty (optimal: >6 mg/L)
+      if (data.dissolvedOxygen < 6) {
+        score -= (6 - data.dissolvedOxygen) * 5;
+      }
+
+      score = Math.max(0, Math.min(100, Math.round(score)));
+
+      await admin.database().ref('health/current').set({
+        score: score,
+        timestamp: admin.database.ServerValue.TIMESTAMP,
+        status: score > 70 ? 'Good' : score > 40 ? 'Moderate' : 'Poor'
+      });
+
+      res.json({ healthScore: score });
+    } catch (error) {
+      console.error('Error calculating health score:', error);
+      res.status(500).json({ error: 'Internal server error' });
     }
-
-    // Simple health score calculation (0-100)
-    let score = 100;
-
-    // Temperature penalty (optimal: 20-30°C)
-    if (data.temperature < 20 || data.temperature > 30) {
-      score -= Math.abs(data.temperature - 25) * 2;
-    }
-
-    // pH penalty (optimal: 6.5-8.5)
-    if (data.ph < 6.5 || data.ph > 8.5) {
-      score -= Math.abs(data.ph - 7.5) * 10;
-    }
-
-    // Turbidity penalty (optimal: <5 NTU)
-    if (data.turbidity > 5) {
-      score -= (data.turbidity - 5) * 3;
-    }
-
-    // Dissolved oxygen penalty (optimal: >6 mg/L)
-    if (data.dissolvedOxygen < 6) {
-      score -= (6 - data.dissolvedOxygen) * 5;
-    }
-
-    score = Math.max(0, Math.min(100, Math.round(score)));
-
-    await admin.database().ref('health/current').set({
-      score: score,
-      timestamp: admin.database.ServerValue.TIMESTAMP,
-      status: score > 70 ? 'Good' : score > 40 ? 'Moderate' : 'Poor'
-    });
-
-    res.json({ healthScore: score });
-  } catch (error) {
-    console.error('Error calculating health score:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  });
 });
 
 // --- NEW FUNCTIONS (Phase 2.5) ---
@@ -185,9 +191,30 @@ async function fallbackLLMLogic(req, res) {
 }
 
 // Exported Firebase Function
-exports.fallbackLLM = functions.https.onRequest(async (req, res) => {
+exports.fallbackLLM = functions.https.onRequest((req, res) => {
   return cors(req, res, () => fallbackLLMLogic(req, res));
 });
 
 // Export logic for Railway Server
 exports.fallbackLLMLogic = fallbackLLMLogic;
+// 4. Gemini Proxy (Hides API Key and handles discovery)
+exports.geminiProxy = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    try {
+      const { model, prompt, contents } = req.body;
+      const apiKey = 'AIzaSyDVX49VBeN3MZ5CvrrjJcFe8LrmrTJlUgg';
+      const modelToUse = model || 'gemini-2.0-flash';
+
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelToUse}:generateContent?key=${apiKey}`;
+
+      // Support both a simple prompt or full contents object
+      const body = contents ? { contents } : { contents: [{ parts: [{ text: prompt }] }] };
+
+      const response = await axios.post(url, body);
+      res.json(response.data);
+    } catch (error) {
+      console.error('Gemini Proxy Error:', error.response ? error.response.data : error.message);
+      res.status(500).json({ error: 'Failed to proxy Gemini request', details: error.message });
+    }
+  });
+});
